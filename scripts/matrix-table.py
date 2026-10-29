@@ -39,6 +39,12 @@ def main():
         ("DPT encoding (sender)", lambda r, a: r["suite"] == "dpt" and r["client"] in a),
         ("DPT decoding (observer)", lambda r, a: r["suite"] == "dpt" and r.get("observer") in a),
         ("Negative tests (server)", lambda r, a: r["suite"] == "negative" and r["peer"] in a),
+        ("Tunnelling over TCP (client)", lambda r, a: r["suite"] == "v2" and "TCP" in r["scenario"] and r["client"] in a),
+        ("Tunnelling over TCP (server)", lambda r, a: r["suite"] == "v2" and "TCP" in r["scenario"] and r["peer"] in a),
+        ("Device management (client)", lambda r, a: r["suite"] == "v2" and r["scenario"].startswith("device management") and r["client"] in a),
+        ("Device management (server)", lambda r, a: r["suite"] == "v2" and r["scenario"].startswith("device management") and r["peer"] in a),
+        ("Busmonitor (client)", lambda r, a: r["suite"] == "v2" and r["scenario"].startswith("busmonitor") and r["client"] in a),
+        ("Busmonitor (server)", lambda r, a: r["suite"] == "v2" and r["scenario"].startswith("busmonitor") and r["peer"] in a),
     ]
     print("| Feature | " + " | ".join(c for c, _ in COLS) + " |")
     print("|---|" + "---|" * len(COLS))

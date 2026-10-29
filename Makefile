@@ -22,7 +22,7 @@ KNXCTL_DIR ?= ../knxctl
 # (through a temporary go.work) when it exists, else against the go-knx
 # version knxctl's go.mod requires.
 GOKNX_DIR ?= ../go-knx
-KNXCTL_VERSION ?= v0.1.0
+KNXCTL_VERSION ?= v0.2.0
 ARCH := $(shell docker version --format '{{.Server.Arch}}' 2>/dev/null || uname -m)
 
 image = $(REGISTRY)/knx-interop-$(1):$(VERSION)

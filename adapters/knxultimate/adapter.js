@@ -12,7 +12,7 @@ const VERSION = pkg.version
 const start = Date.now()
 
 function parse(argv) {
-  const a = { role: argv[0], op: '', target: '', port: 3671, nat: false, routing: false, group: '', dpt: '', value: '', data: '', count: 1, timeout: 5 }
+  const a = { role: argv[0], op: '', target: '', port: 3671, nat: false, tcp: false, routing: false, group: '', dpt: '', value: '', data: '', count: 1, timeout: 5 }
   let i = 1
   if (a.role === 'client') { a.op = argv[1]; i = 2 }
   for (; i < argv.length; i++) {
@@ -22,6 +22,8 @@ function parse(argv) {
       case '--target': a.target = v; i++; break
       case '--port': a.port = Number(v); i++; break
       case '--nat': a.nat = true; break
+      case '--tcp': a.tcp = true; break
+      case '--object': case '--pid': i++; break
       case '--routing': a.routing = true; break
       case '--group': a.group = v; i++; break
       case '--dpt': a.dpt = v; i++; break
@@ -67,7 +69,7 @@ function service(npdu) {
 
 function connect() {
   return new Promise((resolve, reject) => {
-    const opts = { ipAddr: args.routing ? '224.0.23.12' : args.target, ipPort: String(args.port), hostProtocol: args.routing ? 'Multicast' : 'TunnelUDP', physAddr: '1.3.250', suppress_ack_ldatareq: false, loglevel: 'error' }
+    const opts = { ipAddr: args.routing ? '224.0.23.12' : args.target, ipPort: String(args.port), hostProtocol: args.routing ? 'Multicast' : (args.tcp ? 'TunnelTCP' : 'TunnelUDP'), physAddr: '1.3.250', suppress_ack_ldatareq: false, loglevel: 'error' }
     client = new KNXClient(opts)
     const t = setTimeout(() => reject(new Error(`no connection within ${args.timeout}s`)), args.timeout * 1000)
     client.on(KNXClientEvents.connected, () => { clearTimeout(t); resolve() })
@@ -78,11 +80,12 @@ function connect() {
 
 async function main() {
   if (args.role === 'capabilities') {
-    process.stdout.write(JSON.stringify({ features: { answer: true, connect: true, describe: true, discover: true, nat: false, routing: true, secure: false, tunnel: true, dptCodec: true }, implementation: IMPL, notes: 'KNXUltimate supports KNX IP Secure and Data Secure; this adapter does not exercise them yet. It has no route back (NAT) option.', roles: ['client'], schemaVersion: '1.0', version: VERSION }) + '\n')
+    process.stdout.write(JSON.stringify({ features: { answer: true, connect: true, describe: true, discover: true, nat: false, routing: true, secure: false, tunnel: true, dptCodec: true, tcp: true, property: false, busmonitor: false }, implementation: IMPL, notes: 'KNXUltimate supports KNX IP Secure and Data Secure; this adapter does not exercise them yet. It has no route back (NAT) option.', roles: ['client'], schemaVersion: '1.0', version: VERSION }) + '\n')
     return
   }
   if (args.role === 'server') return finish('unsupported', {}, 'the adapter uses KNXUltimate as a client only')
   if (args.nat) return finish('unsupported', {}, 'KNXUltimate has no route back (NAT) option')
+  if (args.op === 'property' || args.op === 'busmonitor') return finish('unsupported', {}, 'the adapter does not drive KNXUltimate for this operation')
   switch (args.op) {
     case 'discover': {
       const list = await KNXClient.discover(args.timeout * 1000)

@@ -2,30 +2,37 @@
 
 Run of 2026-10-29 on Docker Desktop (macOS, arm64), report
 [reports/latest.json](../reports/latest.json) /
-[reports/latest.md](../reports/latest.md): **336 pass, 5 known
-differences, 6 unsupported, 0 fail** (347 results). Each cell counts the
+[reports/latest.md](../reports/latest.md): **361 pass, 4 known
+differences, 42 unsupported, 0 fail** (407 results). Each cell counts the
 results in which that implementation took the role named in the row (every
 pairing with every other implementation; go-knx is in most cells as a peer
 or an observer).
 
 Versions: calimero-server and calimero-tools 3.0-M1 (official images,
 pinned by digest), knxd 0.14.73-1 (Debian trixie), xknx 4.0.0, KNXUltimate
-6.3.1, go-knx from source (feat/foundation, knxctl feat/cli), probe 1.0.
+6.3.1, go-knx v0.2.0 through knxctl (built from source before their
+release), probe 1.0.
 
 | Feature | calimero | knxd | xknx | KNXUltimate | go-knx |
 |---|---|---|---|---|---|
 | Discovery (as client) | PASS (3) | UNSUPPORTED 3 | PASS (3) | PASS (3) | PASS (3) |
-| Description (as client) | PASS (3) | UNSUPPORTED 3 | PASS (3) | KNOWN DIFFERENCE 3 | PASS (3) |
+| Description (as client) | PASS (3) | UNSUPPORTED 3 | PASS (3) | KNOWN DIFFERENCE 2, PASS 1 | PASS (3) |
 | Tunnelling client | PASS (3) | PASS (3) | PASS (3) | PASS (3) | PASS (3) |
 | Tunnelling server | PASS (10) | PASS (10) | UNSUPPORTED (no server) | UNSUPPORTED (adapter: client only) | PASS (10) |
-| Group write | PASS (3) | PASS (3) | PASS (3) | PASS (3) | PASS (3) |
-| Group read (client) | PASS (3) | PASS (3) | PASS (3) | PASS (3) | PASS (3) |
-| Group response (responder/observer) | NOT TESTED | NOT TESTED | PASS (12) | NOT TESTED | PASS (3) |
+| Group write | PASS 5, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 3 | PASS 5, UNSUPPORTED 1 | PASS 5, UNSUPPORTED 1 | PASS 5, UNSUPPORTED 1 |
+| Group read (client) | PASS 5, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 3 | PASS 5, UNSUPPORTED 1 | PASS 5, UNSUPPORTED 1 | PASS 5, UNSUPPORTED 1 |
+| Group response (responder/observer) | NOT TESTED | NOT TESTED | PASS (18) | NOT TESTED | PASS (5) |
 | Routing (sender) | PASS (4) | PASS (4) | PASS (4) | PASS (4) | PASS (4) |
 | Routing (receiver) | PASS (4) | PASS (4) | PASS (4) | PASS (4) | PASS (4) |
 | DPT encoding (sender) | PASS (36) | PASS (36) | PASS (36) | PASS (36) | PASS (36) |
 | DPT decoding (observer) | NOT TESTED | NOT TESTED | PASS (36) | NOT TESTED | PASS (144) |
 | Negative tests (server) | KNOWN DIFFERENCE 2, PASS 22 | PASS (24) | NOT TESTED | NOT TESTED | PASS (24) |
+| Tunnelling over TCP (client) | PASS 4, UNSUPPORTED 2 | UNSUPPORTED 6 | PASS 4, UNSUPPORTED 2 | PASS 4, UNSUPPORTED 2 | PASS 4, UNSUPPORTED 2 |
+| Tunnelling over TCP (server) | PASS 8, UNSUPPORTED 2 | UNSUPPORTED 10 | NOT TESTED | NOT TESTED | PASS 8, UNSUPPORTED 2 |
+| Device management (client) | PASS 2, UNSUPPORTED 1 | UNSUPPORTED 3 | UNSUPPORTED 3 | UNSUPPORTED 3 | PASS 2, UNSUPPORTED 1 |
+| Device management (server) | PASS 2, UNSUPPORTED 3 | UNSUPPORTED 5 | NOT TESTED | NOT TESTED | PASS 2, UNSUPPORTED 3 |
+| Busmonitor (client) | PASS 2, UNSUPPORTED 1 | UNSUPPORTED 3 | UNSUPPORTED 3 | UNSUPPORTED 3 | PASS 2, UNSUPPORTED 1 |
+| Busmonitor (server) | UNSUPPORTED 5 | PASS 2, UNSUPPORTED 3 | NOT TESTED | NOT TESTED | PASS 2, UNSUPPORTED 3 |
 | IP Secure | NOT TESTED | NOT TESTED | NOT TESTED | NOT TESTED | NOT TESTED |
 | Data Secure | NOT TESTED | NOT TESTED | NOT TESTED | NOT TESTED | NOT TESTED |
 
@@ -47,6 +54,11 @@ rows are not tested because go-knx does not implement KNX Secure yet.
 | knxd → go-knx server | connect, write, read, 12 DPT vectors |
 | go-knx routing ↔ xknx, KNXUltimate, Calimero tools, knxd | both directions |
 | probe → go-knx server | all 24 negative checks |
+| Calimero tools, xknx, KNXUltimate → go-knx server over TCP | write, read |
+| go-knx → Calimero server over TCP | write, read (and feature services in go-knx's interop suite) |
+| Calimero tools → go-knx server: device management, busmonitor | serial number read; busmonitor sees another client's write |
+| go-knx → Calimero server: device management | serial number read |
+| go-knx, Calimero tools busmonitor → knxd server | see a write of another client |
 | Third-party pairs (for example xknx → knxd, Calimero → knxd) | as reported; they validate the harness and the peers |
 
 Multiple clients: every server is used by the client, the observer and,

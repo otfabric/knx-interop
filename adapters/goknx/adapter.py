@@ -29,6 +29,8 @@ def link(a):
     args = ["--gateway", "%s:%d" % (a.target, a.port)]
     if a.nat:
         args.append("--nat")
+    if a.tcp:
+        args.append("--tcp")
     return args
 
 
@@ -57,10 +59,12 @@ def main():
     if a.role == "capabilities":
         contract.capabilities(IMPL, version(), ["server", "client"],
                               {"discover": True, "describe": True, "tunnel": True, "routing": True, "nat": True,
-                               "answer": True, "secure": False})
+                               "answer": True, "secure": False, "tcp": True, "property": True, "busmonitor": True,
+                               "server": {"tcp": True, "property": True, "busmonitor": True}},
+                              "The server runs with --concurrent-busmonitor (a simulator: busmonitor next to tunnels).")
         return
     if a.role == "server":
-        args = [KNXCTL, "serve", "--name", a.name[:30], "--tunnels", ",".join("1.1.%d" % i for i in range(10, 18)),
+        args = [KNXCTL, "serve", "--concurrent-busmonitor", "--name", a.name[:30], "--tunnels", ",".join("1.1.%d" % i for i in range(10, 18)),
                 "--address", "1.1.0", "--device-address", "1.1.1",
                 "--object", "1/0/1:1.001:CRWU=off", "--object", "1/0/2:9.001:CRWU=21.5", "--object", "1/0/3:5.001:CRWU=50",
                 "--object", "1/0/4:14.056:CRWU=1234.5", "--object", "1/0/5:16.000:CRWU=interop"]
@@ -85,8 +89,36 @@ def main():
                 r.finish("fail", error=p.stderr or p.stdout)
             d = doc["result"]["device"]
             r.finish("pass", {"name": d["name"], "address": d["individualAddress"], "services": d["services"]})
+        if a.op == "property":
+            args = ["property", "read", "%s:%d" % (a.target, a.port), str(a.object), str(a.pid)] + (["--tcp"] if a.tcp else []) + (["--nat"] if a.nat else [])
+            p = knxctl(args, a.timeout)
+            doc = last_doc(p.stdout)
+            if p.returncode != 0 or not doc or "result" not in doc:
+                r.finish("fail", error=p.stderr or p.stdout)
+            r.finish("pass", {"data": doc["result"]["data"]})
+        if a.op == "busmonitor":
+            args = ["busmonitor", "%s:%d" % (a.target, a.port), "--count", str(a.count), "--duration", "%gs" % a.timeout] + (["--tcp"] if a.tcp else [])
+            p = subprocess.Popen([KNXCTL, "--format", "json", "--timeout", "5s"] + args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            for line in p.stderr:
+                if "busmonitor on" in line:
+                    contract.ready()
+                    break
+                sys.stderr.write(line)
+            out, err = p.communicate(timeout=a.timeout + 30)
+            if p.returncode != 0:
+                r.finish("fail", error=err or out)
+            frames = []
+            for line in out.splitlines():
+                try:
+                    d = json.loads(line)
+                except ValueError:
+                    continue
+                if d.get("type") == "busmonitor":
+                    frames.append({"raw": d.get("raw", ""), "source": d.get("source", ""), "destination": d.get("destination", ""), "data": d.get("data", "")})
+            ok = len(frames) >= a.count
+            r.finish("pass" if ok else "fail", {"frames": frames}, None if ok else "received %d of %d frames" % (len(frames), a.count))
         if a.op == "connect":
-            args = ["tunnel", "connect", "%s:%d" % (a.target, a.port)] + (["--nat"] if a.nat else [])
+            args = ["tunnel", "connect", "%s:%d" % (a.target, a.port)] + (["--nat"] if a.nat else []) + (["--tcp"] if a.tcp else [])
             p = knxctl(args, a.timeout)
             doc = last_doc(p.stdout)
             if p.returncode != 0 or not doc or "result" not in doc:
