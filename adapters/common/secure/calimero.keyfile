@@ -1,0 +1,6 @@
+# knx-interop KNX Secure test profile (public test values)
+device.key=30c3dd3364a62347cbad1a517f6dbd3c
+group.key=6b6e782d696e7465726f702d6b657921
+user[1].pwd=knx-interop-user1
+user[2].pwd=knx-interop-user2
+user[3].pwd=knx-interop-user3

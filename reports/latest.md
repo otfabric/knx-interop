@@ -1,8 +1,8 @@
 # knx-interop results
 
-Started 2026-10-29T21:21:58.887924+00:00, finished 2026-10-29T21:30:36.240074+00:00 on darwin/arm64.
+Started 2026-10-29T23:29:11.015529+00:00, finished 2026-10-29T23:41:14.012813+00:00 on darwin/arm64.
 
-Summary: known-difference 4, pass 361, unsupported 42
+Summary: known-difference 8, pass 399, unsupported 51
 
 ## Implementations
 
@@ -10,7 +10,7 @@ Summary: known-difference 4, pass 361, unsupported 42
 |---|---|---|---|
 | calimero-server | calimero-server | 3.0-M1 | server |
 | calimero-tools | calimero | 3.0-M1 | client |
-| goknx | go-knx | (devel) (knxctl v0.1.1+dirty) | server, client |
+| goknx | go-knx | v0.3.0 (knxctl v0.3.0) | server, client |
 | knxd | knxd | 0.14.73 | server, client |
 | knxultimate | knxultimate | 6.3.1 | client |
 | probe | probe | 1.0 | client |
@@ -419,7 +419,7 @@ Summary: known-difference 4, pass 361, unsupported 42
 | unsupported connection type → E_CONNECTION_TYPE | probe | calimero-server | PASS | status 0x22 |
 | raw tunnelling layer → refused | probe | calimero-server | PASS | observed: status 0x29 |
 | TCP HPAI over UDP → refused | probe | calimero-server | PASS | observed: status 0x00 |
-| heartbeat right after the malformed datagrams | probe | calimero-server | PASS | observed: status 0x27 after 0.0 s |
+| heartbeat right after the malformed datagrams | probe | calimero-server | PASS | observed: status 0x00 after 0.0 s |
 | channel exhaustion → E_NO_MORE_CONNECTIONS | probe | calimero-server | PASS | 8 connections, then status 0x24 |
 | still serving after the tests | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST |
 
@@ -447,3 +447,59 @@ Summary: known-difference 4, pass 361, unsupported 42
 | routing write (multicast) | knxd | xknx | PASS |  |
 | routing write (multicast) | knxd | knxultimate | PASS |  |
 | routing write (multicast) | knxd | calimero-tools | PASS |  |
+
+## secure
+
+| Scenario | Client | Peer | Result | Detail |
+|---|---|---|---|---|
+| secure session connect (user 2, bound address) | goknx | goknx | PASS |  |
+| secure tunnel group write (DPT 1.001) | goknx | goknx | PASS | observer/responder xknx.  |
+| secure tunnel group read/response (DPT 9.001) | goknx | goknx | PASS | observer/responder xknx.  |
+| Data Secure group write through a secure tunnel (DPT 9.001) | goknx | goknx | PASS | observer/responder xknx.  |
+| secure device management: serial number (user 1) | goknx | goknx | PASS |  |
+| secure session connect (user 2, bound address) | xknx | goknx | PASS |  |
+| secure tunnel group write (DPT 1.001) | xknx | goknx | PASS | observer/responder goknx.  |
+| secure tunnel group read/response (DPT 9.001) | xknx | goknx | PASS | observer/responder goknx.  |
+| Data Secure group write through a secure tunnel (DPT 9.001) | xknx | goknx | PASS | observer/responder goknx.  |
+| secure device management: serial number (user 1) | xknx | goknx | UNSUPPORTED | no device management on the client |
+| secure tunnelling | knxultimate | goknx | UNSUPPORTED | no KNX IP Secure client |
+| secure session connect (user 2, bound address) | calimero-tools | goknx | PASS |  |
+| secure tunnel group write (DPT 1.001) | calimero-tools | goknx | PASS | observer/responder goknx.  |
+| secure tunnel group read/response (DPT 9.001) | calimero-tools | goknx | PASS | observer/responder xknx.  |
+| Data Secure group write through a secure tunnel (DPT 9.001) | calimero-tools | goknx | KNOWN-DIFFERENCE | observer/responder goknx. calimero-tools 3.0-M1 does not send Data Secure group telegrams with the test profile: it refuses with "<group> does not have a surrogate specified" (KnxSecureException), and with an ETS keyring it first sends S-A_Sync to a device of the keyring and waits for its answer; th |
+| secure device management: serial number (user 1) | calimero-tools | goknx | PASS |  |
+| secure tunnelling | knxd | goknx | UNSUPPORTED | no KNX IP Secure client |
+| plain connection refused by the secure server | goknx | goknx | PASS |  |
+| secure tunnelling server | - | knxd | UNSUPPORTED | no KNX IP Secure server |
+| secure session connect (user 2, bound address) | goknx | calimero-server | PASS |  |
+| secure tunnel group write (DPT 1.001) | goknx | calimero-server | PASS | observer/responder xknx.  |
+| secure tunnel group read/response (DPT 9.001) | goknx | calimero-server | PASS | observer/responder xknx.  |
+| Data Secure group write through a secure tunnel (DPT 9.001) | goknx | calimero-server | PASS | observer/responder xknx.  |
+| secure device management: serial number (user 1) | goknx | calimero-server | PASS |  |
+| secure session connect (user 2, bound address) | xknx | calimero-server | PASS |  |
+| secure tunnel group write (DPT 1.001) | xknx | calimero-server | PASS | observer/responder goknx.  |
+| secure tunnel group read/response (DPT 9.001) | xknx | calimero-server | PASS | observer/responder goknx.  |
+| Data Secure group write through a secure tunnel (DPT 9.001) | xknx | calimero-server | PASS | observer/responder goknx.  |
+| secure device management: serial number (user 1) | xknx | calimero-server | UNSUPPORTED | no device management on the client |
+| secure tunnelling | knxultimate | calimero-server | UNSUPPORTED | no KNX IP Secure client |
+| secure session connect (user 2, bound address) | calimero-tools | calimero-server | PASS |  |
+| secure tunnel group write (DPT 1.001) | calimero-tools | calimero-server | PASS | observer/responder goknx.  |
+| secure tunnel group read/response (DPT 9.001) | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| Data Secure group write through a secure tunnel (DPT 9.001) | calimero-tools | calimero-server | KNOWN-DIFFERENCE | observer/responder goknx. calimero-tools 3.0-M1 does not send Data Secure group telegrams with the test profile: it refuses with "<group> does not have a surrogate specified" (KnxSecureException), and with an ETS keyring it first sends S-A_Sync to a device of the keyring and waits for its answer; th |
+| secure device management: serial number (user 1) | calimero-tools | calimero-server | PASS |  |
+| secure tunnelling | knxd | calimero-server | UNSUPPORTED | no KNX IP Secure client |
+| plain connection refused by the secure server | goknx | calimero-server | PASS |  |
+| secure routing | knxultimate | - | UNSUPPORTED | no KNX IP Secure routing |
+| secure routing | knxd | - | UNSUPPORTED | no KNX IP Secure routing |
+| secure routing write (DPT 1.001) | goknx | xknx | PASS |  |
+| Data Secure group write over secure routing (DPT 9.001) | goknx | xknx | PASS |  |
+| secure routing write (DPT 1.001) | goknx | calimero-tools | PASS |  |
+| Data Secure group write over secure routing (DPT 9.001) | goknx | calimero-tools | PASS |  |
+| secure routing write (DPT 1.001) | xknx | goknx | PASS |  |
+| Data Secure group write over secure routing (DPT 9.001) | xknx | goknx | PASS |  |
+| secure routing write (DPT 1.001) | xknx | calimero-tools | PASS |  |
+| Data Secure group write over secure routing (DPT 9.001) | xknx | calimero-tools | PASS |  |
+| secure routing write (DPT 1.001) | calimero-tools | goknx | PASS |  |
+| Data Secure group write over secure routing (DPT 9.001) | calimero-tools | goknx | KNOWN-DIFFERENCE | calimero-tools 3.0-M1 does not send Data Secure group telegrams with the test profile: it refuses with "<group> does not have a surrogate specified" (KnxSecureException), and with an ETS keyring it first sends S-A_Sync to a device of the keyring and waits for its answer; the same happens towards xkn |
+| secure routing write (DPT 1.001) | calimero-tools | xknx | PASS |  |
+| Data Secure group write over secure routing (DPT 9.001) | calimero-tools | xknx | KNOWN-DIFFERENCE | calimero-tools 3.0-M1 does not send Data Secure group telegrams with the test profile: it refuses with "<group> does not have a surrogate specified" (KnxSecureException), and with an ETS keyring it first sends S-A_Sync to a device of the keyring and waits for its answer; the same happens towards xkn |

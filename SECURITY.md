@@ -12,8 +12,11 @@ images open UDP port 3671 and join 224.0.23.12 inside that network only;
 nothing is published on the host. The probe sends malformed datagrams: run
 it only against servers you own.
 
-No credentials or keys are used yet. When KNX IP Secure scenarios are
-added, their keys will be test keys generated for the fixtures, never real
-installation keys, and reports will not contain them.
+The KNX Secure scenarios use one test profile
+([adapters/common/secure](adapters/common/secure), written by
+[tools/secure-fixture](tools/secure-fixture)): a keyring, a Calimero
+keyfile and their passwords, all **public test values** that are in every
+adapter image. Never use them in an installation; real installation keys
+are never needed. Reports do not contain keys or passwords.
 
 Reports and logs contain container addresses and test telegrams only.

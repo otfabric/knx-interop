@@ -45,13 +45,19 @@ def main():
         ("Device management (server)", lambda r, a: r["suite"] == "v2" and r["scenario"].startswith("device management") and r["peer"] in a),
         ("Busmonitor (client)", lambda r, a: r["suite"] == "v2" and r["scenario"].startswith("busmonitor") and r["client"] in a),
         ("Busmonitor (server)", lambda r, a: r["suite"] == "v2" and r["scenario"].startswith("busmonitor") and r["peer"] in a),
+        ("IP Secure tunnelling (client)", lambda r, a: r["suite"] == "secure" and r["scenario"].startswith(("secure session", "secure tunnel")) and r["client"] in a),
+        ("IP Secure tunnelling (server)", lambda r, a: r["suite"] == "secure" and r["scenario"].startswith(("secure session", "secure tunnel", "plain connection", "secure tunnelling server")) and r["peer"] in a),
+        ("IP Secure device management (client)", lambda r, a: r["suite"] == "secure" and r["scenario"].startswith("secure device management") and r["client"] in a),
+        ("IP Secure device management (server)", lambda r, a: r["suite"] == "secure" and r["scenario"].startswith("secure device management") and r["peer"] in a),
+        ("IP Secure routing (sender)", lambda r, a: r["suite"] == "secure" and r["scenario"].startswith("secure routing") and r["client"] in a),
+        ("IP Secure routing (receiver)", lambda r, a: r["suite"] == "secure" and r["scenario"].startswith("secure routing") and r["peer"] in a),
+        ("Data Secure (sender)", lambda r, a: r["suite"] == "secure" and r["scenario"].startswith("Data Secure") and r["client"] in a),
+        ("Data Secure (receiver)", lambda r, a: r["suite"] == "secure" and r["scenario"].startswith("Data Secure") and (r.get("observer") or r["peer"]) in a),
     ]
     print("| Feature | " + " | ".join(c for c, _ in COLS) + " |")
     print("|---|" + "---|" * len(COLS))
     for name, pred in rows:
         print("| %s | %s |" % (name, " | ".join(cell(res, a, pred) for _, a in COLS)))
-    print("| IP Secure | " + " | ".join("NOT TESTED" for _ in COLS) + " |")
-    print("| Data Secure | " + " | ".join("NOT TESTED" for _ in COLS) + " |")
 
 
 if __name__ == "__main__":
