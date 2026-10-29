@@ -2,6 +2,9 @@
 # SPDX-License-Identifier: MIT
 # knx-interop adapter for calimero-tools (GPL-2.0 with the Classpath
 # exception): client roles through the Calimero command-line tools.
+# Option lists ($(opts), $filt, hex octets) are split on purpose; some
+# parsed options are not used by every role.
+# shellcheck disable=SC2046,SC2086,SC2034
 set -u
 
 IMPL=calimero

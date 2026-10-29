@@ -303,7 +303,11 @@ class Matrix:
         with open(base + ".md", "w") as f:
             f.write(markdown(doc))
         print("\n%s\nreports: %s.json, %s.md" % (summary, base, base))
-        return summary.get("fail", 0) == 0
+        failed = [r for r in self.results if r["status"] == "fail"]
+        gated = [r for r in failed if not self.a.gate or self.a.gate in (r["client"], r["peer"], r.get("observer"))]
+        if failed and not gated:
+            print("%d failures, none involving %s: reported, not gating" % (len(failed), self.a.gate))
+        return not gated
 
 
 def parse_out(out):
@@ -353,6 +357,7 @@ def main():
     p.add_argument("--routers", default=",".join(ROUTERS))
     p.add_argument("--suites", default="tunnel,dpt,negative,routing")
     p.add_argument("--report", default="latest")
+    p.add_argument("--gate", default="", help="fail only on failures involving this adapter (empty: any failure)")
     a = p.parse_args()
     a.servers = [s for s in a.servers.split(",") if s]
     a.clients = [s for s in a.clients.split(",") if s]

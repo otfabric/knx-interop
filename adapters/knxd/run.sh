@@ -2,6 +2,9 @@
 # SPDX-License-Identifier: MIT
 # knx-interop adapter for knxd (GPL-2.0) and knxtool: server, and tunnelling
 # or routing client through a local knxd daemon.
+# Option lists ($(opts), $filt, hex octets) are split on purpose; some
+# parsed options are not used by every role.
+# shellcheck disable=SC2046,SC2086,SC2034
 set -u
 
 IMPL=knxd

@@ -3,6 +3,9 @@
 # knx-interop adapter for calimero-server (GPL-2.0 with the Classpath
 # exception): a KNXnet/IP server with an emulated KNX subnet, which keeps
 # the last value written to each group address and answers reads with it.
+# Option lists ($(opts), $filt, hex octets) are split on purpose; some
+# parsed options are not used by every role.
+# shellcheck disable=SC2046,SC2086,SC2034
 set -u
 VERSION=$(cat /adapter/VERSION)
 ROLE=${1:-}

@@ -62,8 +62,11 @@ lint: ## Shellcheck the shell adapters, byte-compile the Python ones, check the 
 	@for f in adapters/*/*.py adapters/common/*.py scripts/*.py; do python3 -m py_compile $$f || exit 1; done
 	@if command -v node >/dev/null 2>&1; then node --check adapters/knxultimate/adapter.js; fi
 
+# GATE: fail only on failures that involve this adapter (go-knx, the
+# implementation the matrix exists for); GATE= fails on any failure.
+GATE ?= goknx
 matrix: ## Run every scenario between every pair of adapters (Docker); writes reports/latest.{json,md}
-	@python3 scripts/run-matrix.py --registry $(REGISTRY) --version $(VERSION)
+	@python3 scripts/run-matrix.py --registry $(REGISTRY) --version $(VERSION) --gate "$(GATE)"
 
 matrix-quick: ## Run the tunnel suite against the go-knx server and go-knx against the others
 	@python3 scripts/run-matrix.py --registry $(REGISTRY) --version $(VERSION) --suites tunnel --report quick
