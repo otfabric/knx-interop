@@ -18,6 +18,10 @@ ADAPTERS ?= goknx xknx knxultimate knxd calimero-server calimero-tools probe
 # checkouts KNXCTL_DIR (and the go-knx it replaces) (Dockerfile.local).
 GOKNX ?= local
 KNXCTL_DIR ?= ../knxctl
+# With GOKNX=local, knxctl is built against the go-knx checkout GOKNX_DIR
+# (through a temporary go.work) when it exists, else against the go-knx
+# version knxctl's go.mod requires.
+GOKNX_DIR ?= ../go-knx
 KNXCTL_VERSION ?= latest
 ARCH := $(shell docker version --format '{{.Server.Arch}}' 2>/dev/null || uname -m)
 
@@ -32,7 +36,10 @@ images: $(addprefix image-,$(ADAPTERS)) ## Build every adapter image for this ma
 
 goknx-binary: ## Build knxctl for Linux from KNXCTL_DIR (GOKNX=local)
 	@mkdir -p adapters/goknx/bin
-	@cd $(KNXCTL_DIR) && GOWORK=off CGO_ENABLED=0 GOOS=linux GOARCH=$(ARCH) go build -trimpath -o $(CURDIR)/adapters/goknx/bin/knxctl-linux-$(ARCH) .
+	@work=off; if [ -d "$(GOKNX_DIR)" ]; then \
+		printf 'go 1.23\n\nuse (\n\t%s\n\t%s\n)\n' "$$(cd $(KNXCTL_DIR) && pwd)" "$$(cd $(GOKNX_DIR) && pwd)" > adapters/goknx/bin/go.work; \
+		work=$(CURDIR)/adapters/goknx/bin/go.work; echo "knxctl from $(KNXCTL_DIR) with go-knx from $(GOKNX_DIR)"; fi; \
+	cd $(KNXCTL_DIR) && GOWORK=$$work CGO_ENABLED=0 GOOS=linux GOARCH=$(ARCH) go build -trimpath -o $(CURDIR)/adapters/goknx/bin/knxctl-linux-$(ARCH) .
 
 image-goknx: $(if $(filter local,$(GOKNX)),goknx-binary)
 	@echo "build $(call image,goknx) ($(GOKNX))"
