@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Keyring Project="knx-interop" CreatedBy="knx-interop secure-fixture" Created="2026-10-30T00:00:00" Signature="pfwou6DCoA+cZacFRpJMPg==" xmlns="http://knx.org/xml/keyring/1">
+  <Backbone MulticastAddress="224.0.23.12" Latency="1000" Key="pTAFlHarH1alko20OFFlHg==" />
+  <Interface IndividualAddress="1.1.10" Type="Tunneling" Host="1.1.0" UserID="2" Password="/oTW3k7wNfVthPatRO1pr8/0f5U1hpslzE3CpwPZLfk=" Authentication="9gMX8AVJ0v5lvTJQ/ofmIUaYADre33qAR2XYFB7p7SM=">
+    <Group Address="2817" Senders="1.1.10 1.1.11 1.1.12 1.1.13 1.1.14 1.1.15 1.1.16 1.1.17 15.15.240 15.15.250 15.15.255" />
+    <Group Address="2818" Senders="1.1.10 1.1.11 1.1.12 1.1.13 1.1.14 1.1.15 1.1.16 1.1.17 15.15.240 15.15.250 15.15.255" />
+  </Interface>
+  <Interface IndividualAddress="1.1.11" Type="Tunneling" Host="1.1.0" UserID="3" Password="F/8OvD1TgNqgBiCIItDCwrJdFOyryO5Msa/Lrzt/TUQ=" Authentication="Ou8RkifnbMYlu+Kqn973fpyIzuo8q1G82scj8RbDqjE=">
+    <Group Address="2817" Senders="1.1.10 1.1.11 1.1.12 1.1.13 1.1.14 1.1.15 1.1.16 1.1.17 15.15.240 15.15.250 15.15.255" />
+    <Group Address="2818" Senders="1.1.10 1.1.11 1.1.12 1.1.13 1.1.14 1.1.15 1.1.16 1.1.17 15.15.240 15.15.250 15.15.255" />
+  </Interface>
+  <Interface IndividualAddress="15.15.240" Type="USB">
+    <Group Address="2817" Senders="1.1.10 1.1.11 1.1.12 1.1.13 1.1.14 1.1.15 1.1.16 1.1.17 15.15.240 15.15.250 15.15.255" />
+    <Group Address="2818" Senders="1.1.10 1.1.11 1.1.12 1.1.13 1.1.14 1.1.15 1.1.16 1.1.17 15.15.240 15.15.250 15.15.255" />
+  </Interface>
+  <Interface IndividualAddress="15.15.250" Type="USB">
+    <Group Address="2817" Senders="1.1.10 1.1.11 1.1.12 1.1.13 1.1.14 1.1.15 1.1.16 1.1.17 15.15.240 15.15.250 15.15.255" />
+    <Group Address="2818" Senders="1.1.10 1.1.11 1.1.12 1.1.13 1.1.14 1.1.15 1.1.16 1.1.17 15.15.240 15.15.250 15.15.255" />
+  </Interface>
+  <Interface IndividualAddress="15.15.255" Type="USB">
+    <Group Address="2817" Senders="1.1.10 1.1.11 1.1.12 1.1.13 1.1.14 1.1.15 1.1.16 1.1.17 15.15.240 15.15.250 15.15.255" />
+    <Group Address="2818" Senders="1.1.10 1.1.11 1.1.12 1.1.13 1.1.14 1.1.15 1.1.16 1.1.17 15.15.240 15.15.250 15.15.255" />
+  </Interface>
+  <GroupAddresses>
+    <Group Address="2817" Key="Q4nzKeP87Mm6KsI7QD7yBA==" />
+    <Group Address="2818" Key="VFEZ9D1YCrdaLVlZh6Vt/Q==" />
+  </GroupAddresses>
+  <Devices>
+    <Device IndividualAddress="1.1.0" ToolKey="aTKzWNP4zZqGrp/uYRhshA==" ManagementPassword="4JrRQL1nK8lAWxXureDW/5m6ONVmZ571+XfE+Ky2Ac0=" Authentication="q2X+PE+xx8rD/c16Fh5zsTEFKHlHiiEmNdcL53Qd5jU=" />
+  </Devices>
+</Keyring>

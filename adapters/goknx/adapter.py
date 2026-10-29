@@ -23,15 +23,27 @@ def version():
         return "unknown"
 
 
+def secure(a):
+    """knxctl flags of the secure test profile: the keyring gives the
+    tunnelling user (--user), the backbone key and the Data Secure groups."""
+    if not a.secure:
+        return []
+    p = contract.secure_profile()
+    args = ["--keyring", p["keyringPath"], "--keyring-password", p["keyringPassword"]]
+    if not a.routing:
+        args += ["--user-id", str(a.user)]
+    return args
+
+
 def link(a):
     if a.routing:
-        return ["--routing"]
+        return ["--routing"] + secure(a)
     args = ["--gateway", "%s:%d" % (a.target, a.port)]
-    if a.nat:
+    if a.nat and not a.secure:
         args.append("--nat")
     if a.tcp:
         args.append("--tcp")
-    return args
+    return args + secure(a)
 
 
 def knxctl(args, timeout):
@@ -59,9 +71,11 @@ def main():
     if a.role == "capabilities":
         contract.capabilities(IMPL, version(), ["server", "client"],
                               {"discover": True, "describe": True, "tunnel": True, "routing": True, "nat": True,
-                               "answer": True, "secure": False, "tcp": True, "property": True, "busmonitor": True,
-                               "server": {"tcp": True, "property": True, "busmonitor": True}},
-                              "The server runs with --concurrent-busmonitor (a simulator: busmonitor next to tunnels).")
+                               "answer": True, "secure": True, "tcp": True, "property": True, "busmonitor": True,
+                               "dataSecure": True,
+                               "server": {"tcp": True, "property": True, "busmonitor": True, "secure": True}},
+                              "The server runs with --concurrent-busmonitor (a simulator: busmonitor next to tunnels). "
+                              "Secure: tunnelling over TCP, routing and Data Secure; Data Secure without S-A_Sync.")
         return
     if a.role == "server":
         args = [KNXCTL, "serve", "--concurrent-busmonitor", "--name", a.name[:30], "--tunnels", ",".join("1.1.%d" % i for i in range(10, 18)),
@@ -70,6 +84,9 @@ def main():
                 "--object", "1/0/4:14.056:CRWU=1234.5", "--object", "1/0/5:16.000:CRWU=interop"]
         if a.routing:
             args += ["--routing", "--interface", "eth0"]
+        if a.secure:
+            p = contract.secure_profile()
+            args += ["--keyring", p["keyringPath"], "--keyring-password", p["keyringPassword"], "--keyring-host", p["host"]]
         contract.ready()
         os.execv(KNXCTL, args)
     r = contract.Result(IMPL, version(), a.op)
@@ -90,14 +107,14 @@ def main():
             d = doc["result"]["device"]
             r.finish("pass", {"name": d["name"], "address": d["individualAddress"], "services": d["services"]})
         if a.op == "property":
-            args = ["property", "read", "%s:%d" % (a.target, a.port), str(a.object), str(a.pid)] + (["--tcp"] if a.tcp else []) + (["--nat"] if a.nat else [])
+            args = ["property", "read", "%s:%d" % (a.target, a.port), str(a.object), str(a.pid)] + (["--tcp"] if a.tcp else []) + (["--nat"] if a.nat and not a.secure else []) + secure(a)
             p = knxctl(args, a.timeout)
             doc = last_doc(p.stdout)
             if p.returncode != 0 or not doc or "result" not in doc:
                 r.finish("fail", error=p.stderr or p.stdout)
             r.finish("pass", {"data": doc["result"]["data"]})
         if a.op == "busmonitor":
-            args = ["busmonitor", "%s:%d" % (a.target, a.port), "--count", str(a.count), "--duration", "%gs" % a.timeout] + (["--tcp"] if a.tcp else [])
+            args = ["busmonitor", "%s:%d" % (a.target, a.port), "--count", str(a.count), "--duration", "%gs" % a.timeout] + (["--tcp"] if a.tcp else []) + secure(a)
             p = subprocess.Popen([KNXCTL, "--format", "json", "--timeout", "5s"] + args, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
             for line in p.stderr:
                 if "busmonitor on" in line:
@@ -118,7 +135,7 @@ def main():
             ok = len(frames) >= a.count
             r.finish("pass" if ok else "fail", {"frames": frames}, None if ok else "received %d of %d frames" % (len(frames), a.count))
         if a.op == "connect":
-            args = ["tunnel", "connect", "%s:%d" % (a.target, a.port)] + (["--nat"] if a.nat else []) + (["--tcp"] if a.tcp else [])
+            args = ["tunnel", "connect", "%s:%d" % (a.target, a.port)] + (["--nat"] if a.nat and not a.secure else []) + (["--tcp"] if a.tcp else []) + secure(a)
             p = knxctl(args, a.timeout)
             doc = last_doc(p.stdout)
             if p.returncode != 0 or not doc or "result" not in doc:

@@ -27,7 +27,7 @@ ROLE=${1:-}
 [ $# -gt 0 ] && shift
 OP=$ROLE
 if [ "$ROLE" = client ]; then OP=${1:-}; shift; fi
-TARGET="" PORT=3671 NAT=0 TCP=0 OBJECT=0 PID=11 ROUTING=0 GROUP="" DPT="" VALUE="" COUNT=1 TIMEOUT=5
+TARGET="" PORT=3671 NAT=0 TCP=0 OBJECT=0 PID=11 ROUTING=0 GROUP="" DPT="" VALUE="" COUNT=1 TIMEOUT=5 SECURE=0 SUSER=2
 while [ $# -gt 0 ]; do
 	case "$1" in
 	--target) TARGET=$2; shift ;;
@@ -35,6 +35,8 @@ while [ $# -gt 0 ]; do
 	--nat) NAT=1 ;;
 	--routing) ROUTING=1 ;;
 	--tcp) TCP=1 ;;
+	--secure) SECURE=1 ;;
+	--user) SUSER=$2; shift ;;
 	--object) OBJECT=$2; shift ;;
 	--pid) PID=$2; shift ;;
 	--group) GROUP=$2; shift ;;
@@ -54,8 +56,27 @@ host() {
 		echo "$TARGET"
 	fi
 }
+# The KNX Secure test profile (contract 1.2), from the Calimero keyfile
+# and profile.json of /adapter/common/secure: public test values.
+SEC=/adapter/common/secure
+kf() { sed -n "s/^$1=//p" "$SEC/calimero.keyfile"; }
+secure_opts() {
+	kpw=$(sed -n 's/.*"keyringPassword": "\([^"]*\)".*/\1/p' "$SEC/profile.json")
+	o="--keyring $SEC/knx-interop.knxkeys --keyring-pwd $kpw"
+	if [ "$ROUTING" = 1 ]; then
+		# 15.15.240 is the profile's routing source of Calimero tools.
+		o="$o --group-key $(kf group.key) -k 15.15.240"
+	else
+		o="$o --tcp --user $SUSER --user-pwd $(kf "user\[$SUSER\].pwd") --device-key $(kf device.key)"
+	fi
+	echo "$o"
+}
 opts() {
 	o="-p $PORT"
+	if [ "$SECURE" = 1 ]; then
+		echo "$o $(secure_opts)"
+		return
+	fi
 	[ "$NAT" = 1 ] && o="$o --nat"
 	[ "$TCP" = 1 ] && o="$o --tcp"
 	echo "$o"
@@ -78,7 +99,7 @@ groupmon_json() {
 
 case "$ROLE" in
 capabilities)
-	printf '{"features":{"answer":false,"connect":true,"describe":true,"discover":true,"nat":true,"routing":true,"secure":false,"tunnel":true,"dptCodec":true,"tcp":true,"property":true,"busmonitor":true},"implementation":"%s","notes":"The Calimero process communication tool has no responder; KNX IP Secure is supported by Calimero but not exercised by this adapter yet.","roles":["client"],"schemaVersion":"1.0","version":"%s"}\n' "$IMPL" "$VERSION"
+	printf '{"features":{"answer":false,"connect":true,"describe":true,"discover":true,"nat":true,"routing":true,"secure":true,"dataSecure":true,"tunnel":true,"dptCodec":true,"tcp":true,"property":true,"busmonitor":true},"implementation":"%s","notes":"The Calimero process communication tool has no responder. Secure: tunnelling over TCP, routing and Data Secure with the test profile.","roles":["client"],"schemaVersion":"1.0","version":"%s"}\n' "$IMPL" "$VERSION"
 	exit 0 ;;
 server) finish unsupported '{}' "use the calimero-server adapter" ;;
 client) ;;
@@ -106,6 +127,16 @@ describe)
 	finish pass "{\"name\":\"$(json_str "$name")\",\"address\":\"$addr\",\"services\":$svcs}" ;;
 connect)
 	[ "$ROUTING" = 1 ] && finish unsupported '{}' "connect is for tunnels"
+	if [ "$SECURE" = 1 ]; then
+		# A killed groupmon leaves the secure user's tunnel (and its bound
+		# address) open on the server; a read of an unused group connects
+		# and disconnects normally.
+		line=$(tools read 0/7/255 1.001 "$TARGET" $(opts) | grep -m1 "connection established")
+		[ -z "$line" ] && finish fail '{}' "no secure connection"
+		ch=$(echo "$line" | sed -n 's/.*channel \([0-9]*\).*/\1/p')
+		ia=$(echo "$line" | sed -n 's/.*tunneling address \([0-9.]*\)).*/\1/p')
+		finish pass "{\"channel\":${ch:-null},\"address\":\"$ia\"}"
+	fi
 	bgtools groupmon "$TARGET" $(opts)
 	i=0
 	while [ $i -lt $((TIMEOUT * 10)) ]; do
@@ -124,7 +155,7 @@ connect)
 	finish fail '{}' "no connection within ${TIMEOUT}s: $(head -5 /tmp/gm.log)" ;;
 write)
 	out=$(tools write "$GROUP" "$DPT" "$VALUE" "$(host)" $(opts))
-	echo "$out" | grep -q "successful" || finish fail '{}' "$out"
+	echo "$out" | grep -q "successful" || finish fail '{}' "$(echo "$out" | grep -E 'Exception|ERROR|failed' | head -3)"
 	finish pass '{}' ;;
 read)
 	out=$(tools read "$GROUP" "$DPT" "$(host)" $(opts))
@@ -137,7 +168,11 @@ read)
 monitor)
 	bgtools groupmon "$(host)" $(opts) --json
 	i=0
-	if [ "$ROUTING" = 1 ]; then
+	if [ "$ROUTING" = 1 ] && [ "$SECURE" = 1 ]; then
+		# Secure routing: wait for the timer synchronisation (or the
+		# tool becoming time keeper).
+		while ! grep -q "synchronized" /tmp/gm.log && [ $i -lt 100 ]; do i=$((i + 1)); sleep 0.1; done
+	elif [ "$ROUTING" = 1 ]; then
 		sleep 3
 	else
 		while ! grep -q "connection established" /tmp/gm.log && [ $i -lt 100 ]; do i=$((i + 1)); sleep 0.1; done

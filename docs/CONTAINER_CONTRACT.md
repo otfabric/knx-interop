@@ -1,15 +1,19 @@
-# Container contract (version 1.1)
+# Container contract (version 1.2)
 
-Version 1.1 adds `--tcp`, the `property` and `busmonitor` operations and
-the `server` capabilities; adapters of version 1.0 stay valid.
+Version 1.2 adds `--secure` and `--user` (KNX IP Secure and KNX Data Secure
+with the test profile below) and the `secure`, `dataSecure` and
+`server.secure` capabilities. Version 1.1 added `--tcp`, the `property` and
+`busmonitor` operations and the `server` capabilities. Adapters of earlier
+versions stay valid.
 
 Every adapter image runs one implementation and has the entry point
 `/adapter/run`:
 
 ```text
 run capabilities
-run server [--routing] [--name NAME]
+run server [--routing] [--name NAME] [--secure]
 run client <op> [--target HOST] [--port 3671] [--nat] [--routing] [--tcp]
+                [--secure] [--user 1|2|3]
                 [--object TYPE] [--pid PID]
                 [--group G] [--dpt D] [--value V] [--data HEX]
                 [--count N] [--timeout SECONDS]
@@ -30,7 +34,32 @@ Features a runner relies on: `discover`, `describe`, `tunnel`, `routing`,
 needs `--data`), and since 1.1 `tcp`, `property`, `busmonitor` for the
 client and, under `server`, `tcp`, `property` (device management) and
 `busmonitor` (a busmonitor connection sees the writes of a tunnel at the same
-time) for the server role.
+time) for the server role; since 1.2 `secure` (KNX IP Secure: secure
+tunnelling and, with `--routing`, secure routing), `dataSecure` (KNX Data
+Secure group communication) and `server.secure`.
+
+## KNX Secure test profile (1.2)
+
+Every image carries the profile in `/adapter/common/secure` (from
+`adapters/common/secure`, written by `tools/secure-fixture`). **All of its
+keys and passwords are public test values.**
+
+| Item | Value |
+|---|---|
+| Keyring | `knx-interop.knxkeys`, password `knx-interop` |
+| Host (server) | 1.1.0, device authentication password `knx-interop-device` |
+| Users | 1 management (`knx-interop-user1`); 2 → tunnelling address 1.1.10 (`knx-interop-user2`); 3 → 1.1.11 (`knx-interop-user3`) |
+| Backbone key (secure routing) | `6b6e782d696e7465726f702d6b657921`, latency 1000 ms |
+| Data Secure groups | 1/3/1 and 1/3/2, senders 1.1.10–1.1.17, 15.15.240 (Calimero tools), 15.15.250 (xknx), 15.15.255 (go-knx) |
+| Calimero server | the same profile as a keyfile, `calimero.keyfile` |
+
+With `--secure` a client opens a secure session over TCP as user `--user`
+(default 2) and verifies the server's device authentication code, or with
+`--routing` routes with the backbone key; in both cases it applies Data
+Secure to the profile's groups (plain groups stay plain). A server started
+with `--secure` refuses plain tunnelling and device management, serves
+users 1–3 (user 1: device management) and binds users 2 and 3 to their
+addresses.
 
 ## server
 

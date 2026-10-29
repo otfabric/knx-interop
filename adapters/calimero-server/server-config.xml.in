@@ -2,7 +2,7 @@
 <!-- SPDX-License-Identifier: MIT -->
 <knxServer name="knx-interop" friendlyName="@NAME@">
   <discovery listenNetIf="eth0" outgoingNetIf="eth0" activate="true"/>
-  <serviceContainer activate="true" routing="@ROUTING@" networkMonitoring="false" udpPort="3671" netif="eth0">
+  <serviceContainer activate="true" routing="@ROUTING@" networkMonitoring="false" udpPort="3671" netif="eth0" @SECURE@>
     <knxAddress type="individual">1.1.0</knxAddress>
     @ROUTING_GROUP@
     <knxSubnet type="emulate">knx-interop</knxSubnet>
@@ -17,5 +17,6 @@
       <knxAddress type="individual">1.1.16</knxAddress>
       <knxAddress type="individual">1.1.17</knxAddress>
     </additionalAddresses>
+    @USERS@
   </serviceContainer>
 </knxServer>

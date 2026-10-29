@@ -14,7 +14,7 @@ import contract  # noqa: E402
 from xknx import XKNX  # noqa: E402
 from xknx.core.value_reader import ValueReader  # noqa: E402
 from xknx.dpt import DPTArray, DPTBase, DPTBinary  # noqa: E402
-from xknx.io import ConnectionConfig, ConnectionType, GatewayScanner  # noqa: E402
+from xknx.io import ConnectionConfig, ConnectionType, GatewayScanner, SecureConfig  # noqa: E402
 from xknx.io.self_description import request_description  # noqa: E402
 from xknx.telegram import GroupAddress, Telegram  # noqa: E402
 from xknx.telegram.apci import GroupValueRead, GroupValueResponse, GroupValueWrite  # noqa: E402
@@ -57,7 +57,24 @@ def service(p):
     return type(p).__name__
 
 
+def secure_config(a):
+    """The test profile: secure session (user --user) or backbone key, and
+    the keyring for Data Secure."""
+    p = contract.secure_profile()
+    kw = {"knxkeys_file_path": p["keyringPath"], "knxkeys_password": p["keyringPassword"]}
+    if a.routing:
+        kw.update(backbone_key=p["backboneKey"], latency_ms=p["latencyMs"])
+    else:
+        kw.update(user_id=a.user, user_password=p["users"][str(a.user)]["password"], device_authentication_password=p["devicePassword"])
+    return SecureConfig(**kw)
+
+
 def config(a):
+    if a.secure:
+        if a.routing:
+            return ConnectionConfig(connection_type=ConnectionType.ROUTING_SECURE, local_ip=None, secure_config=secure_config(a))
+        return ConnectionConfig(connection_type=ConnectionType.TUNNELING_TCP_SECURE, gateway_ip=a.target, gateway_port=a.port,
+                                auto_reconnect=False, secure_config=secure_config(a))
     if a.routing:
         return ConnectionConfig(connection_type=ConnectionType.ROUTING, local_ip=None)
     if a.tcp:
@@ -164,8 +181,8 @@ def main():
     if a.role == "capabilities":
         contract.capabilities(IMPL, VERSION, ["client"],
                               {"discover": True, "describe": True, "tunnel": True, "routing": True, "nat": True,
-                               "answer": True, "secure": False, "tcp": True, "property": False, "busmonitor": False},
-                              "xknx supports KNX IP Secure and Data Secure; this adapter does not exercise them yet")
+                               "answer": True, "secure": True, "dataSecure": True, "tcp": True, "property": False, "busmonitor": False},
+                              "Secure: tunnelling over TCP, routing and Data Secure with the test profile")
         return
     if a.role == "server":
         r = contract.Result(IMPL, VERSION, "server")

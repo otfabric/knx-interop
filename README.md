@@ -27,6 +27,7 @@ adapter against every other:
 | negative | the probe against each server: malformed headers, lengths, HPAIs and CRIs; unknown service types; status codes for unknown channels and connection types; duplicate and out-of-order sequence numbers; sequence roll-over; channel exhaustion |
 | routing | a routing indication written by one implementation and received by another on 224.0.23.12:3671 |
 | v2 | group write and read over TCP (KNXnet/IP core v2); device management (M_PropRead of the device serial number); a busmonitor connection that sees another client's write |
+| secure | KNX IP Secure tunnelling against each secure server (session with a bound user address, write, read, Data Secure group write through the tunnel, device management as the management user, refusal of plain connections); secure routing and Data Secure over secure routing between every pair of secure routers. All with the public test profile in [adapters/common/secure](adapters/common/secure) |
 
 Results are `pass`, `fail`, `unsupported` (the adapter or stack does not
 offer the operation), `not-tested` (a prerequisite failed) or
@@ -87,8 +88,10 @@ tag-driven ([RELEASE.md](RELEASE.md)).
   network; hosts outside it are not reached (go-knx's own interop suite
   covers the unicast scenarios from the host, through NAT).
 - The knxd Debian package has no search or description tools.
-- KNX IP Secure and Data Secure scenarios are not implemented yet (several
-  stacks support them; go-knx does not yet).
+- The KNX Secure scenarios use one test profile (keyring, keyfile); keys
+  of real installations are never needed or used. Secure sessions run over
+  TCP only; KNXUltimate and knxd are not in the secure suite (their
+  adapters do not configure security).
 - calimero-server 3.0-M2 has no image; 3.0-M1 is used.
 
 ## License

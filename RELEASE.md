@@ -5,6 +5,39 @@ versions.yaml; the Release workflow builds the images and takes this
 file's section of that version as the release notes. Add the section,
 headed exactly `## vX.Y.Z` and closed by a line `---`, before tagging.
 
+## v0.3.0
+
+**Date:** 2026-10-30
+**Previous release:** v0.2.0
+
+## Summary
+
+Container contract 1.2: KNX IP Secure and KNX Data Secure, with one public
+test profile, in the adapters and in a new `secure` suite of the matrix.
+
+## Additions
+
+- The KNX Secure test profile in `adapters/common/secure` (keyring,
+  Calimero keyfile, profile.json), written by `tools/secure-fixture` with
+  go-knx v0.3.0 and copied into every adapter image. All values are public
+  test values.
+- `--secure` and `--user` in the goknx (knxctl keyring flags), xknx
+  (`TUNNELING_TCP_SECURE`, `ROUTING_SECURE`, keyring for Data Secure) and
+  calimero-tools (`--user`/`--device-key`, `--group-key`, `--keyring`)
+  adapters; `server --secure` in the goknx (keyring host) and
+  calimero-server (keyfile, tunnelling users) adapters.
+- The `secure` suite: secure tunnelling against each secure server (bound
+  user address, write, read, Data Secure through the tunnel, device
+  management as user 1, plain connection refused) and secure routing with
+  Data Secure between every pair of secure routers.
+- A known difference: Calimero tools 3.0-M1 do not send Data Secure group
+  telegrams with the profile (they need a "surrogate" and S-A_Sync).
+- The matrix lets a read responder end by itself, so that a secure user's
+  bound address is free for the next scenario.
+- The goknx adapter builds knxctl v0.3.0 by default.
+
+---
+
 ## v0.2.0
 
 **Date:** 2026-10-29

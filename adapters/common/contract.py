@@ -19,6 +19,7 @@ def parser():
     s = sub.add_parser("server")
     s.add_argument("--routing", action="store_true")
     s.add_argument("--name", default="knx-interop")
+    s.add_argument("--secure", action="store_true", help="KNX IP Secure with the test profile (common/secure)")
     c = sub.add_parser("client")
     c.add_argument("op", choices=OPS)
     c.add_argument("--target", default="")
@@ -26,6 +27,9 @@ def parser():
     c.add_argument("--nat", action="store_true")
     c.add_argument("--routing", action="store_true")
     c.add_argument("--tcp", action="store_true", help="tunnel over TCP (KNXnet/IP core v2)")
+    c.add_argument("--secure", action="store_true",
+                   help="KNX IP Secure (secure session or secure routing) and KNX Data Secure with the test profile (common/secure)")
+    c.add_argument("--user", type=int, default=2, help="secure tunnelling user of the test profile (1 management, 2, 3)")
     c.add_argument("--object", type=int, default=0, help="property: interface object type (0 device)")
     c.add_argument("--pid", type=int, default=11, help="property: property identifier (11 serial number)")
     c.add_argument("--group", default="")
@@ -63,6 +67,17 @@ class Result:
         sys.stdout.write(json.dumps(self.doc, sort_keys=True) + "\n")
         sys.stdout.flush()
         sys.exit({"pass": 0, "fail": 1, "unsupported": 3}[status])
+
+
+# The KNX Secure test profile (contract 1.2): public test values only.
+SECURE_DIR = "/adapter/common/secure"
+
+
+def secure_profile():
+    with open(SECURE_DIR + "/profile.json") as f:
+        p = json.load(f)
+    p["keyringPath"] = SECURE_DIR + "/" + p["keyring"]
+    return p
 
 
 def ready():
