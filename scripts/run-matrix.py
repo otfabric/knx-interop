@@ -51,6 +51,7 @@ class Matrix:
     def __init__(self, a):
         self.a = a
         self.known = load_known()
+        self.server_container = None
         self.net = "knxi-" + uuid.uuid4().hex[:8]
         self.results = []
         self.caps = {}
@@ -144,6 +145,10 @@ class Matrix:
                 r[key] = self.caps[adapter].get("version")
         if observer:
             r["observer"] = observer
+        if status == "fail" and self.server_container:
+            # The server's side of a failure, for the analysis.
+            p = sh(["docker", "logs", "--tail", "40", self.server_container])
+            r["serverLog"] = (p.stdout + p.stderr)[-6000:]
         if error:
             r["error"] = error[:1500]
         if data:
@@ -164,6 +169,7 @@ class Matrix:
 
     def tunnel_suite(self, server):
         name, ip = self.start_server(server)
+        self.server_container = name
         try:
             for c in self.a.clients:
                 self.capabilities(c)
@@ -178,6 +184,7 @@ class Matrix:
             if "negative" in self.a.suites:
                 self.negative(server, ip)
         finally:
+            self.server_container = None
             self.stop(name)
 
     def discover(self, c, server, ip):

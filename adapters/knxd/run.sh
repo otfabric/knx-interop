@@ -48,7 +48,24 @@ while [ $# -gt 0 ]; do
 done
 
 DAEMON=""
-stop_daemon() { [ -n "$DAEMON" ] && kill "$DAEMON" 2>/dev/null && wait "$DAEMON" 2>/dev/null; DAEMON=""; }
+CHANNEL=""
+stop_daemon() {
+	[ -n "$DAEMON" ] || return 0
+	kill "$DAEMON" 2>/dev/null
+	wait "$DAEMON" 2>/dev/null
+	DAEMON=""
+	# knxd 0.14.73 builds its DISCONNECT_REQUEST on shutdown but closes the
+	# socket before sending it (its trace shows no layer 0 send), leaving
+	# the connection open on the server until it times out: send it here.
+	if [ -n "$CHANNEL" ]; then
+		ip=$(getent hosts "$TARGET" | cut -d' ' -f1)
+		bash -c "printf '\\x06\\x10\\x02\\x09\\x00\\x10\\x$CHANNEL\\x00\\x08\\x01\\x00\\x00\\x00\\x00\\x00\\x00' > /dev/udp/${ip:-$TARGET}/$PORT" 2>/dev/null
+		CHANNEL=""
+	fi
+}
+
+# confirmed counts the L_Data.con frames knxd received (layer 0 trace).
+confirmed() { grep -c 'Recv([0-9]*): 06 10 04 20 .. .. .. .. .. .. 2E' /tmp/knxd.log; }
 SOCK=local:/tmp/knx
 
 # start_daemon starts knxd as a client of the target (tunnel or routing)
@@ -63,12 +80,11 @@ start_daemon() {
 		drv="ipt:$TARGET:$PORT"
 	fi
 	# Tunnels: the "single" filter sends with the address the server
-	# assigned, not knxd's own client addresses (1.2.10...): a server may
-	# drop a source address it learned on an earlier connection (knxd's
-	# server does, as loop protection).
+	# assigned, as tunnelling clients usually do, not with knxd's own
+	# client addresses (1.2.10...).
 	[ "$ROUTING" = 1 ] || filt="-B single"
 	rm -f /tmp/knx
-	knxd -e 1.2.0 -E 1.2.10:4 -u /tmp/knx $filt -b "$drv" >/tmp/knxd.log 2>&1 &
+	knxd -e 1.2.0 -E 1.2.10:4 -u /tmp/knx $filt -t 0x1 -f 9 -b "$drv" >/tmp/knxd.log 2>&1 &
 	DAEMON=$!
 	i=0
 	while [ ! -S /tmp/knx ]; do
@@ -77,9 +93,26 @@ start_daemon() {
 		kill -0 "$DAEMON" 2>/dev/null || finish fail '{}' "knxd exited: $(cat /tmp/knxd.log)"
 		sleep 0.1
 	done
-	# The tunnel is set up after the socket opens.
-	sleep 1
-	kill -0 "$DAEMON" 2>/dev/null || finish fail '{}' "knxd exited: $(cat /tmp/knxd.log)"
+	if [ "$ROUTING" = 1 ]; then
+		sleep 1
+		kill -0 "$DAEMON" 2>/dev/null || finish fail '{}' "knxd exited: $(cat /tmp/knxd.log)"
+		return
+	fi
+	# The tunnel is up when the CONNECT_RESPONSE says E_NO_ERROR.
+	i=0
+	while :; do
+		line=$(grep -m1 'Recv([0-9]*): 06 10 02 06' /tmp/knxd.log)
+		if [ -n "$line" ]; then
+			set -- $(echo "$line" | sed 's/.*Recv([0-9]*): //')
+			[ "$8" = 00 ] || finish fail '{}' "CONNECT_RESPONSE status 0x$8"
+			CHANNEL=$7
+			break
+		fi
+		i=$((i + 1))
+		[ $i -gt 100 ] && finish fail '{}' "no CONNECT_RESPONSE within 10 s"
+		kill -0 "$DAEMON" 2>/dev/null || finish fail '{}' "knxd exited: $(tail -5 /tmp/knxd.log)"
+		sleep 0.1
+	done
 }
 
 # hexbytes "0C33" -> "0c 33"
@@ -104,7 +137,7 @@ discover | describe)
 connect)
 	[ "$ROUTING" = 1 ] && finish unsupported '{}' "connect is for tunnels"
 	start_daemon
-	finish pass '{}' ;;
+	finish pass "{\"channel\":$((0x$CHANNEL))}" ;;
 write)
 	[ -z "$DATA" ] && finish unsupported '{}' "knxd has no DPT codec: --data is required"
 	start_daemon
@@ -113,8 +146,18 @@ write)
 	*) out=$(knxtool groupwrite "$SOCK" "$GROUP" $(hexbytes "$DATA") 2>&1) ;;
 	esac
 	rc=$?
-	sleep 0.5
 	[ $rc -eq 0 ] || finish fail '{}' "$out"
+	# Over a tunnel the write counts once the server confirmed it.
+	if [ "$ROUTING" = 0 ]; then
+		i=0
+		while [ "$(confirmed)" -lt 1 ]; do
+			i=$((i + 1))
+			[ $i -gt 30 ] && finish fail '{}' "no L_Data.con within 3 s"
+			sleep 0.1
+		done
+	else
+		sleep 0.5
+	fi
 	finish pass "{\"data\":\"$DATA\"}" ;;
 read)
 	start_daemon

@@ -28,16 +28,19 @@ was rejected because it is Calimero.
 - **Calimero**: the images are the official ones pinned by digest (3.0-M1,
   the newest with images). The tools try a device management connection
   after a tunnel; a server without it logs an error, harmlessly. With
-  `--nat`, `describe --json` throws in Calimero's JSON formatter, so the
-  adapter parses the text output.
+  `--nat`, `describe --json` throws in Calimero's JSON formatter
+  ([calimero-tools#24](https://github.com/calimero-project/calimero-tools/issues/24)),
+  so the adapter parses the text output.
 - **knxd**: the Debian package has no `eibnetsearch`/`eibnetdescribe`, so
   discovery and description are unsupported through this adapter. knxd has
   no DPT codec: writes take the expected octets (`--data`). As a tunnel
   client it would send its own client addresses (1.2.10…) as sources; the
   adapter uses knxd's `single` filter, which sends with the address the
-  server assigned. Without it, knxd's own server drops a source address it
-  learned on an earlier connection.
+  server assigned. knxd 0.14.73 does not send its DISCONNECT_REQUEST on
+  shutdown ([knxd#667](https://github.com/knxd/knxd/issues/667)): the
+  adapter sends it after knxd exits, and requires the CONNECT_RESPONSE and
+  each L_Data.con from knxd's protocol trace.
 - **xknx**: no server. Scripts drive `xknx.XKNX` directly (tunnelling,
   routing, route back, value reader, telegram callbacks).
 - **KNXUltimate**: no route back option; its describe announces the wrong
-  port (known difference).
+  port (known difference, [KNXUltimate#117](https://github.com/Supergiovane/KNXUltimate/issues/117)).

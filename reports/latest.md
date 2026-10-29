@@ -1,8 +1,8 @@
 # knx-interop results
 
-Started 2026-10-29T17:52:01.309757+00:00, finished 2026-10-29T18:01:56.827526+00:00 on darwin/arm64.
+Started 2026-10-29T20:19:06.648157+00:00, finished 2026-10-29T20:27:06.389380+00:00 on darwin/arm64.
 
-Summary: fail 2, known-difference 5, pass 331, unsupported 6
+Summary: known-difference 5, pass 336, unsupported 6
 
 ## Implementations
 
@@ -10,7 +10,7 @@ Summary: fail 2, known-difference 5, pass 331, unsupported 6
 |---|---|---|---|
 | calimero-server | calimero-server | 3.0-M1 | server |
 | calimero-tools | calimero | 3.0-M1 | client |
-| goknx | go-knx | v0.0.0 (knxctl dev) | server, client |
+| goknx | go-knx | (devel) (knxctl dev) | server, client |
 | knxd | knxd | 0.14.73 | server, client |
 | knxultimate | knxultimate | 6.3.1 | client |
 | probe | probe | 1.0 | client |
@@ -271,7 +271,7 @@ Summary: fail 2, known-difference 5, pass 331, unsupported 6
 | DPT 1.001 on | knxd | calimero-server | PASS | observer/responder goknx.  |
 | DPT 1.001 off | knxd | calimero-server | PASS | observer/responder goknx.  |
 | DPT 5.001 100 | knxd | calimero-server | PASS | observer/responder goknx.  |
-| DPT 5.010 200 | knxd | calimero-server | FAIL | observer/responder goknx. observer goknx saw no write to 1/1/3: received 0 of 1 telegrams |
+| DPT 5.010 200 | knxd | calimero-server | PASS | observer/responder goknx.  |
 | DPT 7.001 4660 | knxd | calimero-server | PASS | observer/responder goknx.  |
 | DPT 9.001 21.5 | knxd | calimero-server | PASS | observer/responder goknx.  |
 | DPT 9.001 -30 | knxd | calimero-server | PASS | observer/responder goknx.  |
@@ -285,6 +285,13 @@ Summary: fail 2, known-difference 5, pass 331, unsupported 6
 
 | Scenario | Client | Peer | Result | Detail |
 |---|---|---|---|---|
+| heartbeat on an open channel → E_NO_ERROR | probe | goknx | PASS | status 0x00 after 0.0 s |
+| TUNNELLING_REQUEST sequence 0 acknowledged | probe | goknx | PASS | ack status 0 |
+| repeated sequence 0 acknowledged again (duplicate) | probe | goknx | PASS | ack status 0 |
+| out-of-order sequence 5 not acknowledged | probe | goknx | PASS | ack status None |
+| sequence numbers roll over 255 → 0 | probe | goknx | PASS | 259 requests acknowledged |
+| DISCONNECT_REQUEST → E_NO_ERROR | probe | goknx | PASS | DISCONNECT_RESPONSE |
+| heartbeat after disconnect → E_CONNECTION_ID | probe | goknx | PASS | status 0x21 |
 | survives header length 7 | probe | goknx | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives protocol version 0x20 | probe | goknx | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives total length longer than the datagram | probe | goknx | PASS | answers DESCRIPTION_REQUEST afterwards |
@@ -299,15 +306,16 @@ Summary: fail 2, known-difference 5, pass 331, unsupported 6
 | unsupported connection type → E_CONNECTION_TYPE | probe | goknx | PASS | status 0x22 |
 | raw tunnelling layer → refused | probe | goknx | PASS | observed: status 0x29 |
 | TCP HPAI over UDP → refused | probe | goknx | PASS | observed: status 0x01 |
-| heartbeat on an open channel → E_NO_ERROR | probe | goknx | PASS | CONNECTIONSTATE_RESPONSE |
-| TUNNELLING_REQUEST sequence 0 acknowledged | probe | goknx | PASS | ack status 0 |
-| repeated sequence 0 acknowledged again (duplicate) | probe | goknx | PASS | ack status 0 |
-| out-of-order sequence 5 not acknowledged | probe | goknx | PASS | ack status None |
-| sequence numbers roll over 255 → 0 | probe | goknx | PASS | 259 requests acknowledged |
-| DISCONNECT_REQUEST → E_NO_ERROR | probe | goknx | PASS | DISCONNECT_RESPONSE |
-| heartbeat after disconnect → E_CONNECTION_ID | probe | goknx | PASS | status 0x21 |
-| channel exhaustion → E_NO_MORE_CONNECTIONS | probe | goknx | PASS | 7 connections, then status 0x24 |
+| heartbeat right after the malformed datagrams | probe | goknx | PASS | observed: status 0x00 after 0.0 s |
+| channel exhaustion → E_NO_MORE_CONNECTIONS | probe | goknx | PASS | 8 connections, then status 0x24 |
 | still serving after the tests | probe | goknx | PASS | answers DESCRIPTION_REQUEST |
+| heartbeat on an open channel → E_NO_ERROR | probe | knxd | PASS | status 0x00 after 0.0 s |
+| TUNNELLING_REQUEST sequence 0 acknowledged | probe | knxd | PASS | ack status 0 |
+| repeated sequence 0 acknowledged again (duplicate) | probe | knxd | PASS | ack status 0 |
+| out-of-order sequence 5 not acknowledged | probe | knxd | PASS | ack status None |
+| sequence numbers roll over 255 → 0 | probe | knxd | PASS | 259 requests acknowledged |
+| DISCONNECT_REQUEST → E_NO_ERROR | probe | knxd | PASS | DISCONNECT_RESPONSE |
+| heartbeat after disconnect → E_CONNECTION_ID | probe | knxd | PASS | status 0x21 |
 | survives header length 7 | probe | knxd | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives protocol version 0x20 | probe | knxd | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives total length longer than the datagram | probe | knxd | PASS | answers DESCRIPTION_REQUEST afterwards |
@@ -322,20 +330,21 @@ Summary: fail 2, known-difference 5, pass 331, unsupported 6
 | unsupported connection type → E_CONNECTION_TYPE | probe | knxd | PASS | status 0x22 |
 | raw tunnelling layer → refused | probe | knxd | PASS | observed: status 0x29 |
 | TCP HPAI over UDP → refused | probe | knxd | PASS | observed: status None |
-| heartbeat on an open channel → E_NO_ERROR | probe | knxd | PASS | CONNECTIONSTATE_RESPONSE |
-| TUNNELLING_REQUEST sequence 0 acknowledged | probe | knxd | PASS | ack status 0 |
-| repeated sequence 0 acknowledged again (duplicate) | probe | knxd | PASS | ack status 0 |
-| out-of-order sequence 5 not acknowledged | probe | knxd | PASS | ack status None |
-| sequence numbers roll over 255 → 0 | probe | knxd | PASS | 259 requests acknowledged |
-| DISCONNECT_REQUEST → E_NO_ERROR | probe | knxd | PASS | DISCONNECT_RESPONSE |
-| heartbeat after disconnect → E_CONNECTION_ID | probe | knxd | PASS | status 0x21 |
-| channel exhaustion → E_NO_MORE_CONNECTIONS | probe | knxd | PASS | 6 connections, then status 0x24 |
+| heartbeat right after the malformed datagrams | probe | knxd | PASS | observed: status 0x00 after 0.0 s |
+| channel exhaustion → E_NO_MORE_CONNECTIONS | probe | knxd | PASS | 7 connections, then status 0x24 |
 | still serving after the tests | probe | knxd | PASS | answers DESCRIPTION_REQUEST |
+| heartbeat on an open channel → E_NO_ERROR | probe | calimero-server | PASS | status 0x00 after 0.0 s |
+| TUNNELLING_REQUEST sequence 0 acknowledged | probe | calimero-server | PASS | ack status 0 |
+| repeated sequence 0 acknowledged again (duplicate) | probe | calimero-server | PASS | ack status 0 |
+| out-of-order sequence 5 not acknowledged | probe | calimero-server | PASS | ack status None |
+| sequence numbers roll over 255 → 0 | probe | calimero-server | PASS | 259 requests acknowledged |
+| DISCONNECT_REQUEST → E_NO_ERROR | probe | calimero-server | PASS | DISCONNECT_RESPONSE |
+| heartbeat after disconnect → E_CONNECTION_ID | probe | calimero-server | PASS | status 0x21 |
 | survives header length 7 | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives protocol version 0x20 | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives total length longer than the datagram | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives total length shorter than the datagram | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
-| survives truncated header | probe | calimero-server | KNOWN-DIFFERENCE | calimero-server 3.0-M1 stops answering for about 10 s after a 3-octet datagram: its log shows the control endpoint coming up again ("control endpoint ... is up and running"); description requests meanwhile are logged as "unknown service type 0x203 - ignored" (observed: no DESCRIPTION_RESPONSE for 20 |
+| survives truncated header | probe | calimero-server | KNOWN-DIFFERENCE | calimero-server 3.0-M1 stops answering for about 10 s after a 3-octet datagram: its log shows the control endpoint coming up again ("control endpoint ... is up and running"); description requests meanwhile are logged as "unknown service type 0x203 - ignored" (observed: no DESCRIPTION_RESPONSE for 10 |
 | survives unknown service type 0x0F00 | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives HPAI of length 7 | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives 2000-octet datagram | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
@@ -345,13 +354,7 @@ Summary: fail 2, known-difference 5, pass 331, unsupported 6
 | unsupported connection type → E_CONNECTION_TYPE | probe | calimero-server | PASS | status 0x22 |
 | raw tunnelling layer → refused | probe | calimero-server | PASS | observed: status 0x29 |
 | TCP HPAI over UDP → refused | probe | calimero-server | PASS | observed: status 0x00 |
-| heartbeat on an open channel → E_NO_ERROR | probe | calimero-server | FAIL | CONNECTIONSTATE_RESPONSE |
-| TUNNELLING_REQUEST sequence 0 acknowledged | probe | calimero-server | PASS | ack status 0 |
-| repeated sequence 0 acknowledged again (duplicate) | probe | calimero-server | PASS | ack status 0 |
-| out-of-order sequence 5 not acknowledged | probe | calimero-server | PASS | ack status None |
-| sequence numbers roll over 255 → 0 | probe | calimero-server | PASS | 259 requests acknowledged |
-| DISCONNECT_REQUEST → E_NO_ERROR | probe | calimero-server | PASS | DISCONNECT_RESPONSE |
-| heartbeat after disconnect → E_CONNECTION_ID | probe | calimero-server | PASS | status 0x21 |
+| heartbeat right after the malformed datagrams | probe | calimero-server | PASS | observed: status 0x27 after 0.0 s |
 | channel exhaustion → E_NO_MORE_CONNECTIONS | probe | calimero-server | PASS | 8 connections, then status 0x24 |
 | still serving after the tests | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST |
 

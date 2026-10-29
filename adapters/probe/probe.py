@@ -94,9 +94,14 @@ class Peer:
         r = self.recv({DISC_RES}, 2.0)
         return None if r is None else r[1][1]
 
-    def state(self, ch):
+    def state(self, ch, timeout=10.0):
+        """CONNECTIONSTATE_REQUEST; the standard gives the server
+        CONNECTIONSTATE_REQUEST_TIMEOUT (10 s) to answer. Returns the status
+        and stores the latency in self.latency."""
+        t0 = time.monotonic()
         self.send(frame(CS_REQ, bytes([ch, 0]) + hpai()))
-        r = self.recv({CS_RES}, 2.0)
+        r = self.recv({CS_RES}, timeout)
+        self.latency = time.monotonic() - t0
         return None if r is None else r[1][1]
 
     def tunnel(self, ch, seq, cemi):
@@ -125,6 +130,15 @@ def negative(a):
 
     if not p.alive():
         return "fail", {"checks": checks}, "the server does not answer DESCRIPTION_REQUEST"
+    # The connection checks first: they must not depend on the aftermath of
+    # the malformed datagrams below.
+    # A tunnelling connection: duplicates, order, rollover.
+    ch, st = p.connect()
+    if st != 0:
+        check("tunnelling connection", False, "status %s" % (None if st is None else "0x%02X" % st))
+    else:
+        connection_checks(p, ch, check)
+
     malformed = [
         ("header length 7", frame(DESC_REQ, hpai(), hlen=7)),
         ("protocol version 0x20", frame(DESC_REQ, hpai(), version=0x20)),
@@ -172,12 +186,32 @@ def negative(a):
     if st == 0:
         p.disconnect(ch)
 
-    # A tunnelling connection: duplicates, order, rollover.
+    # Observed: does the server still serve a new connection's heartbeat
+    # right after the malformed input?
     ch, st = p.connect()
-    if st != 0:
-        check("tunnelling connection", False, "status %s" % (None if st is None else "0x%02X" % st))
-        return finish_checks(checks)
-    check("heartbeat on an open channel → E_NO_ERROR", p.state(ch) == 0, "CONNECTIONSTATE_RESPONSE")
+    if st == 0:
+        st = p.state(ch)
+        check("heartbeat right after the malformed datagrams", st == 0, "status %s after %.1f s" % (None if st is None else "0x%02X" % st, p.latency), "observed")
+        p.disconnect(ch)
+    # Channel exhaustion.
+    peers, refused = [], None
+    for _ in range(64):
+        q = Peer(a.target, a.port)
+        ch, st = q.connect()
+        if st != 0:
+            refused = st
+            break
+        peers.append((q, ch))
+    check("channel exhaustion → E_NO_MORE_CONNECTIONS", refused == 0x24, "%d connections, then status %s" % (len(peers), None if refused is None else "0x%02X" % refused))
+    for q, ch in peers:
+        q.disconnect(ch)
+    check("still serving after the tests", p.alive(), "answers DESCRIPTION_REQUEST")
+    return finish_checks(checks)
+
+
+def connection_checks(p, ch, check):
+    st = p.state(ch)
+    check("heartbeat on an open channel → E_NO_ERROR", st == 0, "status %s after %.1f s" % (None if st is None else "0x%02X" % st, p.latency))
     a0 = p.tunnel(ch, 0, ldata_write(value=1))
     check("TUNNELLING_REQUEST sequence 0 acknowledged", a0 == 0, "ack status %r" % a0)
     a0b = p.tunnel(ch, 0, ldata_write(value=1))
@@ -195,21 +229,6 @@ def negative(a):
     check("DISCONNECT_REQUEST → E_NO_ERROR", p.disconnect(ch) == 0, "DISCONNECT_RESPONSE")
     st = p.state(ch)
     check("heartbeat after disconnect → E_CONNECTION_ID", st == 0x21, "status %s" % (None if st is None else "0x%02X" % st))
-
-    # Channel exhaustion.
-    peers, refused = [], None
-    for _ in range(64):
-        q = Peer(a.target, a.port)
-        ch, st = q.connect()
-        if st != 0:
-            refused = st
-            break
-        peers.append((q, ch))
-    check("channel exhaustion → E_NO_MORE_CONNECTIONS", refused == 0x24, "%d connections, then status %s" % (len(peers), None if refused is None else "0x%02X" % refused))
-    for q, ch in peers:
-        q.disconnect(ch)
-    check("still serving after the tests", p.alive(), "answers DESCRIPTION_REQUEST")
-    return finish_checks(checks)
 
 
 def finish_checks(checks):

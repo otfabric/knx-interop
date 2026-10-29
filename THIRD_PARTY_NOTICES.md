@@ -13,11 +13,11 @@ software under its own licence, installed from upstream, unmodified:
 | knx-interop-knxultimate | KNXUltimate 6.3.1 and its npm dependencies (package-lock.json) | MIT (KNXUltimate) and the licences of its dependencies | <https://github.com/Supergiovane/KNXUltimate> |
 | knx-interop-goknx | knxctl and go-knx | MIT | <https://github.com/otfabric/knxctl>, <https://github.com/otfabric/go-knx> |
 
-Publishing policy: the release workflow publishes the MIT images (xknx,
-knxultimate, goknx, probe). Whether the images that redistribute GPL
-binaries (calimero-server, calimero-tools, knxd) are published to GHCR is
-an open decision for the maintainers (see docs/INTEROPERABILITY.md); until
-then they are built from source wherever they are used.
+Publishing policy (decided 2026-10-29): the release workflow publishes the
+MIT images only (xknx, knxultimate, probe). The images that contain GPL
+binaries (calimero-server, calimero-tools, knxd) are never published: they
+are built from their Dockerfiles wherever they are used (CI, `make
+images`), from the upstream images and packages they pin.
 
 KNX is a registered trademark of KNX Association cvba. knx-interop is not
 affiliated with or endorsed by KNX Association.
