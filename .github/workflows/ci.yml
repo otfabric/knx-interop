@@ -4,8 +4,7 @@ run-name: "CI (${{ github.event_name }}) on ${{ github.ref_name }} by @${{ githu
 # Lints the adapters, validates fixtures and versions, builds every adapter
 # image natively on amd64 and arm64, and runs the whole interoperability
 # matrix on an isolated Docker network. go-knx enters through knxctl built
-# from the go-knx and knxctl sources (feature branches until their first
-# merge, then main).
+# from the go-knx and knxctl sources on main (or the refs given).
 
 on:
   push:
@@ -55,12 +54,12 @@ jobs:
       - uses: actions/checkout@v7
         with:
           repository: otfabric/go-knx
-          ref: ${{ inputs.goknx-ref || 'feat/foundation' }}
+          ref: ${{ inputs.goknx-ref || 'main' }}
           path: go-knx
       - uses: actions/checkout@v7
         with:
           repository: otfabric/knxctl
-          ref: ${{ inputs.knxctl-ref || 'feat/cli' }}
+          ref: ${{ inputs.knxctl-ref || 'main' }}
           path: knxctl
       - uses: actions/setup-go@v7
         with:

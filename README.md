@@ -60,8 +60,8 @@ make matrix                         # every suite, every pair: reports/latest.{j
 python3 scripts/run-matrix.py --servers goknx --clients xknx,calimero-tools --suites tunnel
 ```
 
-`GOKNX=release KNXCTL_VERSION=v0.1.0 make images` builds go-knx from a
-released knxctl instead of the sibling checkouts.
+`make images GOKNX=release` builds go-knx from the released knxctl
+(`KNXCTL_VERSION`, default v0.1.0) instead of the sibling checkouts.
 
 One scenario by hand:
 

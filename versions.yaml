@@ -72,7 +72,7 @@ implementations:
     status: implemented
     upstream: "otfabric/go-knx (through otfabric/knxctl)"
     repository: "https://github.com/otfabric/go-knx"
-    version: "source"              # KNXCTL_VERSION at build time, or local sources (GOKNX=local)
+    version: "knxctl v0.1.0 (go-knx v0.1.0)"   # KNXCTL_VERSION (GOKNX=release), or local sources (GOKNX=local)
     license: "MIT"
     language: "Go"
     stack: "go-knx — the implementation under test"
