@@ -1,0 +1,84 @@
+name: CI
+run-name: "CI (${{ github.event_name }}) on ${{ github.ref_name }} by @${{ github.actor }}"
+
+# Lints the adapters, validates fixtures and versions, builds every adapter
+# image natively on amd64 and arm64, and runs the whole interoperability
+# matrix on an isolated Docker network. go-knx enters through knxctl built
+# from the go-knx and knxctl sources on main (or the refs given).
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+  schedule:
+    - cron: "17 4 * * 1"
+  workflow_dispatch:
+    inputs:
+      goknx-ref:
+        description: go-knx ref
+        default: main
+      knxctl-ref:
+        description: knxctl ref
+        default: main
+
+permissions:
+  contents: read
+
+env:
+  BASE_REGISTRY: mirror.gcr.io/library
+
+jobs:
+  lint:
+    name: Lint and validate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - run: sudo apt-get install -y -qq shellcheck
+      - run: make lint validate
+
+  matrix:
+    name: Matrix (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { arch: amd64, runner: ubuntu-24.04 }
+          - { arch: arm64, runner: ubuntu-24.04-arm }
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          path: knx-interop
+      - uses: actions/checkout@v7
+        with:
+          repository: otfabric/go-knx
+          ref: ${{ inputs.goknx-ref || 'main' }}
+          path: go-knx
+      - uses: actions/checkout@v7
+        with:
+          repository: otfabric/knxctl
+          ref: ${{ inputs.knxctl-ref || 'main' }}
+          path: knxctl
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: knxctl/go.mod
+      - name: Build the adapter images
+        working-directory: knx-interop
+        run: make images GOKNX=local KNXCTL_DIR=../knxctl
+      - name: Interoperability matrix
+        working-directory: knx-interop
+        run: make matrix
+      - name: Summary
+        if: always()
+        working-directory: knx-interop
+        run: |
+          [ -f reports/latest.md ] && cat reports/latest.md >> "$GITHUB_STEP_SUMMARY" || true
+      - name: Upload the reports
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: interop-reports-${{ matrix.arch }}
+          path: knx-interop/reports/latest.*
+          if-no-files-found: warn

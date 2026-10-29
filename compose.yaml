@@ -1,0 +1,53 @@
+# SPDX-License-Identifier: MIT
+# Three KNXnet/IP servers and a shell on one isolated network, for
+# exploring by hand (make images first):
+#
+#   docker compose up -d
+#   docker compose run --rm xknx client read --target calimero --group 1/0/2 --dpt 9.001
+#   docker compose run --rm goknx client discover
+#   docker compose down
+#
+# The automated matrix (scripts/run-matrix.py) creates its own networks.
+name: knx-interop
+
+x-image: &image
+  pull_policy: never
+
+services:
+  calimero:
+    <<: *image
+    image: ghcr.io/otfabric/knx-interop-calimero-server:${VERSION:-dev}
+    command: ["server", "--name", "calimero", "--routing"]
+  knxd:
+    <<: *image
+    image: ghcr.io/otfabric/knx-interop-knxd:${VERSION:-dev}
+    command: ["server", "--name", "knxd"]
+  goknx-server:
+    <<: *image
+    image: ghcr.io/otfabric/knx-interop-goknx:${VERSION:-dev}
+    command: ["server", "--name", "go-knx", "--routing"]
+  # Clients, run with "docker compose run --rm <service> client ...".
+  goknx:
+    <<: *image
+    image: ghcr.io/otfabric/knx-interop-goknx:${VERSION:-dev}
+    profiles: [client]
+  xknx:
+    <<: *image
+    image: ghcr.io/otfabric/knx-interop-xknx:${VERSION:-dev}
+    profiles: [client]
+  knxultimate:
+    <<: *image
+    image: ghcr.io/otfabric/knx-interop-knxultimate:${VERSION:-dev}
+    profiles: [client]
+  calimero-tools:
+    <<: *image
+    image: ghcr.io/otfabric/knx-interop-calimero-tools:${VERSION:-dev}
+    profiles: [client]
+  probe:
+    <<: *image
+    image: ghcr.io/otfabric/knx-interop-probe:${VERSION:-dev}
+    profiles: [client]
+
+networks:
+  default:
+    driver: bridge
