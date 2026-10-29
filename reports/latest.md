@@ -1,8 +1,8 @@
 # knx-interop results
 
-Started 2026-10-29T20:19:06.648157+00:00, finished 2026-10-29T20:27:06.389380+00:00 on darwin/arm64.
+Started 2026-10-29T21:21:58.887924+00:00, finished 2026-10-29T21:30:36.240074+00:00 on darwin/arm64.
 
-Summary: known-difference 5, pass 336, unsupported 6
+Summary: known-difference 4, pass 361, unsupported 42
 
 ## Implementations
 
@@ -10,7 +10,7 @@ Summary: known-difference 5, pass 336, unsupported 6
 |---|---|---|---|
 | calimero-server | calimero-server | 3.0-M1 | server |
 | calimero-tools | calimero | 3.0-M1 | client |
-| goknx | go-knx | (devel) (knxctl dev) | server, client |
+| goknx | go-knx | (devel) (knxctl v0.1.1+dirty) | server, client |
 | knxd | knxd | 0.14.73 | server, client |
 | knxultimate | knxultimate | 6.3.1 | client |
 | probe | probe | 1.0 | client |
@@ -31,7 +31,7 @@ Summary: known-difference 5, pass 336, unsupported 6
 | group write (DPT 1.001) | xknx | goknx | PASS | observer/responder goknx.  |
 | group read/response (DPT 9.001) | xknx | goknx | PASS | observer/responder goknx.  |
 | discover (multicast search) | knxultimate | goknx | PASS |  |
-| describe | knxultimate | goknx | KNOWN-DIFFERENCE | KNXUltimate 6.3.1 announces <local IP>:3671 in its DESCRIPTION_REQUEST HPAI while it listens on an ephemeral port (src/KNXClient.ts sendDescriptionRequestMessage: new HPAI(localIPAddress), default port 3671); servers that answer to the HPAI, as the standard requires, answer a port nobody listens on  |
+| describe | knxultimate | goknx | KNOWN-DIFFERENCE | KNXUltimate 6.3.1 announces <local IP>:3671 in its DESCRIPTION_REQUEST HPAI while it listens on an ephemeral port (src/KNXClient.ts sendDescriptionRequestMessage: new HPAI(localIPAddress), default port 3671); servers that answer to the HPAI, as the standard requires, answer a port nobody listens on. |
 | connect and disconnect | knxultimate | goknx | PASS |  |
 | group write (DPT 1.001) | knxultimate | goknx | PASS | observer/responder goknx.  |
 | group read/response (DPT 9.001) | knxultimate | goknx | PASS | observer/responder xknx.  |
@@ -56,7 +56,7 @@ Summary: known-difference 5, pass 336, unsupported 6
 | group write (DPT 1.001) | xknx | knxd | PASS | observer/responder goknx.  |
 | group read/response (DPT 9.001) | xknx | knxd | PASS | observer/responder goknx.  |
 | discover (multicast search) | knxultimate | knxd | PASS |  |
-| describe | knxultimate | knxd | KNOWN-DIFFERENCE | KNXUltimate 6.3.1 announces <local IP>:3671 in its DESCRIPTION_REQUEST HPAI while it listens on an ephemeral port (src/KNXClient.ts sendDescriptionRequestMessage: new HPAI(localIPAddress), default port 3671); servers that answer to the HPAI, as the standard requires, answer a port nobody listens on  |
+| describe | knxultimate | knxd | KNOWN-DIFFERENCE | KNXUltimate 6.3.1 announces <local IP>:3671 in its DESCRIPTION_REQUEST HPAI while it listens on an ephemeral port (src/KNXClient.ts sendDescriptionRequestMessage: new HPAI(localIPAddress), default port 3671); servers that answer to the HPAI, as the standard requires, answer a port nobody listens on. |
 | connect and disconnect | knxultimate | knxd | PASS |  |
 | group write (DPT 1.001) | knxultimate | knxd | PASS | observer/responder goknx.  |
 | group read/response (DPT 9.001) | knxultimate | knxd | PASS | observer/responder xknx.  |
@@ -81,7 +81,7 @@ Summary: known-difference 5, pass 336, unsupported 6
 | group write (DPT 1.001) | xknx | calimero-server | PASS | observer/responder goknx.  |
 | group read/response (DPT 9.001) | xknx | calimero-server | PASS | observer/responder goknx.  |
 | discover (multicast search) | knxultimate | calimero-server | PASS |  |
-| describe | knxultimate | calimero-server | KNOWN-DIFFERENCE | KNXUltimate 6.3.1 announces <local IP>:3671 in its DESCRIPTION_REQUEST HPAI while it listens on an ephemeral port (src/KNXClient.ts sendDescriptionRequestMessage: new HPAI(localIPAddress), default port 3671); servers that answer to the HPAI, as the standard requires, answer a port nobody listens on  |
+| describe | knxultimate | calimero-server | PASS |  |
 | connect and disconnect | knxultimate | calimero-server | PASS |  |
 | group write (DPT 1.001) | knxultimate | calimero-server | PASS | observer/responder goknx.  |
 | group read/response (DPT 9.001) | knxultimate | calimero-server | PASS | observer/responder xknx.  |
@@ -281,6 +281,71 @@ Summary: known-difference 5, pass 336, unsupported 6
 | DPT 14.056 1234.5 | knxd | calimero-server | PASS | observer/responder goknx.  |
 | DPT 16.000 KNX interop | knxd | calimero-server | PASS | observer/responder goknx.  |
 
+## v2
+
+| Scenario | Client | Peer | Result | Detail |
+|---|---|---|---|---|
+| group write over TCP (DPT 1.001) | goknx | goknx | PASS | observer/responder xknx.  |
+| group read over TCP (DPT 9.001) | goknx | goknx | PASS | observer/responder xknx.  |
+| device management: device serial number (M_PropRead) | goknx | goknx | PASS |  |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | goknx | goknx | PASS | observer/responder xknx.  |
+| group write over TCP (DPT 1.001) | xknx | goknx | PASS | observer/responder goknx.  |
+| group read over TCP (DPT 9.001) | xknx | goknx | PASS | observer/responder goknx.  |
+| device management: device serial number (M_PropRead) | xknx | goknx | UNSUPPORTED | no device management on the client |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | xknx | goknx | UNSUPPORTED | no busmonitor on the client |
+| group write over TCP (DPT 1.001) | knxultimate | goknx | PASS | observer/responder goknx.  |
+| group read over TCP (DPT 9.001) | knxultimate | goknx | PASS | observer/responder xknx.  |
+| device management: device serial number (M_PropRead) | knxultimate | goknx | UNSUPPORTED | no device management on the client |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | knxultimate | goknx | UNSUPPORTED | no busmonitor on the client |
+| group write over TCP (DPT 1.001) | calimero-tools | goknx | PASS | observer/responder goknx.  |
+| group read over TCP (DPT 9.001) | calimero-tools | goknx | PASS | observer/responder xknx.  |
+| device management: device serial number (M_PropRead) | calimero-tools | goknx | PASS |  |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | calimero-tools | goknx | PASS | observer/responder goknx.  |
+| group write over TCP (DPT 1.001) | knxd | goknx | UNSUPPORTED | no TCP on the client |
+| group read over TCP (DPT 9.001) | knxd | goknx | UNSUPPORTED | no TCP on the client |
+| device management: device serial number (M_PropRead) | knxd | goknx | UNSUPPORTED | no device management on the client |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | knxd | goknx | UNSUPPORTED | no busmonitor on the client |
+| group write over TCP (DPT 1.001) | goknx | knxd | UNSUPPORTED | no TCP on the server |
+| group read over TCP (DPT 9.001) | goknx | knxd | UNSUPPORTED | no TCP on the server |
+| device management: device serial number (M_PropRead) | goknx | knxd | UNSUPPORTED | no device management on the server |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | goknx | knxd | PASS | observer/responder xknx.  |
+| group write over TCP (DPT 1.001) | xknx | knxd | UNSUPPORTED | no TCP on the server |
+| group read over TCP (DPT 9.001) | xknx | knxd | UNSUPPORTED | no TCP on the server |
+| device management: device serial number (M_PropRead) | xknx | knxd | UNSUPPORTED | no device management on the client |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | xknx | knxd | UNSUPPORTED | no busmonitor on the client |
+| group write over TCP (DPT 1.001) | knxultimate | knxd | UNSUPPORTED | no TCP on the server |
+| group read over TCP (DPT 9.001) | knxultimate | knxd | UNSUPPORTED | no TCP on the server |
+| device management: device serial number (M_PropRead) | knxultimate | knxd | UNSUPPORTED | no device management on the client |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | knxultimate | knxd | UNSUPPORTED | no busmonitor on the client |
+| group write over TCP (DPT 1.001) | calimero-tools | knxd | UNSUPPORTED | no TCP on the server |
+| group read over TCP (DPT 9.001) | calimero-tools | knxd | UNSUPPORTED | no TCP on the server |
+| device management: device serial number (M_PropRead) | calimero-tools | knxd | UNSUPPORTED | no device management on the server |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | calimero-tools | knxd | PASS | observer/responder goknx.  |
+| group write over TCP (DPT 1.001) | knxd | knxd | UNSUPPORTED | no TCP on the client |
+| group read over TCP (DPT 9.001) | knxd | knxd | UNSUPPORTED | no TCP on the client |
+| device management: device serial number (M_PropRead) | knxd | knxd | UNSUPPORTED | no device management on the client |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | knxd | knxd | UNSUPPORTED | no busmonitor on the client |
+| group write over TCP (DPT 1.001) | goknx | calimero-server | PASS | observer/responder xknx.  |
+| group read over TCP (DPT 9.001) | goknx | calimero-server | PASS | observer/responder xknx.  |
+| device management: device serial number (M_PropRead) | goknx | calimero-server | PASS |  |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | goknx | calimero-server | UNSUPPORTED | no busmonitor on the server |
+| group write over TCP (DPT 1.001) | xknx | calimero-server | PASS | observer/responder goknx.  |
+| group read over TCP (DPT 9.001) | xknx | calimero-server | PASS | observer/responder goknx.  |
+| device management: device serial number (M_PropRead) | xknx | calimero-server | UNSUPPORTED | no device management on the client |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | xknx | calimero-server | UNSUPPORTED | no busmonitor on the client |
+| group write over TCP (DPT 1.001) | knxultimate | calimero-server | PASS | observer/responder goknx.  |
+| group read over TCP (DPT 9.001) | knxultimate | calimero-server | PASS | observer/responder xknx.  |
+| device management: device serial number (M_PropRead) | knxultimate | calimero-server | UNSUPPORTED | no device management on the client |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | knxultimate | calimero-server | UNSUPPORTED | no busmonitor on the client |
+| group write over TCP (DPT 1.001) | calimero-tools | calimero-server | PASS | observer/responder goknx.  |
+| group read over TCP (DPT 9.001) | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| device management: device serial number (M_PropRead) | calimero-tools | calimero-server | PASS |  |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | calimero-tools | calimero-server | UNSUPPORTED | no busmonitor on the server |
+| group write over TCP (DPT 1.001) | knxd | calimero-server | UNSUPPORTED | no TCP on the client |
+| group read over TCP (DPT 9.001) | knxd | calimero-server | UNSUPPORTED | no TCP on the client |
+| device management: device serial number (M_PropRead) | knxd | calimero-server | UNSUPPORTED | no device management on the client |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | knxd | calimero-server | UNSUPPORTED | no busmonitor on the client |
+
 ## negative
 
 | Scenario | Client | Peer | Result | Detail |
@@ -344,12 +409,12 @@ Summary: known-difference 5, pass 336, unsupported 6
 | survives protocol version 0x20 | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives total length longer than the datagram | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives total length shorter than the datagram | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
-| survives truncated header | probe | calimero-server | KNOWN-DIFFERENCE | calimero-server 3.0-M1 stops answering for about 10 s after a 3-octet datagram: its log shows the control endpoint coming up again ("control endpoint ... is up and running"); description requests meanwhile are logged as "unknown service type 0x203 - ignored" (observed: no DESCRIPTION_RESPONSE for 10 |
+| survives truncated header | probe | calimero-server | KNOWN-DIFFERENCE | calimero-server 3.0-M1 stops answering for about 10 s after a 3-octet datagram: its log shows the control endpoint coming up again ("control endpoint ... is up and running"); cause: an uncaught KNXIllegalArgumentException ("negative length of message body") in UdpServiceLooper closes the control end |
 | survives unknown service type 0x0F00 | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives HPAI of length 7 | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives 2000-octet datagram | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
 | survives empty CONNECT_REQUEST | probe | calimero-server | PASS | answers DESCRIPTION_REQUEST afterwards |
-| survives CRI length 0 | probe | calimero-server | KNOWN-DIFFERENCE | calimero-server 3.0-M1 stops answering for about 10 s after a CONNECT_REQUEST whose CRI has length 0, as after a truncated header (observed: no DESCRIPTION_RESPONSE for 10 s, then the server answered again) |
+| survives CRI length 0 | probe | calimero-server | KNOWN-DIFFERENCE | calimero-server 3.0-M1 stops answering for about 10 s after a CONNECT_REQUEST whose CRI has length 0, the same uncaught exception as after a truncated header; fixed upstream by d276d8a8 (observed: no DESCRIPTION_RESPONSE for 10 s, then the server answered again) |
 | CONNECTIONSTATE_REQUEST of an unknown channel → E_CONNECTION_ID | probe | calimero-server | PASS | status 0x21 |
 | unsupported connection type → E_CONNECTION_TYPE | probe | calimero-server | PASS | status 0x22 |
 | raw tunnelling layer → refused | probe | calimero-server | PASS | observed: status 0x29 |

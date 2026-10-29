@@ -1,5 +1,5 @@
 {
-  "finishedAt": "2026-10-29T20:27:06.389380+00:00",
+  "finishedAt": "2026-10-29T21:30:36.240074+00:00",
   "host": {
     "machine": "arm64",
     "platform": "darwin"
@@ -25,7 +25,7 @@
         "server",
         "client"
       ],
-      "version": "(devel) (knxctl dev)"
+      "version": "(devel) (knxctl v0.1.1+dirty)"
     },
     "knxd": {
       "implementation": "knxd",
@@ -60,54 +60,55 @@
   "results": [
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.19.0.2:3671",
+        "endpoint": "172.20.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3271,
+      "durationMs": 3233,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "discover (multicast search)",
       "status": "pass",
       "suite": "tunnel"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "address": "1.1.0",
         "name": "knx-interop",
         "services": {
-          "Core": 1,
-          "Tunnelling": 1
+          "Core": 2,
+          "DeviceManagement": 1,
+          "Tunnelling": 2
         }
       },
-      "durationMs": 217,
+      "durationMs": 238,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "describe",
       "status": "pass",
       "suite": "tunnel"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "address": "1.1.10",
         "channel": 1
       },
-      "durationMs": 207,
+      "durationMs": 214,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "connect and disconnect",
       "status": "pass",
       "suite": "tunnel"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "01",
@@ -116,33 +117,33 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 783,
+      "durationMs": 793,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "group write (DPT 1.001)",
       "status": "pass",
       "suite": "tunnel"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "data": "0C33",
         "source": "1.1.1",
         "value": 21.5
       },
-      "durationMs": 847,
+      "durationMs": 860,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "group read/response (DPT 9.001)",
       "status": "pass",
       "suite": "tunnel"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "01",
@@ -151,17 +152,17 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 766,
+      "durationMs": 805,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 1.001 on",
       "status": "pass",
       "suite": "dpt"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "00",
@@ -170,17 +171,17 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 773,
+      "durationMs": 789,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 1.001 off",
       "status": "pass",
       "suite": "dpt"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "FF",
@@ -189,17 +190,17 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 788,
+      "durationMs": 815,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 5.001 100",
       "status": "pass",
       "suite": "dpt"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "C8",
@@ -208,17 +209,17 @@
           "source": "1.1.10"
         }
       },
-      "durationMs": 777,
+      "durationMs": 819,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 5.010 200",
       "status": "pass",
       "suite": "dpt"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "1234",
@@ -227,17 +228,17 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 787,
+      "durationMs": 798,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 7.001 4660",
       "status": "pass",
       "suite": "dpt"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "0C33",
@@ -246,17 +247,17 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 790,
+      "durationMs": 798,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.001 21.5",
       "status": "pass",
       "suite": "dpt"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "8A24",
@@ -265,17 +266,17 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 787,
+      "durationMs": 763,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.001 -30",
       "status": "pass",
       "suite": "dpt"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "3753",
@@ -284,17 +285,17 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 787,
+      "durationMs": 800,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.004 1200",
       "status": "pass",
       "suite": "dpt"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "12345678",
@@ -303,17 +304,17 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 781,
+      "durationMs": 812,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 12.001 305419896",
       "status": "pass",
       "suite": "dpt"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "FFFFFFFE",
@@ -322,17 +323,17 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 800,
+      "durationMs": 785,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 13.001 -2",
       "status": "pass",
       "suite": "dpt"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "449A5000",
@@ -341,17 +342,17 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 797,
+      "durationMs": 784,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 14.056 1234.5",
       "status": "pass",
       "suite": "dpt"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "4B4E5820696E7465726F70000000",
@@ -360,25 +361,94 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 784,
+      "durationMs": 785,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 16.000 KNX interop",
       "status": "pass",
       "suite": "dpt"
+    },
+    {
+      "client": "goknx",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "data": {
+        "seen": {
+          "data": "01",
+          "group": "1/0/1",
+          "service": "write",
+          "source": "1.1.11"
+        }
+      },
+      "durationMs": 788,
+      "observer": "xknx",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "goknx",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "data": {
+        "data": "0C33",
+        "source": "1.1.1",
+        "value": 21.5
+      },
+      "durationMs": 860,
+      "observer": "xknx",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "goknx",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "data": {
+        "data": "00FA00000001"
+      },
+      "durationMs": 222,
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "goknx",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "data": {
+        "frames": [
+          {
+            "data": "01",
+            "destination": "1/0/7",
+            "raw": "BC110C0807E1008131",
+            "source": "1.1.12"
+          }
+        ]
+      },
+      "durationMs": 1103,
+      "observer": "xknx",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "pass",
+      "suite": "v2"
     },
     {
       "client": "xknx",
       "clientVersion": "4.0.0",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.19.0.2:3671",
+        "endpoint": "172.20.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3396,
+      "durationMs": 3374,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "discover (multicast search)",
       "status": "pass",
       "suite": "tunnel"
@@ -393,9 +463,9 @@
           "Tunnelling": 1
         }
       },
-      "durationMs": 338,
+      "durationMs": 326,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "describe",
       "status": "pass",
       "suite": "tunnel"
@@ -405,11 +475,11 @@
       "clientVersion": "4.0.0",
       "data": {
         "address": "1.1.10",
-        "channel": 30
+        "channel": 37
       },
-      "durationMs": 340,
+      "durationMs": 333,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "connect and disconnect",
       "status": "pass",
       "suite": "tunnel"
@@ -425,10 +495,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1122,
+      "durationMs": 1123,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "group write (DPT 1.001)",
       "status": "pass",
       "suite": "tunnel"
@@ -441,10 +511,10 @@
         "source": "1.1.1",
         "value": 21.5
       },
-      "durationMs": 862,
+      "durationMs": 857,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "group read/response (DPT 9.001)",
       "status": "pass",
       "suite": "tunnel"
@@ -460,10 +530,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1085,
+      "durationMs": 1117,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 1.001 on",
       "status": "pass",
       "suite": "dpt"
@@ -479,10 +549,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1167,
+      "durationMs": 1193,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 1.001 off",
       "status": "pass",
       "suite": "dpt"
@@ -498,10 +568,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1111,
+      "durationMs": 1149,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 5.001 100",
       "status": "pass",
       "suite": "dpt"
@@ -517,10 +587,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1123,
+      "durationMs": 1161,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 5.010 200",
       "status": "pass",
       "suite": "dpt"
@@ -536,10 +606,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1106,
+      "durationMs": 1136,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 7.001 4660",
       "status": "pass",
       "suite": "dpt"
@@ -555,10 +625,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1118,
+      "durationMs": 1157,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.001 21.5",
       "status": "pass",
       "suite": "dpt"
@@ -574,10 +644,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1104,
+      "durationMs": 1142,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.001 -30",
       "status": "pass",
       "suite": "dpt"
@@ -593,10 +663,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1109,
+      "durationMs": 1166,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.004 1200",
       "status": "pass",
       "suite": "dpt"
@@ -612,10 +682,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1124,
+      "durationMs": 1268,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 12.001 305419896",
       "status": "pass",
       "suite": "dpt"
@@ -631,10 +701,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1120,
+      "durationMs": 1182,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 13.001 -2",
       "status": "pass",
       "suite": "dpt"
@@ -650,10 +720,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1111,
+      "durationMs": 1144,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 14.056 1234.5",
       "status": "pass",
       "suite": "dpt"
@@ -669,25 +739,82 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1108,
+      "durationMs": 1119,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 16.000 KNX interop",
       "status": "pass",
       "suite": "dpt"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "data": {
+        "seen": {
+          "data": "01",
+          "group": "1/0/1",
+          "service": "write",
+          "source": "1.1.11"
+        }
+      },
+      "durationMs": 1159,
+      "observer": "goknx",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "data": {
+        "data": "0C33",
+        "source": "1.1.1",
+        "value": 21.5
+      },
+      "durationMs": 847,
+      "observer": "goknx",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "durationMs": 0,
+      "error": "no device management on the client",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "durationMs": 0,
+      "error": "no busmonitor on the client",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "unsupported",
+      "suite": "v2"
     },
     {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.19.0.2:3671",
+        "endpoint": "172.20.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3326,
+      "durationMs": 3339,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "discover (multicast search)",
       "status": "pass",
       "suite": "tunnel"
@@ -695,10 +822,10 @@
     {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
-      "durationMs": 5333,
-      "error": "KNXUltimate 6.3.1 announces <local IP>:3671 in its DESCRIPTION_REQUEST HPAI while it listens on an ephemeral port (src/KNXClient.ts sendDescriptionRequestMessage: new HPAI(localIPAddress), default port 3671); servers that answer to the HPAI, as the standard requires, answer a port nobody listens on (observed: no description response)",
+      "durationMs": 5300,
+      "error": "KNXUltimate 6.3.1 announces <local IP>:3671 in its DESCRIPTION_REQUEST HPAI while it listens on an ephemeral port (src/KNXClient.ts sendDescriptionRequestMessage: new HPAI(localIPAddress), default port 3671); servers that answer to the HPAI, as the standard requires, answer a port nobody listens on. Reported: https://github.com/Supergiovane/KNXUltimate/issues/117 (observed: no description response)",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "describe",
       "status": "known-difference",
       "suite": "tunnel"
@@ -708,11 +835,11 @@
       "clientVersion": "6.3.1",
       "data": {
         "address": "1.3.250",
-        "channel": 59
+        "channel": 70
       },
-      "durationMs": 2652,
+      "durationMs": 2646,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "connect and disconnect",
       "status": "pass",
       "suite": "tunnel"
@@ -728,10 +855,10 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4125,
+      "durationMs": 4133,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "group write (DPT 1.001)",
       "status": "pass",
       "suite": "tunnel"
@@ -744,10 +871,10 @@
         "source": "1.1.1",
         "value": 21.5
       },
-      "durationMs": 3257,
+      "durationMs": 3312,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "group read/response (DPT 9.001)",
       "status": "pass",
       "suite": "tunnel"
@@ -763,10 +890,10 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4178,
+      "durationMs": 4154,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 1.001 on",
       "status": "pass",
       "suite": "dpt"
@@ -782,10 +909,10 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4102,
+      "durationMs": 4142,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 1.001 off",
       "status": "pass",
       "suite": "dpt"
@@ -801,10 +928,10 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4180,
+      "durationMs": 4122,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 5.001 100",
       "status": "pass",
       "suite": "dpt"
@@ -820,10 +947,10 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4138,
+      "durationMs": 4099,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 5.010 200",
       "status": "pass",
       "suite": "dpt"
@@ -839,10 +966,10 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4105,
+      "durationMs": 4124,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 7.001 4660",
       "status": "pass",
       "suite": "dpt"
@@ -858,10 +985,10 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4082,
+      "durationMs": 4106,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.001 21.5",
       "status": "pass",
       "suite": "dpt"
@@ -877,10 +1004,10 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4105,
+      "durationMs": 4089,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.001 -30",
       "status": "pass",
       "suite": "dpt"
@@ -896,10 +1023,10 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4096,
+      "durationMs": 4123,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.004 1200",
       "status": "pass",
       "suite": "dpt"
@@ -915,10 +1042,10 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4130,
+      "durationMs": 4148,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 12.001 305419896",
       "status": "pass",
       "suite": "dpt"
@@ -934,10 +1061,10 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4117,
+      "durationMs": 4140,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 13.001 -2",
       "status": "pass",
       "suite": "dpt"
@@ -953,10 +1080,10 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4108,
+      "durationMs": 4098,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 14.056 1234.5",
       "status": "pass",
       "suite": "dpt"
@@ -975,22 +1102,79 @@
       "durationMs": 4134,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 16.000 KNX interop",
       "status": "pass",
       "suite": "dpt"
+    },
+    {
+      "client": "knxultimate",
+      "clientVersion": "6.3.1",
+      "data": {
+        "seen": {
+          "data": "01",
+          "group": "1/0/1",
+          "service": "write",
+          "source": "1.3.250"
+        }
+      },
+      "durationMs": 2112,
+      "observer": "goknx",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "knxultimate",
+      "clientVersion": "6.3.1",
+      "data": {
+        "data": "0C33",
+        "source": "1.1.1",
+        "value": 21.5
+      },
+      "durationMs": 1234,
+      "observer": "xknx",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "knxultimate",
+      "clientVersion": "6.3.1",
+      "durationMs": 0,
+      "error": "no device management on the client",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxultimate",
+      "clientVersion": "6.3.1",
+      "durationMs": 0,
+      "error": "no busmonitor on the client",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "unsupported",
+      "suite": "v2"
     },
     {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.19.0.2:3671",
+        "endpoint": "172.20.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3421,
+      "durationMs": 3475,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "discover (multicast search)",
       "status": "pass",
       "suite": "tunnel"
@@ -1002,13 +1186,14 @@
         "address": "1.1.0",
         "name": "knx-interop",
         "services": {
-          "Core": 1,
-          "Tunnelling": 1
+          "Core": 2,
+          "DeviceManagement": 1,
+          "Tunnelling": 2
         }
       },
-      "durationMs": 387,
+      "durationMs": 395,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "describe",
       "status": "pass",
       "suite": "tunnel"
@@ -1018,11 +1203,11 @@
       "clientVersion": "3.0-M1",
       "data": {
         "address": "1.1.10",
-        "channel": 88
+        "channel": 103
       },
-      "durationMs": 406,
+      "durationMs": 414,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "connect and disconnect",
       "status": "pass",
       "suite": "tunnel"
@@ -1038,10 +1223,10 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 947,
+      "durationMs": 997,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "group write (DPT 1.001)",
       "status": "pass",
       "suite": "tunnel"
@@ -1053,10 +1238,10 @@
         "text": "21.5 \u00b0C",
         "value": 21.5
       },
-      "durationMs": 1130,
+      "durationMs": 1159,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "group read/response (DPT 9.001)",
       "status": "pass",
       "suite": "tunnel"
@@ -1069,13 +1254,13 @@
           "data": "01",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.13"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 945,
+      "durationMs": 967,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 1.001 on",
       "status": "pass",
       "suite": "dpt"
@@ -1091,10 +1276,10 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 933,
+      "durationMs": 958,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 1.001 off",
       "status": "pass",
       "suite": "dpt"
@@ -1110,10 +1295,10 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 978,
+      "durationMs": 948,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 5.001 100",
       "status": "pass",
       "suite": "dpt"
@@ -1129,10 +1314,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 967,
+      "durationMs": 945,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 5.010 200",
       "status": "pass",
       "suite": "dpt"
@@ -1148,10 +1333,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 955,
+      "durationMs": 946,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 7.001 4660",
       "status": "pass",
       "suite": "dpt"
@@ -1167,10 +1352,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 955,
+      "durationMs": 926,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.001 21.5",
       "status": "pass",
       "suite": "dpt"
@@ -1186,10 +1371,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 959,
+      "durationMs": 945,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.001 -30",
       "status": "pass",
       "suite": "dpt"
@@ -1205,10 +1390,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 953,
+      "durationMs": 957,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.004 1200",
       "status": "pass",
       "suite": "dpt"
@@ -1224,10 +1409,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 961,
+      "durationMs": 1024,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 12.001 305419896",
       "status": "pass",
       "suite": "dpt"
@@ -1243,10 +1428,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 979,
+      "durationMs": 1014,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 13.001 -2",
       "status": "pass",
       "suite": "dpt"
@@ -1262,10 +1447,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 957,
+      "durationMs": 1023,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 14.056 1234.5",
       "status": "pass",
       "suite": "dpt"
@@ -1281,13 +1466,78 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 951,
+      "durationMs": 1052,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 16.000 KNX interop",
       "status": "pass",
       "suite": "dpt"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "data": {
+        "seen": {
+          "data": "01",
+          "group": "1/0/1",
+          "service": "write",
+          "source": "1.1.11"
+        }
+      },
+      "durationMs": 1000,
+      "observer": "goknx",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "data": {
+        "text": "21.5 \u00b0C",
+        "value": 21.5
+      },
+      "durationMs": 1321,
+      "observer": "xknx",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "data": {
+        "data": "00FA00000001"
+      },
+      "durationMs": 463,
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "data": {
+        "frames": [
+          {
+            "raw": "BC110C0807E1008131"
+          }
+        ]
+      },
+      "durationMs": 921,
+      "observer": "goknx",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "pass",
+      "suite": "v2"
     },
     {
       "client": "knxd",
@@ -1295,7 +1545,7 @@
       "durationMs": 0,
       "error": "The Debian package has no eibnetsearch/eibnetdescribe tools; knxd has no DPT codec, writes send the octets given with --data.",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "discover (multicast search)",
       "status": "unsupported",
       "suite": "tunnel"
@@ -1306,7 +1556,7 @@
       "durationMs": 0,
       "error": "The Debian package has no eibnetsearch/eibnetdescribe tools; knxd has no DPT codec, writes send the octets given with --data.",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "describe",
       "status": "unsupported",
       "suite": "tunnel"
@@ -1315,11 +1565,11 @@
       "client": "knxd",
       "clientVersion": "0.14.73",
       "data": {
-        "channel": 117
+        "channel": 154
       },
-      "durationMs": 319,
+      "durationMs": 315,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "connect and disconnect",
       "status": "pass",
       "suite": "tunnel"
@@ -1332,13 +1582,13 @@
           "data": "01",
           "group": "1/0/1",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 777,
+      "durationMs": 819,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "group write (DPT 1.001)",
       "status": "pass",
       "suite": "tunnel"
@@ -1350,10 +1600,10 @@
         "data": "0C33",
         "source": "1.1.1"
       },
-      "durationMs": 1314,
+      "durationMs": 1412,
       "observer": "xknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "group read/response (DPT 9.001)",
       "status": "pass",
       "suite": "tunnel"
@@ -1369,10 +1619,10 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 844,
+      "durationMs": 867,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 1.001 on",
       "status": "pass",
       "suite": "dpt"
@@ -1388,10 +1638,10 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 809,
+      "durationMs": 828,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 1.001 off",
       "status": "pass",
       "suite": "dpt"
@@ -1407,10 +1657,10 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 793,
+      "durationMs": 911,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 5.001 100",
       "status": "pass",
       "suite": "dpt"
@@ -1423,13 +1673,13 @@
           "data": "C8",
           "group": "1/1/3",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.11"
         }
       },
-      "durationMs": 812,
+      "durationMs": 819,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 5.010 200",
       "status": "pass",
       "suite": "dpt"
@@ -1445,10 +1695,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 808,
+      "durationMs": 849,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 7.001 4660",
       "status": "pass",
       "suite": "dpt"
@@ -1464,10 +1714,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 812,
+      "durationMs": 857,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.001 21.5",
       "status": "pass",
       "suite": "dpt"
@@ -1483,10 +1733,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 817,
+      "durationMs": 821,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.001 -30",
       "status": "pass",
       "suite": "dpt"
@@ -1502,10 +1752,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 798,
+      "durationMs": 869,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 9.004 1200",
       "status": "pass",
       "suite": "dpt"
@@ -1521,10 +1771,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 801,
+      "durationMs": 808,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 12.001 305419896",
       "status": "pass",
       "suite": "dpt"
@@ -1540,10 +1790,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 824,
+      "durationMs": 828,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 13.001 -2",
       "status": "pass",
       "suite": "dpt"
@@ -1559,10 +1809,10 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 798,
+      "durationMs": 864,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 14.056 1234.5",
       "status": "pass",
       "suite": "dpt"
@@ -1578,13 +1828,57 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 793,
+      "durationMs": 948,
       "observer": "goknx",
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DPT 16.000 KNX interop",
       "status": "pass",
       "suite": "dpt"
+    },
+    {
+      "client": "knxd",
+      "clientVersion": "0.14.73",
+      "durationMs": 0,
+      "error": "no TCP on the client",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxd",
+      "clientVersion": "0.14.73",
+      "durationMs": 0,
+      "error": "no TCP on the client",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxd",
+      "clientVersion": "0.14.73",
+      "durationMs": 0,
+      "error": "no device management on the client",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxd",
+      "clientVersion": "0.14.73",
+      "durationMs": 0,
+      "error": "no busmonitor on the client",
+      "peer": "goknx",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "unsupported",
+      "suite": "v2"
     },
     {
       "client": "probe",
@@ -1595,7 +1889,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "heartbeat on an open channel \u2192 E_NO_ERROR",
       "status": "pass",
       "suite": "negative"
@@ -1609,7 +1903,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "TUNNELLING_REQUEST sequence 0 acknowledged",
       "status": "pass",
       "suite": "negative"
@@ -1623,7 +1917,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "repeated sequence 0 acknowledged again (duplicate)",
       "status": "pass",
       "suite": "negative"
@@ -1637,7 +1931,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "out-of-order sequence 5 not acknowledged",
       "status": "pass",
       "suite": "negative"
@@ -1651,7 +1945,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "sequence numbers roll over 255 \u2192 0",
       "status": "pass",
       "suite": "negative"
@@ -1665,7 +1959,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "DISCONNECT_REQUEST \u2192 E_NO_ERROR",
       "status": "pass",
       "suite": "negative"
@@ -1679,7 +1973,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "heartbeat after disconnect \u2192 E_CONNECTION_ID",
       "status": "pass",
       "suite": "negative"
@@ -1693,7 +1987,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "survives header length 7",
       "status": "pass",
       "suite": "negative"
@@ -1707,7 +2001,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "survives protocol version 0x20",
       "status": "pass",
       "suite": "negative"
@@ -1721,7 +2015,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "survives total length longer than the datagram",
       "status": "pass",
       "suite": "negative"
@@ -1735,7 +2029,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "survives total length shorter than the datagram",
       "status": "pass",
       "suite": "negative"
@@ -1749,7 +2043,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "survives truncated header",
       "status": "pass",
       "suite": "negative"
@@ -1763,7 +2057,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "survives unknown service type 0x0F00",
       "status": "pass",
       "suite": "negative"
@@ -1777,7 +2071,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "survives HPAI of length 7",
       "status": "pass",
       "suite": "negative"
@@ -1791,7 +2085,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "survives 2000-octet datagram",
       "status": "pass",
       "suite": "negative"
@@ -1805,7 +2099,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "survives empty CONNECT_REQUEST",
       "status": "pass",
       "suite": "negative"
@@ -1819,7 +2113,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "survives CRI length 0",
       "status": "pass",
       "suite": "negative"
@@ -1833,7 +2127,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "CONNECTIONSTATE_REQUEST of an unknown channel \u2192 E_CONNECTION_ID",
       "status": "pass",
       "suite": "negative"
@@ -1847,7 +2141,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "unsupported connection type \u2192 E_CONNECTION_TYPE",
       "status": "pass",
       "suite": "negative"
@@ -1861,7 +2155,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "raw tunnelling layer \u2192 refused",
       "status": "pass",
       "suite": "negative"
@@ -1875,7 +2169,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "TCP HPAI over UDP \u2192 refused",
       "status": "pass",
       "suite": "negative"
@@ -1889,7 +2183,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "heartbeat right after the malformed datagrams",
       "status": "pass",
       "suite": "negative"
@@ -1903,7 +2197,7 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "channel exhaustion \u2192 E_NO_MORE_CONNECTIONS",
       "status": "pass",
       "suite": "negative"
@@ -1917,20 +2211,20 @@
       },
       "durationMs": 0,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "still serving after the tests",
       "status": "pass",
       "suite": "negative"
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.19.0.2:3671",
+        "endpoint": "172.20.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3246,
+      "durationMs": 3268,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "discover (multicast search)",
@@ -1939,7 +2233,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "address": "1.1.0",
         "name": "knx-interop",
@@ -1949,7 +2243,7 @@
           "Tunnelling": 1
         }
       },
-      "durationMs": 217,
+      "durationMs": 223,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "describe",
@@ -1958,12 +2252,12 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "address": "1.1.10",
         "channel": 1
       },
-      "durationMs": 231,
+      "durationMs": 217,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "connect and disconnect",
@@ -1972,7 +2266,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "01",
@@ -1981,7 +2275,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 815,
+      "durationMs": 817,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1991,13 +2285,13 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "data": "0C33",
         "source": "1.1.13",
         "value": 21.5
       },
-      "durationMs": 910,
+      "durationMs": 898,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2007,7 +2301,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "01",
@@ -2016,7 +2310,7 @@
           "source": "1.1.16"
         }
       },
-      "durationMs": 813,
+      "durationMs": 821,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2026,7 +2320,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "00",
@@ -2035,7 +2329,7 @@
           "source": "1.1.10"
         }
       },
-      "durationMs": 804,
+      "durationMs": 796,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2045,7 +2339,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "FF",
@@ -2054,7 +2348,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 802,
+      "durationMs": 804,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2064,7 +2358,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "C8",
@@ -2073,7 +2367,7 @@
           "source": "1.1.15"
         }
       },
-      "durationMs": 798,
+      "durationMs": 797,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2083,7 +2377,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "1234",
@@ -2092,7 +2386,7 @@
           "source": "1.1.17"
         }
       },
-      "durationMs": 806,
+      "durationMs": 830,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2102,7 +2396,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "0C33",
@@ -2111,7 +2405,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 797,
+      "durationMs": 828,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2121,7 +2415,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "8A24",
@@ -2130,7 +2424,7 @@
           "source": "1.1.13"
         }
       },
-      "durationMs": 788,
+      "durationMs": 958,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2140,7 +2434,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "3753",
@@ -2149,7 +2443,7 @@
           "source": "1.1.15"
         }
       },
-      "durationMs": 786,
+      "durationMs": 827,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2159,7 +2453,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "12345678",
@@ -2168,7 +2462,7 @@
           "source": "1.1.17"
         }
       },
-      "durationMs": 817,
+      "durationMs": 944,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2178,7 +2472,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "FFFFFFFE",
@@ -2187,7 +2481,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 795,
+      "durationMs": 819,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2197,7 +2491,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "449A5000",
@@ -2206,7 +2500,7 @@
           "source": "1.1.13"
         }
       },
-      "durationMs": 788,
+      "durationMs": 834,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2216,7 +2510,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "4B4E5820696E7465726F70000000",
@@ -2225,7 +2519,7 @@
           "source": "1.1.15"
         }
       },
-      "durationMs": 791,
+      "durationMs": 809,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2234,14 +2528,68 @@
       "suite": "dpt"
     },
     {
+      "client": "goknx",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "durationMs": 0,
+      "error": "no TCP on the server",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "goknx",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "durationMs": 0,
+      "error": "no TCP on the server",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "goknx",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "durationMs": 0,
+      "error": "no device management on the server",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "goknx",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "data": {
+        "frames": [
+          {
+            "data": "01",
+            "destination": "1/0/7",
+            "raw": "BC11110807E100812C",
+            "source": "1.1.17"
+          }
+        ]
+      },
+      "durationMs": 1187,
+      "observer": "xknx",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
       "client": "xknx",
       "clientVersion": "4.0.0",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.19.0.2:3671",
+        "endpoint": "172.20.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3369,
+      "durationMs": 3365,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "discover (multicast search)",
@@ -2258,7 +2606,7 @@
           "Tunnelling": 1
         }
       },
-      "durationMs": 348,
+      "durationMs": 328,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "describe",
@@ -2269,10 +2617,10 @@
       "client": "xknx",
       "clientVersion": "4.0.0",
       "data": {
-        "address": "1.1.16",
+        "address": "1.1.10",
         "channel": 1
       },
-      "durationMs": 370,
+      "durationMs": 331,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "connect and disconnect",
@@ -2287,10 +2635,10 @@
           "data": "01",
           "group": "1/0/1",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1110,
+      "durationMs": 1127,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2303,10 +2651,10 @@
       "clientVersion": "4.0.0",
       "data": {
         "data": "0C33",
-        "source": "1.1.11",
+        "source": "1.1.13",
         "value": 21.5
       },
-      "durationMs": 859,
+      "durationMs": 852,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2322,10 +2670,10 @@
           "data": "01",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.14"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 1097,
+      "durationMs": 1134,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2341,10 +2689,10 @@
           "data": "00",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.16"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 1126,
+      "durationMs": 1201,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2360,10 +2708,10 @@
           "data": "FF",
           "group": "1/1/2",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1111,
+      "durationMs": 1166,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2379,10 +2727,10 @@
           "data": "C8",
           "group": "1/1/3",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 1126,
+      "durationMs": 1149,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2398,10 +2746,10 @@
           "data": "1234",
           "group": "1/1/4",
           "service": "write",
-          "source": "1.1.14"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 1121,
+      "durationMs": 1132,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2417,10 +2765,10 @@
           "data": "0C33",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.16"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 1133,
+      "durationMs": 1148,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2436,7 +2784,7 @@
           "data": "8A24",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.12"
         }
       },
       "durationMs": 1133,
@@ -2455,10 +2803,10 @@
           "data": "3753",
           "group": "1/1/6",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 1106,
+      "durationMs": 1166,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2474,10 +2822,10 @@
           "data": "12345678",
           "group": "1/1/7",
           "service": "write",
-          "source": "1.1.14"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 1095,
+      "durationMs": 1155,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2493,10 +2841,10 @@
           "data": "FFFFFFFE",
           "group": "1/1/8",
           "service": "write",
-          "source": "1.1.16"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 1110,
+      "durationMs": 1160,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2512,10 +2860,10 @@
           "data": "449A5000",
           "group": "1/1/9",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1119,
+      "durationMs": 1156,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2531,10 +2879,10 @@
           "data": "4B4E5820696E7465726F70000000",
           "group": "1/1/10",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 1126,
+      "durationMs": 1163,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2543,14 +2891,58 @@
       "suite": "dpt"
     },
     {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "durationMs": 0,
+      "error": "no TCP on the server",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "durationMs": 0,
+      "error": "no TCP on the server",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "durationMs": 0,
+      "error": "no device management on the client",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "durationMs": 0,
+      "error": "no busmonitor on the client",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.19.0.2:3671",
+        "endpoint": "172.20.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3359,
+      "durationMs": 3307,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "discover (multicast search)",
@@ -2560,8 +2952,8 @@
     {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
-      "durationMs": 5336,
-      "error": "KNXUltimate 6.3.1 announces <local IP>:3671 in its DESCRIPTION_REQUEST HPAI while it listens on an ephemeral port (src/KNXClient.ts sendDescriptionRequestMessage: new HPAI(localIPAddress), default port 3671); servers that answer to the HPAI, as the standard requires, answer a port nobody listens on (observed: no description response)",
+      "durationMs": 5335,
+      "error": "KNXUltimate 6.3.1 announces <local IP>:3671 in its DESCRIPTION_REQUEST HPAI while it listens on an ephemeral port (src/KNXClient.ts sendDescriptionRequestMessage: new HPAI(localIPAddress), default port 3671); servers that answer to the HPAI, as the standard requires, answer a port nobody listens on. Reported: https://github.com/Supergiovane/KNXUltimate/issues/117 (observed: no description response)",
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "describe",
@@ -2575,7 +2967,7 @@
         "address": "1.3.250",
         "channel": 1
       },
-      "durationMs": 2643,
+      "durationMs": 2651,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "connect and disconnect",
@@ -2606,10 +2998,10 @@
       "clientVersion": "6.3.1",
       "data": {
         "data": "0C33",
-        "source": "1.1.16",
+        "source": "1.1.10",
         "value": 21.5
       },
-      "durationMs": 3296,
+      "durationMs": 3256,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2628,7 +3020,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4132,
+      "durationMs": 4155,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2647,7 +3039,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4144,
+      "durationMs": 4156,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2666,7 +3058,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4128,
+      "durationMs": 4159,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2685,7 +3077,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4136,
+      "durationMs": 4143,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2704,7 +3096,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4147,
+      "durationMs": 4196,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2723,7 +3115,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4163,
+      "durationMs": 4133,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2742,7 +3134,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4115,
+      "durationMs": 4163,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2761,7 +3153,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4134,
+      "durationMs": 4129,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2780,7 +3172,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4147,
+      "durationMs": 4131,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2799,7 +3191,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4137,
+      "durationMs": 4164,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2818,7 +3210,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4126,
+      "durationMs": 4180,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2837,7 +3229,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4143,
+      "durationMs": 4145,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2846,14 +3238,58 @@
       "suite": "dpt"
     },
     {
+      "client": "knxultimate",
+      "clientVersion": "6.3.1",
+      "durationMs": 0,
+      "error": "no TCP on the server",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxultimate",
+      "clientVersion": "6.3.1",
+      "durationMs": 0,
+      "error": "no TCP on the server",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxultimate",
+      "clientVersion": "6.3.1",
+      "durationMs": 0,
+      "error": "no device management on the client",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxultimate",
+      "clientVersion": "6.3.1",
+      "durationMs": 0,
+      "error": "no busmonitor on the client",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.19.0.2:3671",
+        "endpoint": "172.20.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3473,
+      "durationMs": 3459,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "discover (multicast search)",
@@ -2872,7 +3308,7 @@
           "Tunnelling": 1
         }
       },
-      "durationMs": 371,
+      "durationMs": 381,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "describe",
@@ -2883,10 +3319,10 @@
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
       "data": {
-        "address": "1.1.10",
+        "address": "1.1.12",
         "channel": 1
       },
-      "durationMs": 401,
+      "durationMs": 419,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "connect and disconnect",
@@ -2901,10 +3337,10 @@
           "data": "01",
           "group": "1/0/1",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 957,
+      "durationMs": 991,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2919,7 +3355,7 @@
         "text": "21.5 \u00b0C",
         "value": 21.5
       },
-      "durationMs": 1157,
+      "durationMs": 1156,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2935,10 +3371,10 @@
           "data": "01",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.16"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 930,
+      "durationMs": 951,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2954,10 +3390,10 @@
           "data": "00",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 971,
+      "durationMs": 951,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2973,10 +3409,10 @@
           "data": "FF",
           "group": "1/1/2",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 950,
+      "durationMs": 970,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -2992,10 +3428,10 @@
           "data": "C8",
           "group": "1/1/3",
           "service": "write",
-          "source": "1.1.14"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 945,
+      "durationMs": 944,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3011,10 +3447,10 @@
           "data": "1234",
           "group": "1/1/4",
           "service": "write",
-          "source": "1.1.16"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 951,
+      "durationMs": 940,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3030,10 +3466,10 @@
           "data": "0C33",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 929,
+      "durationMs": 932,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3049,10 +3485,10 @@
           "data": "8A24",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 952,
+      "durationMs": 939,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3068,10 +3504,10 @@
           "data": "3753",
           "group": "1/1/6",
           "service": "write",
-          "source": "1.1.14"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 944,
+      "durationMs": 969,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3087,10 +3523,10 @@
           "data": "12345678",
           "group": "1/1/7",
           "service": "write",
-          "source": "1.1.16"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 929,
+      "durationMs": 947,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3106,10 +3542,10 @@
           "data": "FFFFFFFE",
           "group": "1/1/8",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 940,
+      "durationMs": 945,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3125,10 +3561,10 @@
           "data": "449A5000",
           "group": "1/1/9",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 945,
+      "durationMs": 941,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3144,16 +3580,67 @@
           "data": "4B4E5820696E7465726F70000000",
           "group": "1/1/10",
           "service": "write",
-          "source": "1.1.14"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 920,
+      "durationMs": 932,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "DPT 16.000 KNX interop",
       "status": "pass",
       "suite": "dpt"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "durationMs": 0,
+      "error": "no TCP on the server",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "durationMs": 0,
+      "error": "no TCP on the server",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "durationMs": 0,
+      "error": "no device management on the server",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "data": {
+        "frames": [
+          {
+            "raw": "BC110A0807E1008137"
+          }
+        ]
+      },
+      "durationMs": 929,
+      "observer": "goknx",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "pass",
+      "suite": "v2"
     },
     {
       "client": "knxd",
@@ -3183,7 +3670,7 @@
       "data": {
         "channel": 1
       },
-      "durationMs": 315,
+      "durationMs": 321,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "connect and disconnect",
@@ -3198,10 +3685,10 @@
           "data": "01",
           "group": "1/0/1",
           "service": "write",
-          "source": "1.1.17"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 778,
+      "durationMs": 848,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3214,9 +3701,9 @@
       "clientVersion": "0.14.73",
       "data": {
         "data": "0C33",
-        "source": "1.1.10"
+        "source": "1.1.14"
       },
-      "durationMs": 1440,
+      "durationMs": 1386,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3232,10 +3719,10 @@
           "data": "01",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.13"
+          "source": "1.1.17"
         }
       },
-      "durationMs": 808,
+      "durationMs": 842,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3251,10 +3738,10 @@
           "data": "00",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.15"
+          "source": "1.1.11"
         }
       },
-      "durationMs": 800,
+      "durationMs": 796,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3270,10 +3757,10 @@
           "data": "FF",
           "group": "1/1/2",
           "service": "write",
-          "source": "1.1.17"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 816,
+      "durationMs": 830,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3289,10 +3776,10 @@
           "data": "C8",
           "group": "1/1/3",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 784,
+      "durationMs": 810,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3308,10 +3795,10 @@
           "data": "1234",
           "group": "1/1/4",
           "service": "write",
-          "source": "1.1.14"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 841,
+      "durationMs": 835,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3327,10 +3814,10 @@
           "data": "0C33",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.16"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 806,
+      "durationMs": 799,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3346,10 +3833,10 @@
           "data": "8A24",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 819,
+      "durationMs": 835,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3365,10 +3852,10 @@
           "data": "3753",
           "group": "1/1/6",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 813,
+      "durationMs": 803,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3384,10 +3871,10 @@
           "data": "12345678",
           "group": "1/1/7",
           "service": "write",
-          "source": "1.1.14"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 808,
+      "durationMs": 822,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3403,10 +3890,10 @@
           "data": "FFFFFFFE",
           "group": "1/1/8",
           "service": "write",
-          "source": "1.1.16"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 779,
+      "durationMs": 780,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3422,10 +3909,10 @@
           "data": "449A5000",
           "group": "1/1/9",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 838,
+      "durationMs": 814,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -3441,16 +3928,60 @@
           "data": "4B4E5820696E7465726F70000000",
           "group": "1/1/10",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 796,
+      "durationMs": 794,
       "observer": "goknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "DPT 16.000 KNX interop",
       "status": "pass",
       "suite": "dpt"
+    },
+    {
+      "client": "knxd",
+      "clientVersion": "0.14.73",
+      "durationMs": 0,
+      "error": "no TCP on the client",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxd",
+      "clientVersion": "0.14.73",
+      "durationMs": 0,
+      "error": "no TCP on the client",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxd",
+      "clientVersion": "0.14.73",
+      "durationMs": 0,
+      "error": "no device management on the client",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxd",
+      "clientVersion": "0.14.73",
+      "durationMs": 0,
+      "error": "no busmonitor on the client",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "unsupported",
+      "suite": "v2"
     },
     {
       "client": "probe",
@@ -3790,13 +4321,13 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.19.0.2:3671",
+        "endpoint": "172.20.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3245,
+      "durationMs": 3256,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "discover (multicast search)",
@@ -3805,7 +4336,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "address": "1.1.0",
         "name": "knx-interop",
@@ -3815,7 +4346,7 @@
           "Tunnelling": 2
         }
       },
-      "durationMs": 222,
+      "durationMs": 218,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "describe",
@@ -3824,12 +4355,12 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "address": "1.1.10",
         "channel": 1
       },
-      "durationMs": 224,
+      "durationMs": 225,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "connect and disconnect",
@@ -3838,7 +4369,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "01",
@@ -3847,7 +4378,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 783,
+      "durationMs": 835,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3857,13 +4388,13 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "data": "0C33",
         "source": "1.1.10",
         "value": 21.5
       },
-      "durationMs": 880,
+      "durationMs": 908,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3873,7 +4404,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "01",
@@ -3882,7 +4413,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 853,
+      "durationMs": 806,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3892,7 +4423,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "00",
@@ -3901,7 +4432,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 787,
+      "durationMs": 846,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3911,7 +4442,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "FF",
@@ -3920,7 +4451,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 784,
+      "durationMs": 819,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3930,7 +4461,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "C8",
@@ -3939,7 +4470,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 800,
+      "durationMs": 806,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3949,7 +4480,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "1234",
@@ -3958,7 +4489,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 790,
+      "durationMs": 828,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3968,7 +4499,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "0C33",
@@ -3977,7 +4508,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 802,
+      "durationMs": 841,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3987,7 +4518,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "8A24",
@@ -3996,7 +4527,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 807,
+      "durationMs": 840,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4006,7 +4537,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "3753",
@@ -4015,7 +4546,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 811,
+      "durationMs": 838,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4025,7 +4556,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "12345678",
@@ -4034,7 +4565,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 802,
+      "durationMs": 828,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4044,7 +4575,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "FFFFFFFE",
@@ -4053,7 +4584,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 801,
+      "durationMs": 817,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4063,7 +4594,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "449A5000",
@@ -4072,7 +4603,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 798,
+      "durationMs": 833,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4082,7 +4613,7 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
       "data": {
         "seen": {
           "data": "4B4E5820696E7465726F70000000",
@@ -4091,7 +4622,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 792,
+      "durationMs": 840,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4100,14 +4631,73 @@
       "suite": "dpt"
     },
     {
+      "client": "goknx",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "data": {
+        "seen": {
+          "data": "01",
+          "group": "1/0/1",
+          "service": "write",
+          "source": "1.1.12"
+        }
+      },
+      "durationMs": 834,
+      "observer": "xknx",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "goknx",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "data": {
+        "data": "0C33",
+        "source": "1.1.10",
+        "value": 21.5
+      },
+      "durationMs": 907,
+      "observer": "xknx",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "goknx",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "data": {
+        "data": "000000000000"
+      },
+      "durationMs": 222,
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "goknx",
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "durationMs": 0,
+      "error": "no busmonitor on the server",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
       "client": "xknx",
       "clientVersion": "4.0.0",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.19.0.2:3671",
+        "endpoint": "172.20.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3375,
+      "durationMs": 3381,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "discover (multicast search)",
@@ -4124,7 +4714,7 @@
           "Tunnelling": 1
         }
       },
-      "durationMs": 330,
+      "durationMs": 352,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "describe",
@@ -4136,9 +4726,9 @@
       "clientVersion": "4.0.0",
       "data": {
         "address": "1.1.10",
-        "channel": 30
+        "channel": 35
       },
-      "durationMs": 324,
+      "durationMs": 340,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "connect and disconnect",
@@ -4153,10 +4743,10 @@
           "data": "01",
           "group": "1/0/1",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1101,
+      "durationMs": 1153,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4169,10 +4759,10 @@
       "clientVersion": "4.0.0",
       "data": {
         "data": "0C33",
-        "source": "1.1.10",
+        "source": "1.1.11",
         "value": 21.5
       },
-      "durationMs": 834,
+      "durationMs": 867,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4188,10 +4778,10 @@
           "data": "01",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1113,
+      "durationMs": 1173,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4207,10 +4797,10 @@
           "data": "00",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1136,
+      "durationMs": 1173,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4226,10 +4816,10 @@
           "data": "FF",
           "group": "1/1/2",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1134,
+      "durationMs": 1170,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4245,10 +4835,10 @@
           "data": "C8",
           "group": "1/1/3",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1178,
+      "durationMs": 1162,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4264,10 +4854,10 @@
           "data": "1234",
           "group": "1/1/4",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1140,
+      "durationMs": 1172,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4283,10 +4873,10 @@
           "data": "0C33",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1134,
+      "durationMs": 1141,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4302,10 +4892,10 @@
           "data": "8A24",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1115,
+      "durationMs": 1165,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4321,10 +4911,10 @@
           "data": "3753",
           "group": "1/1/6",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1139,
+      "durationMs": 1176,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4340,10 +4930,10 @@
           "data": "12345678",
           "group": "1/1/7",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1123,
+      "durationMs": 1179,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4362,7 +4952,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1120,
+      "durationMs": 1129,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4381,7 +4971,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1104,
+      "durationMs": 1150,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4400,7 +4990,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1148,
+      "durationMs": 1138,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4409,14 +4999,71 @@
       "suite": "dpt"
     },
     {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "data": {
+        "seen": {
+          "data": "01",
+          "group": "1/0/1",
+          "service": "write",
+          "source": "1.1.11"
+        }
+      },
+      "durationMs": 1148,
+      "observer": "goknx",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "data": {
+        "data": "0C33",
+        "source": "1.1.10",
+        "value": 21.5
+      },
+      "durationMs": 849,
+      "observer": "goknx",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "durationMs": 0,
+      "error": "no device management on the client",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "durationMs": 0,
+      "error": "no busmonitor on the client",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.19.0.2:3671",
+        "endpoint": "172.20.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3308,
+      "durationMs": 3315,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "discover (multicast search)",
@@ -4426,12 +5073,16 @@
     {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
-      "durationMs": 5316,
-      "error": "KNXUltimate 6.3.1 announces <local IP>:3671 in its DESCRIPTION_REQUEST HPAI while it listens on an ephemeral port (src/KNXClient.ts sendDescriptionRequestMessage: new HPAI(localIPAddress), default port 3671); servers that answer to the HPAI, as the standard requires, answer a port nobody listens on (observed: no description response)",
+      "data": {
+        "address": "1.1.0",
+        "name": "knx-interop",
+        "services": {}
+      },
+      "durationMs": 5329,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "describe",
-      "status": "known-difference",
+      "status": "pass",
       "suite": "tunnel"
     },
     {
@@ -4439,9 +5090,9 @@
       "clientVersion": "6.3.1",
       "data": {
         "address": "1.3.250",
-        "channel": 59
+        "channel": 68
       },
-      "durationMs": 2654,
+      "durationMs": 2661,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "connect and disconnect",
@@ -4459,7 +5110,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4109,
+      "durationMs": 4142,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4475,7 +5126,7 @@
         "source": "1.1.10",
         "value": 21.5
       },
-      "durationMs": 3258,
+      "durationMs": 3250,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4494,7 +5145,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4144,
+      "durationMs": 4153,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4513,7 +5164,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4127,
+      "durationMs": 4128,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4532,7 +5183,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4096,
+      "durationMs": 4129,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4551,7 +5202,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4116,
+      "durationMs": 4162,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4570,7 +5221,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4112,
+      "durationMs": 4142,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4589,7 +5240,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4135,
+      "durationMs": 4141,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4608,7 +5259,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4115,
+      "durationMs": 4154,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4627,7 +5278,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4124,
+      "durationMs": 4135,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4646,7 +5297,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4152,
+      "durationMs": 4127,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4665,7 +5316,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4125,
+      "durationMs": 4116,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4684,7 +5335,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4128,
+      "durationMs": 4140,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4703,7 +5354,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4147,
+      "durationMs": 4120,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4712,14 +5363,71 @@
       "suite": "dpt"
     },
     {
+      "client": "knxultimate",
+      "clientVersion": "6.3.1",
+      "data": {
+        "seen": {
+          "data": "01",
+          "group": "1/0/1",
+          "service": "write",
+          "source": "1.3.250"
+        }
+      },
+      "durationMs": 2120,
+      "observer": "goknx",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "knxultimate",
+      "clientVersion": "6.3.1",
+      "data": {
+        "data": "0C33",
+        "source": "1.1.10",
+        "value": 21.5
+      },
+      "durationMs": 1240,
+      "observer": "xknx",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "knxultimate",
+      "clientVersion": "6.3.1",
+      "durationMs": 0,
+      "error": "no device management on the client",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxultimate",
+      "clientVersion": "6.3.1",
+      "durationMs": 0,
+      "error": "no busmonitor on the client",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.19.0.2:3671",
+        "endpoint": "172.20.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3433,
+      "durationMs": 3427,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "discover (multicast search)",
@@ -4738,7 +5446,7 @@
           "Tunnelling": 2
         }
       },
-      "durationMs": 396,
+      "durationMs": 368,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "describe",
@@ -4750,7 +5458,7 @@
       "clientVersion": "3.0-M1",
       "data": {
         "address": "1.1.10",
-        "channel": 88
+        "channel": 101
       },
       "durationMs": 410,
       "peer": "calimero-server",
@@ -4770,7 +5478,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 999,
+      "durationMs": 963,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4785,7 +5493,7 @@
         "text": "21.5 \u00b0C",
         "value": 21.5
       },
-      "durationMs": 1163,
+      "durationMs": 1134,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4804,7 +5512,7 @@
           "source": "1.1.13"
         }
       },
-      "durationMs": 950,
+      "durationMs": 929,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4823,7 +5531,7 @@
           "source": "1.1.13"
         }
       },
-      "durationMs": 954,
+      "durationMs": 955,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4842,7 +5550,7 @@
           "source": "1.1.13"
         }
       },
-      "durationMs": 951,
+      "durationMs": 962,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4861,7 +5569,7 @@
           "source": "1.1.13"
         }
       },
-      "durationMs": 952,
+      "durationMs": 953,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4880,7 +5588,7 @@
           "source": "1.1.13"
         }
       },
-      "durationMs": 960,
+      "durationMs": 947,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4899,7 +5607,7 @@
           "source": "1.1.13"
         }
       },
-      "durationMs": 945,
+      "durationMs": 940,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4918,7 +5626,7 @@
           "source": "1.1.13"
         }
       },
-      "durationMs": 944,
+      "durationMs": 936,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4937,7 +5645,7 @@
           "source": "1.1.13"
         }
       },
-      "durationMs": 950,
+      "durationMs": 951,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4956,7 +5664,7 @@
           "source": "1.1.13"
         }
       },
-      "durationMs": 963,
+      "durationMs": 945,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4975,7 +5683,7 @@
           "source": "1.1.13"
         }
       },
-      "durationMs": 953,
+      "durationMs": 962,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4994,7 +5702,7 @@
           "source": "1.1.13"
         }
       },
-      "durationMs": 948,
+      "durationMs": 956,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5013,13 +5721,71 @@
           "source": "1.1.10"
         }
       },
-      "durationMs": 961,
+      "durationMs": 942,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "DPT 16.000 KNX interop",
       "status": "pass",
       "suite": "dpt"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "data": {
+        "seen": {
+          "data": "01",
+          "group": "1/0/1",
+          "service": "write",
+          "source": "1.1.12"
+        }
+      },
+      "durationMs": 933,
+      "observer": "goknx",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "data": {
+        "text": "21.5 \u00b0C",
+        "value": 21.5
+      },
+      "durationMs": 1143,
+      "observer": "xknx",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "data": {
+        "data": "000000000000"
+      },
+      "durationMs": 438,
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "pass",
+      "suite": "v2"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "durationMs": 0,
+      "error": "no busmonitor on the server",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "unsupported",
+      "suite": "v2"
     },
     {
       "client": "knxd",
@@ -5047,9 +5813,9 @@
       "client": "knxd",
       "clientVersion": "0.14.73",
       "data": {
-        "channel": 131
+        "channel": 150
       },
-      "durationMs": 311,
+      "durationMs": 299,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "connect and disconnect",
@@ -5067,7 +5833,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 877,
+      "durationMs": 867,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5082,7 +5848,7 @@
         "data": "0C33",
         "source": "1.1.10"
       },
-      "durationMs": 1416,
+      "durationMs": 1421,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5098,10 +5864,10 @@
           "data": "01",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 826,
+      "durationMs": 911,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5117,10 +5883,10 @@
           "data": "00",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 865,
+      "durationMs": 863,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5136,10 +5902,10 @@
           "data": "FF",
           "group": "1/1/2",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 897,
+      "durationMs": 861,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5155,10 +5921,10 @@
           "data": "C8",
           "group": "1/1/3",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 875,
+      "durationMs": 796,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5174,10 +5940,10 @@
           "data": "1234",
           "group": "1/1/4",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 819,
+      "durationMs": 839,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5193,10 +5959,10 @@
           "data": "0C33",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 874,
+      "durationMs": 789,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5212,10 +5978,10 @@
           "data": "8A24",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 903,
+      "durationMs": 819,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5231,10 +5997,10 @@
           "data": "3753",
           "group": "1/1/6",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 803,
+      "durationMs": 828,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5250,10 +6016,10 @@
           "data": "12345678",
           "group": "1/1/7",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 880,
+      "durationMs": 837,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5269,10 +6035,10 @@
           "data": "FFFFFFFE",
           "group": "1/1/8",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 856,
+      "durationMs": 837,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5288,10 +6054,10 @@
           "data": "449A5000",
           "group": "1/1/9",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 901,
+      "durationMs": 871,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -5307,16 +6073,60 @@
           "data": "4B4E5820696E7465726F70000000",
           "group": "1/1/10",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.13"
         }
       },
-      "durationMs": 872,
+      "durationMs": 833,
       "observer": "goknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "DPT 16.000 KNX interop",
       "status": "pass",
       "suite": "dpt"
+    },
+    {
+      "client": "knxd",
+      "clientVersion": "0.14.73",
+      "durationMs": 0,
+      "error": "no TCP on the client",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "group write over TCP (DPT 1.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxd",
+      "clientVersion": "0.14.73",
+      "durationMs": 0,
+      "error": "no TCP on the client",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "group read over TCP (DPT 9.001)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxd",
+      "clientVersion": "0.14.73",
+      "durationMs": 0,
+      "error": "no device management on the client",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "device management: device serial number (M_PropRead)",
+      "status": "unsupported",
+      "suite": "v2"
+    },
+    {
+      "client": "knxd",
+      "clientVersion": "0.14.73",
+      "durationMs": 0,
+      "error": "no busmonitor on the client",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "busmonitor sees a write (L_Busmon.ind, TP1 frame)",
+      "status": "unsupported",
+      "suite": "v2"
     },
     {
       "client": "probe",
@@ -5476,11 +6286,11 @@
       "client": "probe",
       "clientVersion": "1.0",
       "data": {
-        "detail": "no DESCRIPTION_RESPONSE for 10 s, then the server answered again",
+        "detail": "no DESCRIPTION_RESPONSE for 20 s, then the server answered again",
         "kind": "required"
       },
       "durationMs": 0,
-      "error": "calimero-server 3.0-M1 stops answering for about 10 s after a 3-octet datagram: its log shows the control endpoint coming up again (\"control endpoint ... is up and running\"); description requests meanwhile are logged as \"unknown service type 0x203 - ignored\" (observed: no DESCRIPTION_RESPONSE for 10 s, then the server answered again)",
+      "error": "calimero-server 3.0-M1 stops answering for about 10 s after a 3-octet datagram: its log shows the control endpoint coming up again (\"control endpoint ... is up and running\"); cause: an uncaught KNXIllegalArgumentException (\"negative length of message body\") in UdpServiceLooper closes the control endpoint; fixed upstream after 3.0-M2 by calimero-server d276d8a8 (2026-09-14), not in a release or image yet (observed: no DESCRIPTION_RESPONSE for 20 s, then the server answered again)",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "survives truncated header",
@@ -5551,7 +6361,7 @@
         "kind": "required"
       },
       "durationMs": 0,
-      "error": "calimero-server 3.0-M1 stops answering for about 10 s after a CONNECT_REQUEST whose CRI has length 0, as after a truncated header (observed: no DESCRIPTION_RESPONSE for 10 s, then the server answered again)",
+      "error": "calimero-server 3.0-M1 stops answering for about 10 s after a CONNECT_REQUEST whose CRI has length 0, the same uncaught exception as after a truncated header; fixed upstream by d276d8a8 (observed: no DESCRIPTION_RESPONSE for 10 s, then the server answered again)",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "survives CRI length 0",
@@ -5658,8 +6468,8 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
-      "durationMs": 809,
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "durationMs": 796,
       "peer": "xknx",
       "peerVersion": "4.0.0",
       "scenario": "routing write (multicast)",
@@ -5668,8 +6478,8 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
-      "durationMs": 1034,
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "durationMs": 1044,
       "peer": "knxultimate",
       "peerVersion": "6.3.1",
       "scenario": "routing write (multicast)",
@@ -5678,8 +6488,8 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
-      "durationMs": 3953,
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "durationMs": 3951,
       "peer": "calimero-tools",
       "peerVersion": "3.0-M1",
       "scenario": "routing write (multicast)",
@@ -5688,8 +6498,8 @@
     },
     {
       "client": "goknx",
-      "clientVersion": "(devel) (knxctl dev)",
-      "durationMs": 2175,
+      "clientVersion": "(devel) (knxctl v0.1.1+dirty)",
+      "durationMs": 2160,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "routing write (multicast)",
@@ -5699,9 +6509,9 @@
     {
       "client": "xknx",
       "clientVersion": "4.0.0",
-      "durationMs": 1142,
+      "durationMs": 1143,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "routing write (multicast)",
       "status": "pass",
       "suite": "routing"
@@ -5709,7 +6519,7 @@
     {
       "client": "xknx",
       "clientVersion": "4.0.0",
-      "durationMs": 1194,
+      "durationMs": 1157,
       "peer": "knxultimate",
       "peerVersion": "6.3.1",
       "scenario": "routing write (multicast)",
@@ -5719,7 +6529,7 @@
     {
       "client": "xknx",
       "clientVersion": "4.0.0",
-      "durationMs": 4098,
+      "durationMs": 4113,
       "peer": "calimero-tools",
       "peerVersion": "3.0-M1",
       "scenario": "routing write (multicast)",
@@ -5729,7 +6539,7 @@
     {
       "client": "xknx",
       "clientVersion": "4.0.0",
-      "durationMs": 2538,
+      "durationMs": 2530,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "routing write (multicast)",
@@ -5739,9 +6549,9 @@
     {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
-      "durationMs": 2116,
+      "durationMs": 2098,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "routing write (multicast)",
       "status": "pass",
       "suite": "routing"
@@ -5749,7 +6559,7 @@
     {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
-      "durationMs": 2175,
+      "durationMs": 2173,
       "peer": "xknx",
       "peerVersion": "4.0.0",
       "scenario": "routing write (multicast)",
@@ -5759,7 +6569,7 @@
     {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
-      "durationMs": 5118,
+      "durationMs": 5108,
       "peer": "calimero-tools",
       "peerVersion": "3.0-M1",
       "scenario": "routing write (multicast)",
@@ -5769,7 +6579,7 @@
     {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
-      "durationMs": 3471,
+      "durationMs": 3503,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "routing write (multicast)",
@@ -5779,9 +6589,9 @@
     {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
-      "durationMs": 936,
+      "durationMs": 960,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "routing write (multicast)",
       "status": "pass",
       "suite": "routing"
@@ -5789,7 +6599,7 @@
     {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
-      "durationMs": 1050,
+      "durationMs": 1011,
       "peer": "xknx",
       "peerVersion": "4.0.0",
       "scenario": "routing write (multicast)",
@@ -5799,7 +6609,7 @@
     {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
-      "durationMs": 1323,
+      "durationMs": 1283,
       "peer": "knxultimate",
       "peerVersion": "6.3.1",
       "scenario": "routing write (multicast)",
@@ -5809,7 +6619,7 @@
     {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
-      "durationMs": 2376,
+      "durationMs": 2365,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "routing write (multicast)",
@@ -5819,9 +6629,9 @@
     {
       "client": "knxd",
       "clientVersion": "0.14.73",
-      "durationMs": 2309,
+      "durationMs": 2295,
       "peer": "goknx",
-      "peerVersion": "(devel) (knxctl dev)",
+      "peerVersion": "(devel) (knxctl v0.1.1+dirty)",
       "scenario": "routing write (multicast)",
       "status": "pass",
       "suite": "routing"
@@ -5829,7 +6639,7 @@
     {
       "client": "knxd",
       "clientVersion": "0.14.73",
-      "durationMs": 2387,
+      "durationMs": 2378,
       "peer": "xknx",
       "peerVersion": "4.0.0",
       "scenario": "routing write (multicast)",
@@ -5839,7 +6649,7 @@
     {
       "client": "knxd",
       "clientVersion": "0.14.73",
-      "durationMs": 2358,
+      "durationMs": 2335,
       "peer": "knxultimate",
       "peerVersion": "6.3.1",
       "scenario": "routing write (multicast)",
@@ -5849,7 +6659,7 @@
     {
       "client": "knxd",
       "clientVersion": "0.14.73",
-      "durationMs": 5271,
+      "durationMs": 5294,
       "peer": "calimero-tools",
       "peerVersion": "3.0-M1",
       "scenario": "routing write (multicast)",
@@ -5858,10 +6668,10 @@
     }
   ],
   "schemaVersion": "1.0",
-  "startedAt": "2026-10-29T20:19:06.648157+00:00",
+  "startedAt": "2026-10-29T21:21:58.887924+00:00",
   "summary": {
-    "known-difference": 5,
-    "pass": 336,
-    "unsupported": 6
+    "known-difference": 4,
+    "pass": 361,
+    "unsupported": 42
   }
 }

@@ -20,7 +20,7 @@ while [ $# -gt 0 ]; do
 done
 case "$ROLE" in
 capabilities)
-	printf '{"features":{"discover":true,"describe":true,"tunnel":true,"routing":true,"nat":true,"secure":false,"emulatedReads":true},"implementation":"calimero-server","notes":"The emulated subnet answers a read with the last value written; KNX IP Secure is supported by Calimero but not configured here yet.","roles":["server"],"schemaVersion":"1.0","version":"%s"}\n' "$VERSION"
+	printf '{"features":{"discover":true,"describe":true,"tunnel":true,"routing":true,"nat":true,"secure":false,"emulatedReads":true,"server":{"tcp":true,"property":true,"busmonitor":false}},"implementation":"calimero-server","notes":"The emulated subnet answers a read with the last value written; a busmonitor connection is exclusive and the emulated subnet sends nothing while it is open; KNX IP Secure is supported by Calimero but not configured here yet.","roles":["server"],"schemaVersion":"1.0","version":"%s"}\n' "$VERSION"
 	exit 0 ;;
 server)
 	group=""

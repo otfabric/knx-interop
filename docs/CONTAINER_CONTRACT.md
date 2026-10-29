@@ -1,4 +1,7 @@
-# Container contract (version 1.0)
+# Container contract (version 1.1)
+
+Version 1.1 adds `--tcp`, the `property` and `busmonitor` operations and
+the `server` capabilities; adapters of version 1.0 stay valid.
 
 Every adapter image runs one implementation and has the entry point
 `/adapter/run`:
@@ -6,7 +9,8 @@ Every adapter image runs one implementation and has the entry point
 ```text
 run capabilities
 run server [--routing] [--name NAME]
-run client <op> [--target HOST] [--port 3671] [--nat] [--routing]
+run client <op> [--target HOST] [--port 3671] [--nat] [--routing] [--tcp]
+                [--object TYPE] [--pid PID]
                 [--group G] [--dpt D] [--value V] [--data HEX]
                 [--count N] [--timeout SECONDS]
 ```
@@ -23,7 +27,10 @@ One JSON document on stdout:
 
 Features a runner relies on: `discover`, `describe`, `tunnel`, `routing`,
 `nat`, `answer` (group read responder), `dptCodec` (false: the adapter
-needs `--data`).
+needs `--data`), and since 1.1 `tcp`, `property`, `busmonitor` for the
+client and, under `server`, `tcp`, `property` (device management) and
+`busmonitor` (a busmonitor connection sees the writes of a tunnel at the same
+time) for the server role.
 
 ## server
 
@@ -56,6 +63,8 @@ stdout and exits 0 (pass), 1 (fail) or 3 (unsupported):
 | `read` | A_GroupValue_Read; wait `--timeout` for the response | `{"source", "data": "HEX", "value"}` |
 | `monitor` | listen until `--count` group telegrams or `--timeout`; prints `READY` on stderr once listening | `{"telegrams": [{"source", "group", "service": "write\|read\|response", "data"}]}` |
 | `answer` | answer A_GroupValue_Read of `--group` with `--value` until `--count` answers or `--timeout`; `READY` on stderr | `{"answered": n}` |
+| `property` (1.1) | device management (M_PropRead) of property `--pid` of interface object type `--object` | `{"data": "HEX"}` |
+| `busmonitor` (1.1) | open a busmonitor connection, report `--count` L_Busmon.ind frames; `READY` on stderr | `{"frames": [{"raw": "HEX"}]}` (the TP1 frame) |
 | `negative` (probe only) | the negative test suite against `--target` | `{"checks": [{"name", "status", "detail", "kind"}]}` |
 
 `--data` carries the expected encoding of `--value` from the fixtures, for

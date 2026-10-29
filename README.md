@@ -26,6 +26,7 @@ adapter against every other:
 | dpt | twelve datapoint values (DPT 1, 5, 7, 9, 12, 13, 14, 16) written by one implementation and decoded octet for octet by another, against fixtures recomputed from the encoding rules |
 | negative | the probe against each server: malformed headers, lengths, HPAIs and CRIs; unknown service types; status codes for unknown channels and connection types; duplicate and out-of-order sequence numbers; sequence roll-over; channel exhaustion |
 | routing | a routing indication written by one implementation and received by another on 224.0.23.12:3671 |
+| v2 | group write and read over TCP (KNXnet/IP core v2); device management (M_PropRead of the device serial number); a busmonitor connection that sees another client's write |
 
 Results are `pass`, `fail`, `unsupported` (the adapter or stack does not
 offer the operation), `not-tested` (a prerequisite failed) or

@@ -27,13 +27,16 @@ ROLE=${1:-}
 [ $# -gt 0 ] && shift
 OP=$ROLE
 if [ "$ROLE" = client ]; then OP=${1:-}; shift; fi
-TARGET="" PORT=3671 NAT=0 ROUTING=0 GROUP="" DPT="" VALUE="" COUNT=1 TIMEOUT=5
+TARGET="" PORT=3671 NAT=0 TCP=0 OBJECT=0 PID=11 ROUTING=0 GROUP="" DPT="" VALUE="" COUNT=1 TIMEOUT=5
 while [ $# -gt 0 ]; do
 	case "$1" in
 	--target) TARGET=$2; shift ;;
 	--port) PORT=$2; shift ;;
 	--nat) NAT=1 ;;
 	--routing) ROUTING=1 ;;
+	--tcp) TCP=1 ;;
+	--object) OBJECT=$2; shift ;;
+	--pid) PID=$2; shift ;;
 	--group) GROUP=$2; shift ;;
 	--dpt) DPT=$2; shift ;;
 	--value) VALUE=$2; shift ;;
@@ -54,6 +57,7 @@ host() {
 opts() {
 	o="-p $PORT"
 	[ "$NAT" = 1 ] && o="$o --nat"
+	[ "$TCP" = 1 ] && o="$o --tcp"
 	echo "$o"
 }
 tools() { timeout "$((TIMEOUT + 10))" "$TOOLS" "$@" 2>&1 | grep -v '^WARNING: Unknown module'; }
@@ -74,7 +78,7 @@ groupmon_json() {
 
 case "$ROLE" in
 capabilities)
-	printf '{"features":{"answer":false,"connect":true,"describe":true,"discover":true,"nat":true,"routing":true,"secure":false,"tunnel":true,"dptCodec":true},"implementation":"%s","notes":"The Calimero process communication tool has no responder; KNX IP Secure is supported by Calimero but not exercised by this adapter yet.","roles":["client"],"schemaVersion":"1.0","version":"%s"}\n' "$IMPL" "$VERSION"
+	printf '{"features":{"answer":false,"connect":true,"describe":true,"discover":true,"nat":true,"routing":true,"secure":false,"tunnel":true,"dptCodec":true,"tcp":true,"property":true,"busmonitor":true},"implementation":"%s","notes":"The Calimero process communication tool has no responder; KNX IP Secure is supported by Calimero but not exercised by this adapter yet.","roles":["client"],"schemaVersion":"1.0","version":"%s"}\n' "$IMPL" "$VERSION"
 	exit 0 ;;
 server) finish unsupported '{}' "use the calimero-server adapter" ;;
 client) ;;
@@ -153,5 +157,31 @@ monitor)
 	[ "$n" -ge "$COUNT" ] && finish pass "{\"telegrams\":$tel}"
 	finish fail "{\"telegrams\":$tel}" "received $n of $COUNT telegrams: $(grep -E 'ERROR|failed' /tmp/gm.log | head -3)" ;;
 answer) finish unsupported '{}' "calimero-tools has no group responder" ;;
+property)
+	# The tool addresses interface objects by index; the device object is
+	# index 0 on every server.
+	[ "$OBJECT" = 0 ] || finish unsupported '{}' "the adapter reads the device object (index 0) only"
+	out=$(tools get --local "$TARGET" $(opts) get 0 "$PID")
+	data=$(printf '%s\n' "$out" | sed -n 's/.*(\([0-9a-fA-F]*\)).*/\1/p' | head -1 | tr a-f A-F)
+	[ -n "$data" ] || finish fail '{}' "$(printf '%s\n' "$out" | grep -v '^\s*at ' | tail -3)"
+	finish pass "{\"data\":\"$data\"}" ;;
+busmonitor)
+	bgtools monitor "$TARGET" $(opts)
+	i=0
+	while ! grep -q "connection established" /tmp/gm.log && [ $i -lt 100 ]; do i=$((i + 1)); sleep 0.1; done
+	echo READY >&2
+	i=0
+	while [ $i -lt $((TIMEOUT * 10)) ]; do
+		n=$(grep -c 'Busmon.ind' /tmp/gm.log)
+		[ "$n" -ge "$COUNT" ] && break
+		i=$((i + 1))
+		sleep 0.1
+	done
+	kill $P 2>/dev/null
+	frames=$(grep 'Busmon.ind' /tmp/gm.log | head -n "$COUNT" | sed -n 's/.*): \([0-9a-f ]*\) = .*/\1/p' |
+		awk 'BEGIN{ORS=""; print "["} {gsub(/ /,""); if (NR>1) print ","; printf "{\"raw\":\"%s\"}", toupper($0)} END{print "]"}')
+	n=$(grep -c 'Busmon.ind' /tmp/gm.log)
+	[ "$n" -ge "$COUNT" ] && finish pass "{\"frames\":$frames}"
+	finish fail "{\"frames\":$frames}" "received $n of $COUNT frames: $(grep -E 'ERROR|failed' /tmp/gm.log | head -3)" ;;
 *) finish fail '{}' "unknown operation $OP" ;;
 esac

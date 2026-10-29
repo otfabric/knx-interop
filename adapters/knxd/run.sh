@@ -29,13 +29,15 @@ ROLE=${1:-}
 [ $# -gt 0 ] && shift
 OP=$ROLE
 if [ "$ROLE" = client ]; then OP=${1:-}; shift; fi
-TARGET="" PORT=3671 NAT=0 ROUTING=0 GROUP="" DPT="" VALUE="" DATA="" COUNT=1 TIMEOUT=5 NAME=knx-interop
+TARGET="" PORT=3671 NAT=0 TCP=0 ROUTING=0 GROUP="" DPT="" VALUE="" DATA="" COUNT=1 TIMEOUT=5 NAME=knx-interop
 while [ $# -gt 0 ]; do
 	case "$1" in
 	--target) TARGET=$2; shift ;;
 	--port) PORT=$2; shift ;;
 	--nat) NAT=1 ;;
 	--routing) ROUTING=1 ;;
+	--tcp) TCP=1 ;;
+	--object | --pid) shift ;;
 	--group) GROUP=$2; shift ;;
 	--dpt) DPT=$2; shift ;;
 	--value) VALUE=$2; shift ;;
@@ -120,7 +122,7 @@ hexbytes() { printf '%s' "$1" | sed 's/../& /g; s/ $//'; }
 
 case "$ROLE" in
 capabilities)
-	printf '{"features":{"answer":true,"connect":true,"describe":false,"discover":false,"nat":true,"routing":true,"secure":false,"tunnel":true,"dptCodec":false},"implementation":"%s","notes":"The Debian package has no eibnetsearch/eibnetdescribe tools; knxd has no DPT codec, writes send the octets given with --data.","roles":["server","client"],"schemaVersion":"1.0","version":"%s"}\n' "$IMPL" "$VERSION"
+	printf '{"features":{"answer":true,"connect":true,"describe":false,"discover":false,"nat":true,"routing":true,"secure":false,"tunnel":true,"dptCodec":false,"tcp":false,"property":false,"busmonitor":false,"server":{"tcp":false,"property":false,"busmonitor":true}},"implementation":"%s","notes":"The Debian package has no eibnetsearch/eibnetdescribe tools; knxd has no DPT codec, writes send the octets given with --data.","roles":["server","client"],"schemaVersion":"1.0","version":"%s"}\n' "$IMPL" "$VERSION"
 	exit 0 ;;
 server)
 	r=""
@@ -131,7 +133,10 @@ client) ;;
 *) echo "usage: run capabilities|server|client <op> ..." >&2; exit 2 ;;
 esac
 
+[ "$TCP" = 1 ] && finish unsupported '{}' "knxd has no TCP tunnel client"
 case "$OP" in
+property | busmonitor)
+	finish unsupported '{}' "the knxd adapter does not offer $OP as a client" ;;
 discover | describe)
 	finish unsupported '{}' "the Debian knxd package has no KNXnet/IP search or description tool" ;;
 connect)

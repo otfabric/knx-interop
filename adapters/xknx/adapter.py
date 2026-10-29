@@ -60,6 +60,9 @@ def service(p):
 def config(a):
     if a.routing:
         return ConnectionConfig(connection_type=ConnectionType.ROUTING, local_ip=None)
+    if a.tcp:
+        return ConnectionConfig(connection_type=ConnectionType.TUNNELING_TCP, gateway_ip=a.target, gateway_port=a.port,
+                                auto_reconnect=False)
     return ConnectionConfig(connection_type=ConnectionType.TUNNELING, gateway_ip=a.target, gateway_port=a.port,
                             route_back=a.nat, auto_reconnect=False)
 
@@ -161,13 +164,15 @@ def main():
     if a.role == "capabilities":
         contract.capabilities(IMPL, VERSION, ["client"],
                               {"discover": True, "describe": True, "tunnel": True, "routing": True, "nat": True,
-                               "answer": True, "secure": False},
+                               "answer": True, "secure": False, "tcp": True, "property": False, "busmonitor": False},
                               "xknx supports KNX IP Secure and Data Secure; this adapter does not exercise them yet")
         return
     if a.role == "server":
         r = contract.Result(IMPL, VERSION, "server")
         r.finish("unsupported", error="xknx has no KNXnet/IP server")
     r = contract.Result(IMPL, VERSION, a.op)
+    if a.op in ("property", "busmonitor"):
+        r.finish("unsupported", error="the adapter does not drive xknx's device management or busmonitor")
     try:
         res = asyncio.run(run(a))
         if res is None:

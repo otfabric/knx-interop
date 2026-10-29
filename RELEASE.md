@@ -5,6 +5,29 @@ versions.yaml; the Release workflow builds the images and takes this
 file's section of that version as the release notes. Add the section,
 headed exactly `## vX.Y.Z` and closed by a line `---`, before tagging.
 
+## v0.2.0
+
+**Date:** 2026-10-29
+**Previous release:** v0.1.0
+
+## Summary
+
+Container contract 1.1: tunnelling over TCP, device management and
+busmonitor, in the adapters and in a new `v2` suite of the matrix.
+
+## Additions
+
+- `--tcp` in the calimero-tools, xknx (TUNNELING_TCP), KNXUltimate
+  (TunnelTCP) and goknx adapters.
+- `property` (M_PropRead) in the calimero-tools (`get --local`) and goknx
+  adapters; `busmonitor` in the calimero-tools (`monitor`) and goknx
+  adapters.
+- `server` capabilities: TCP, device management and busmonitor of
+  calimero-server, knxd and go-knx.
+- The goknx adapter builds knxctl v0.2.0 by default.
+
+---
+
 ## v0.1.0
 
 **Date:** 2026-10-29

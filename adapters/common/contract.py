@@ -9,7 +9,7 @@ import time
 
 SCHEMA_VERSION = "1.0"
 
-OPS = ["discover", "describe", "connect", "write", "read", "monitor", "answer"]
+OPS = ["discover", "describe", "connect", "write", "read", "monitor", "answer", "property", "busmonitor"]
 
 
 def parser():
@@ -25,6 +25,9 @@ def parser():
     c.add_argument("--port", type=int, default=3671)
     c.add_argument("--nat", action="store_true")
     c.add_argument("--routing", action="store_true")
+    c.add_argument("--tcp", action="store_true", help="tunnel over TCP (KNXnet/IP core v2)")
+    c.add_argument("--object", type=int, default=0, help="property: interface object type (0 device)")
+    c.add_argument("--pid", type=int, default=11, help="property: property identifier (11 serial number)")
     c.add_argument("--group", default="")
     c.add_argument("--dpt", default="")
     c.add_argument("--value", default="")

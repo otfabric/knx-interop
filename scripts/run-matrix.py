@@ -181,6 +181,8 @@ class Matrix:
                     self.read(c, server, ip)
                 if "dpt" in self.a.suites:
                     self.dpt(c, server, ip)
+                if "v2" in self.a.suites:
+                    self.v2(c, server, ip)
             if "negative" in self.a.suites:
                 self.negative(server, ip)
         finally:
@@ -213,7 +215,7 @@ class Matrix:
         r = self.client(c, "connect", ["--target", ip])
         self.record("tunnel", "connect and disconnect", c, server, r["status"], t, r.get("error"), r.get("data"))
 
-    def write(self, c, server, ip, vector=None, scenario="group write (DPT 1.001)", suite="tunnel"):
+    def write(self, c, server, ip, vector=None, scenario="group write (DPT 1.001)", suite="tunnel", extra=None):
         v = vector or {"dpt": "1.001", "group": "1/0/1", "value": "on", "data": "01"}
         t = time.monotonic()
         o = self.observer_for(c)
@@ -221,7 +223,7 @@ class Matrix:
         if not h["ready"]:
             res = self.collect(h, 30)
             return self.record(suite, scenario, c, server, "not-tested", t, "observer %s could not listen: %s" % (o, res.get("error")), observer=o)
-        r = self.client(c, "write", ["--target", ip, "--group", v["group"], "--dpt", v["dpt"], "--value", v["value"], "--data", v["data"]])
+        r = self.client(c, "write", ["--target", ip, "--group", v["group"], "--dpt", v["dpt"], "--value", v["value"], "--data", v["data"]] + (extra or []))
         obs = self.collect(h)
         if r["status"] != "pass":
             return self.record(suite, scenario, c, server, r["status"], t, r.get("error"), observer=o)
@@ -232,22 +234,61 @@ class Matrix:
         self.record(suite, scenario, c, server, "pass" if ok else "fail", t,
                     None if ok else "observer %s saw %s, expected %s" % (o, seen[0].get("data"), v["data"]), {"seen": seen[0]}, observer=o)
 
-    def read(self, c, server, ip):
+    def read(self, c, server, ip, scenario="group read/response (DPT 9.001)", suite="tunnel", extra=None):
         t = time.monotonic()
-        scenario = "group read/response (DPT 9.001)"
         resp = self.responder_for(c)
         h = self.background(resp, "answer", ["--target", ip, "--group", "1/0/2", "--dpt", "9.001", "--value", "21.5", "--data", "0C33", "--count", "1", "--timeout", "20"])
         if not h["ready"]:
             res = self.collect(h, 30)
-            return self.record("tunnel", scenario, c, server, "not-tested", t, "responder %s: %s" % (resp, res.get("error")), observer=resp)
-        r = self.client(c, "read", ["--target", ip, "--group", "1/0/2", "--dpt", "9.001", "--timeout", "8"])
+            return self.record(suite, scenario, c, server, "not-tested", t, "responder %s: %s" % (resp, res.get("error")), observer=resp)
+        r = self.client(c, "read", ["--target", ip, "--group", "1/0/2", "--dpt", "9.001", "--timeout", "8"] + (extra or []))
         sh(["docker", "rm", "-f", h["name"]])
         h["proc"].wait(10)
         if r["status"] != "pass":
-            return self.record("tunnel", scenario, c, server, r["status"], t, r.get("error"), observer=resp)
+            return self.record(suite, scenario, c, server, r["status"], t, r.get("error"), observer=resp)
         d = r["data"]
         ok = d.get("data", "").upper() == "0C33" or str(d.get("value")).startswith("21.5")
-        self.record("tunnel", scenario, c, server, "pass" if ok else "fail", t, None if ok else "response %r" % d, d, observer=resp)
+        self.record(suite, scenario, c, server, "pass" if ok else "fail", t, None if ok else "response %r" % d, d, observer=resp)
+
+    def server_feature(self, server, f):
+        return (self.capabilities(server).get("features", {}).get("server") or {}).get(f, False)
+
+    def v2(self, c, server, ip):
+        """Contract 1.1: tunnelling over TCP, device management, busmonitor."""
+        t = time.monotonic()
+        if self.feature(c, "tcp") and self.server_feature(server, "tcp"):
+            self.write(c, server, ip, None, "group write over TCP (DPT 1.001)", "v2", ["--tcp"])
+            self.read(c, server, ip, "group read over TCP (DPT 9.001)", "v2", ["--tcp"])
+        else:
+            for sc in ("group write over TCP (DPT 1.001)", "group read over TCP (DPT 9.001)"):
+                self.record("v2", sc, c, server, "unsupported", t, "no TCP on the %s" % ("client" if not self.feature(c, "tcp") else "server"))
+        t = time.monotonic()
+        sc = "device management: device serial number (M_PropRead)"
+        if self.feature(c, "property") and self.server_feature(server, "property"):
+            r = self.client(c, "property", ["--target", ip, "--object", "0", "--pid", "11"])
+            data = r.get("data", {}).get("data", "")
+            ok = r["status"] == "pass" and len(data) == 12
+            self.record("v2", sc, c, server, r["status"] if r["status"] != "pass" else ("pass" if ok else "fail"), t,
+                        r.get("error") or (None if ok else "serial %r" % data), r.get("data"))
+        else:
+            self.record("v2", sc, c, server, "unsupported", t, "no device management on the %s" % ("client" if not self.feature(c, "property") else "server"))
+        t = time.monotonic()
+        sc = "busmonitor sees a write (L_Busmon.ind, TP1 frame)"
+        if not (self.feature(c, "busmonitor") and self.server_feature(server, "busmonitor")):
+            return self.record("v2", sc, c, server, "unsupported", t, "no busmonitor on the %s" % ("client" if not self.feature(c, "busmonitor") else "server"))
+        writer = self.observer_for(c)
+        h = self.background(c, "busmonitor", ["--target", ip, "--count", "1", "--timeout", "15"])
+        if not h["ready"]:
+            res = self.collect(h, 30)
+            return self.record("v2", sc, c, server, "not-tested" if res["status"] != "fail" else "fail", t, res.get("error"))
+        w = self.client(writer, "write", ["--target", ip, "--group", "1/0/7", "--dpt", "1.001", "--value", "on", "--data", "01"])
+        res = self.collect(h)
+        if w["status"] != "pass":
+            return self.record("v2", sc, c, server, "not-tested", t, "writer %s: %s" % (writer, w.get("error")), observer=writer)
+        frames = res.get("data", {}).get("frames", [])
+        ok = bool(frames) and frames[0].get("raw", "").upper()[6:10] == "0807"
+        self.record("v2", sc, c, server, "pass" if ok else (res["status"] if res["status"] != "pass" else "fail"), t,
+                    None if ok else "frames %s %s" % (frames, res.get("error") or ""), {"frames": frames[:1]}, observer=writer)
 
     def dpt(self, c, server, ip):
         vectors = json.load(open(os.path.join(ROOT, "fixtures", "dpt-vectors.json")))["vectors"]
@@ -362,7 +403,7 @@ def main():
     p.add_argument("--servers", default=",".join(SERVERS))
     p.add_argument("--clients", default=",".join(CLIENTS))
     p.add_argument("--routers", default=",".join(ROUTERS))
-    p.add_argument("--suites", default="tunnel,dpt,negative,routing")
+    p.add_argument("--suites", default="tunnel,dpt,negative,routing,v2")
     p.add_argument("--report", default="latest")
     p.add_argument("--gate", default="", help="fail only on failures involving this adapter (empty: any failure)")
     a = p.parse_args()
@@ -375,7 +416,7 @@ def main():
     try:
         for s in a.servers:
             m.capabilities(s)
-        if {"tunnel", "dpt", "negative"} & set(a.suites):
+        if {"tunnel", "dpt", "negative", "v2"} & set(a.suites):
             for s in a.servers:
                 try:
                     m.tunnel_suite(s)
