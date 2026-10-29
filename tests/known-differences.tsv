@@ -1,0 +1,8 @@
+# Known deviations of the implementations under test, verified by hand.
+# A failing result matching client, peer and scenario (fnmatch patterns) is
+# reported as "known-difference" with the reason; it still appears in every
+# report. Remove a line when the deviation is fixed upstream.
+# client	peer	scenario	reason
+knxultimate	*	describe	KNXUltimate 6.3.1 announces <local IP>:3671 in its DESCRIPTION_REQUEST HPAI while it listens on an ephemeral port (src/KNXClient.ts sendDescriptionRequestMessage: new HPAI(localIPAddress), default port 3671); servers that answer to the HPAI, as the standard requires, answer a port nobody listens on
+probe	calimero-server	survives truncated header	calimero-server 3.0-M1 stops answering for about 10 s after a 3-octet datagram: its log shows the control endpoint coming up again ("control endpoint ... is up and running"); description requests meanwhile are logged as "unknown service type 0x203 - ignored"
+probe	calimero-server	survives CRI length 0	calimero-server 3.0-M1 stops answering for about 10 s after a CONNECT_REQUEST whose CRI has length 0, as after a truncated header

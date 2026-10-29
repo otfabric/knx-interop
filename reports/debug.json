@@ -1,0 +1,262 @@
+{
+  "finishedAt": "2026-10-29T17:51:27.515284+00:00",
+  "host": {
+    "machine": "arm64",
+    "platform": "darwin"
+  },
+  "implementations": {
+    "calimero-server": {
+      "implementation": "calimero-server",
+      "roles": [
+        "server"
+      ],
+      "version": "3.0-M1"
+    },
+    "goknx": {
+      "implementation": "go-knx",
+      "roles": [
+        "server",
+        "client"
+      ],
+      "version": "v0.0.0 (knxctl dev)"
+    }
+  },
+  "results": [
+    {
+      "client": "probe",
+      "detail": "answers DESCRIPTION_REQUEST afterwards",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "survives header length 7",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "answers DESCRIPTION_REQUEST afterwards",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "survives protocol version 0x20",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "answers DESCRIPTION_REQUEST afterwards",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "survives total length longer than the datagram",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "answers DESCRIPTION_REQUEST afterwards",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "survives total length shorter than the datagram",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "no DESCRIPTION_RESPONSE for 10 s, then the server answered again",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "survives truncated header",
+      "status": "fail",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "answers DESCRIPTION_REQUEST afterwards",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "survives unknown service type 0x0F00",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "answers DESCRIPTION_REQUEST afterwards",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "survives HPAI of length 7",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "answers DESCRIPTION_REQUEST afterwards",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "survives 2000-octet datagram",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "answers DESCRIPTION_REQUEST afterwards",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "survives empty CONNECT_REQUEST",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "no DESCRIPTION_RESPONSE for 10 s, then the server answered again",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "survives CRI length 0",
+      "status": "fail",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "status 0x21",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "CONNECTIONSTATE_REQUEST of an unknown channel \u2192 E_CONNECTION_ID",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "status 0x22",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "unsupported connection type \u2192 E_CONNECTION_TYPE",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "status 0x29",
+      "kind": "observed",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "raw tunnelling layer \u2192 refused",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "status 0x00",
+      "kind": "observed",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "TCP HPAI over UDP \u2192 refused",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "CONNECTIONSTATE_RESPONSE",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "heartbeat on an open channel \u2192 E_NO_ERROR",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "ack status 0",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "TUNNELLING_REQUEST sequence 0 acknowledged",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "ack status 0",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "repeated sequence 0 acknowledged again (duplicate)",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "ack status None",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "out-of-order sequence 5 not acknowledged",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "259 requests acknowledged",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "sequence numbers roll over 255 \u2192 0",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "DISCONNECT_RESPONSE",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "DISCONNECT_REQUEST \u2192 E_NO_ERROR",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "status 0x21",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "heartbeat after disconnect \u2192 E_CONNECTION_ID",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "8 connections, then status 0x24",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "channel exhaustion \u2192 E_NO_MORE_CONNECTIONS",
+      "status": "pass",
+      "suite": "negative"
+    },
+    {
+      "client": "probe",
+      "detail": "answers DESCRIPTION_REQUEST",
+      "kind": "required",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "still serving after the tests",
+      "status": "pass",
+      "suite": "negative"
+    }
+  ],
+  "schemaVersion": "1.0",
+  "startedAt": "2026-10-29T17:51:03.257113+00:00",
+  "summary": {
+    "fail": 2,
+    "pass": 21
+  }
+}

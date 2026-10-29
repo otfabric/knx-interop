@@ -1,0 +1,69 @@
+name: Release
+run-name: "Release ${{ github.ref_name }}"
+
+# On a tag vX.Y.Z equal to interop_version: build the MIT-licensed adapter
+# images natively on amd64 and arm64, push them to GHCR as one multi-arch
+# tag, and create the GitHub release with the RELEASE.md section. The
+# images that redistribute GPL binaries (calimero-server, calimero-tools,
+# knxd) are not published (THIRD_PARTY_NOTICES.md).
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+  packages: write
+
+env:
+  BASE_REGISTRY: mirror.gcr.io/library
+  PUBLISHED: "xknx knxultimate probe"
+
+jobs:
+  images:
+    name: Images (${{ matrix.arch }})
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        include:
+          - { arch: amd64, runner: ubuntu-24.04 }
+          - { arch: arm64, runner: ubuntu-24.04-arm }
+    steps:
+      - uses: actions/checkout@v7
+      - name: Tag equals interop_version
+        run: |
+          v=$(sed -nE 's/^interop_version: "([^"]+)".*/\1/p' versions.yaml)
+          [ "v$v" = "${GITHUB_REF_NAME}" ] || { echo "tag ${GITHUB_REF_NAME} but interop_version $v"; exit 1; }
+      - name: Build and push
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$GH_TOKEN" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          for a in $PUBLISHED; do
+            t=ghcr.io/otfabric/knx-interop-$a:${GITHUB_REF_NAME#v}-${{ matrix.arch }}
+            docker build --build-arg BASE_REGISTRY=$BASE_REGISTRY -f adapters/$a/Dockerfile -t $t adapters
+            docker push $t
+          done
+
+  release:
+    needs: images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Multi-arch tags
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "$GH_TOKEN" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          v=${GITHUB_REF_NAME#v}
+          for a in $PUBLISHED; do
+            i=ghcr.io/otfabric/knx-interop-$a
+            docker buildx imagetools create -t $i:$v $i:$v-amd64 $i:$v-arm64
+            docker buildx imagetools inspect $i:$v | head -3
+          done
+      - name: GitHub release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          scripts/release-notes.sh "${GITHUB_REF_NAME}" > notes.md && test -s notes.md
+          gh release create "${GITHUB_REF_NAME}" --title "knx-interop ${GITHUB_REF_NAME}" --notes-file notes.md

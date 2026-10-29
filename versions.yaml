@@ -1,0 +1,92 @@
+# Machine-readable version manifest for knx-interop.
+# Upstream pins and base image digests are release inputs; nothing floats.
+# The Dockerfiles, adapters/xknx/requirements.txt and
+# adapters/knxultimate/package-lock.json are the source of truth for a
+# build: scripts/check-versions.py fails when this file disagrees with them.
+
+interop_version: "0.1.0"
+contract_version: "1.0"          # docs/CONTAINER_CONTRACT.md
+
+protocol:
+  name: "KNXnet/IP (core, tunnelling, routing), cEMI, KNX datapoint types"
+  transport: "UDP on a user-defined Docker bridge network (multicast 224.0.23.12:3671 inside it)"
+
+base_images:
+  python: "python:3.12-slim-bookworm@sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337"
+  node: "node:22-bookworm-slim@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da"
+  debian: "debian:trixie-slim@sha256:f6b08b09a05725f9431502d3b5714f5c4576e82c1a84fa1debe0c24a7e0c3ec4"
+  golang: "golang:1.25-bookworm@sha256:3b4a11519ad929d1e1d261a12cff056f0c85b735253d7d861346b9c6f8b36437"
+
+implementations:
+  calimero-server:
+    status: implemented
+    upstream: "calimero-project/calimero-server"
+    repository: "https://github.com/calimero-project/calimero-server"
+    version: "3.0-M1"
+    image: "calimeroproject/knxserver:3.0-M1@sha256:70463ad74c4c976cbc8c062fc219b19059f417562051670deeaa65c5e13f7f9c"
+    license: "GPL-2.0-only WITH Classpath-exception-2.0"
+    language: "Java"
+    stack: "Calimero (calimero-core)"
+    roles: [server]
+    note: "The official multi-arch image (amd64, arm64, armv7). 3.0-M2 (commit 5f162f26) exists as source and on Maven Central but has no image."
+  calimero-tools:
+    status: implemented
+    upstream: "calimero-project/calimero-tools"
+    repository: "https://github.com/calimero-project/calimero-tools"
+    version: "3.0-M1"
+    image: "calimeroproject/knxtools:3.0-M1@sha256:c83aa43c4a61f237104f08952d205cacab17d574040b46d5861b05cba4119966"
+    license: "GPL-2.0-only WITH Classpath-exception-2.0"
+    language: "Java"
+    stack: "Calimero (calimero-core) — the same protocol engine as calimero-server"
+    roles: [client]
+  knxd:
+    status: implemented
+    upstream: "knxd/knxd"
+    repository: "https://github.com/knxd/knxd"
+    version: "0.14.73-1"           # Debian trixie package (upstream 0.14.75 is the latest tag)
+    license: "GPL-2.0-only"
+    language: "C++"
+    stack: "knxd (eibnetserver, ipt/iptn/ip drivers) and knxtool"
+    roles: [server, client]
+  xknx:
+    status: implemented
+    upstream: "XKNX/xknx"
+    repository: "https://github.com/XKNX/xknx"
+    package: "xknx"
+    version: "4.0.0"               # commit bdf5ea455166bf7fe9e418e1b15ce5ca745d3063
+    license: "MIT"
+    language: "Python"
+    stack: "xknx"
+    roles: [client]
+  knxultimate:
+    status: implemented
+    upstream: "Supergiovane/KNXUltimate"
+    repository: "https://github.com/Supergiovane/KNXUltimate"
+    package: "knxultimate"
+    version: "6.3.1"               # commit ad9bc2c87da2dd5a782e3225154cbb3e58735544
+    license: "MIT"
+    language: "TypeScript (Node.js)"
+    stack: "KNXUltimate"
+    roles: [client]
+  goknx:
+    status: implemented
+    upstream: "otfabric/go-knx (through otfabric/knxctl)"
+    repository: "https://github.com/otfabric/go-knx"
+    version: "source"              # KNXCTL_VERSION at build time, or local sources (GOKNX=local)
+    license: "MIT"
+    language: "Go"
+    stack: "go-knx — the implementation under test"
+    roles: [server, client]
+  probe:
+    status: implemented
+    upstream: "otfabric/knx-interop"
+    version: "1.0"
+    license: "MIT"
+    language: "Python (standard library)"
+    stack: "hand-built datagrams for negative tests; shares no code with any stack"
+    roles: [client]
+  openhab:
+    status: rejected
+    upstream: "openhab/openhab-addons (org.openhab.binding.knx)"
+    license: "EPL-2.0"
+    note: "Embeds io.calimero:calimero-core 3.0-M2: not an independent implementation; needs a full openHAB runtime."

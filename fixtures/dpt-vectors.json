@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "1.0",
+  "description": "Datapoint values and their encodings in A_GroupValue_Write, derived from the DPT formats of KNX Standard volume 3/7/2 (format and encoding rules only; no specification text). Each implementation encodes value with dpt; the observer must see data. small: the value travels in the 6 low bits of the APCI octet.",
+  "vectors": [
+    {"dpt": "1.001", "group": "1/1/1", "value": "on", "data": "01", "small": true},
+    {"dpt": "1.001", "group": "1/1/1", "value": "off", "data": "00", "small": true},
+    {"dpt": "5.001", "group": "1/1/2", "value": "100", "data": "FF", "small": false},
+    {"dpt": "5.010", "group": "1/1/3", "value": "200", "data": "C8", "small": false},
+    {"dpt": "7.001", "group": "1/1/4", "value": "4660", "data": "1234", "small": false},
+    {"dpt": "9.001", "group": "1/1/5", "value": "21.5", "data": "0C33", "small": false},
+    {"dpt": "9.001", "group": "1/1/5", "value": "-30", "data": "8A24", "small": false},
+    {"dpt": "9.004", "group": "1/1/6", "value": "1200", "data": "3753", "small": false},
+    {"dpt": "12.001", "group": "1/1/7", "value": "305419896", "data": "12345678", "small": false},
+    {"dpt": "13.001", "group": "1/1/8", "value": "-2", "data": "FFFFFFFE", "small": false},
+    {"dpt": "14.056", "group": "1/1/9", "value": "1234.5", "data": "449A5000", "small": false},
+    {"dpt": "16.000", "group": "1/1/10", "value": "KNX interop", "data": "4B4E5820696E7465726F70000000", "small": false}
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "name": "knx-interop-knxultimate",
+  "private": true,
+  "license": "MIT",
+  "dependencies": {
+    "knxultimate": "6.3.1"
+  }
+}
