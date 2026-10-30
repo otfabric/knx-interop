@@ -15,8 +15,7 @@ Prints key=value lines (the format of $GITHUB_OUTPUT):
 The pins are read from the build inputs (Dockerfiles, requirements.txt,
 package-lock.json): calimero-server and calimero-tools against the tags of
 their official images on Docker Hub, knxd against the Debian suite of its
-base image, xknx against PyPI, knxultimate against npm and goknx (knxctl)
-against the Go module proxy. Snapshots and pre-releases are never "latest";
+base image, xknx against PyPI and knxultimate against npm. Snapshots and pre-releases are never "latest";
 Calimero milestones (3.0-M1) are, as only they have images. probe is this
 repository's own tool. Nothing is modified.
 """
@@ -112,10 +111,6 @@ def knxultimate():
     return "library", pin, newest(live), "npm"
 
 
-def goknx():
-    pin = search(r"^ARG KNXCTL_VERSION=(\S+)$", "adapters/goknx/Dockerfile")
-    versions = fetch("https://proxy.golang.org/github.com/otfabric/knxctl/@v/list").split()
-    return "library", pin, newest(versions), "Go module proxy (knxctl)"
 
 
 RESOLVERS = {
@@ -124,7 +119,6 @@ RESOLVERS = {
     "knxd": knxd,
     "xknx": xknx,
     "knxultimate": knxultimate,
-    "goknx": goknx,
 }
 
 

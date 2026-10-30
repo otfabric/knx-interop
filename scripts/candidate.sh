@@ -6,8 +6,7 @@
 #   scripts/candidate.sh <adapter> <version>
 #
 # The pin is moved in the working tree only (Dockerfile, requirements.txt,
-# package.json/package-lock.json; goknx through KNXCTL_VERSION), every image
-# is built with go-knx from the released knxctl (GOKNX=release) and
+# package.json/package-lock.json), every image is built and
 # `make matrix GATE=<adapter>` runs. Used by the Upstream workflow on a
 # throwaway checkout; locally, `git checkout adapters/` undoes the edits.
 # knxultimate needs npm on the host to update the lock file.
@@ -19,7 +18,7 @@ cd "$(dirname "$0")/.."
 adapter=${1:-}
 version=${2:-}
 if [ -z "$adapter" ] || [ -z "$version" ]; then
-	echo "usage: candidate.sh calimero-server|calimero-tools|knxd|xknx|knxultimate|goknx <version>" >&2
+	echo "usage: candidate.sh calimero-server|calimero-tools|knxd|xknx|knxultimate <version>" >&2
 	exit 2
 fi
 
@@ -30,7 +29,6 @@ edit() {
 	awk -v re="$2" -v new="$3" '$0 ~ re { print new; next } { print }' "$1" > "$1.tmp" && mv "$1.tmp" "$1"
 }
 
-knxctl=$(sed -n 's/^ARG KNXCTL_VERSION=//p' adapters/goknx/Dockerfile)
 case "$adapter" in
 	calimero-server | calimero-tools)
 		image=$([ "$adapter" = calimero-server ] && echo knxserver || echo knxtools)
@@ -48,9 +46,6 @@ case "$adapter" in
 	knxultimate)
 		(cd adapters/knxultimate && npm install --package-lock-only --save-exact --no-audit --no-fund "knxultimate@$version")
 		;;
-	goknx)
-		knxctl=$version
-		;;
 	*)
 		echo "candidate: unknown adapter $adapter" >&2
 		exit 2
@@ -58,7 +53,7 @@ case "$adapter" in
 esac
 
 git --no-pager diff --stat -- adapters/
-make images GOKNX=release KNXCTL_VERSION="$knxctl"
+make images
 rc=0
 make matrix GATE="$adapter" || rc=$?
 python3 - "$adapter" <<'EOF'

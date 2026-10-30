@@ -3,8 +3,7 @@ run-name: "Upstream check (${{ github.event_name }})"
 
 # Daily check of every pin against the latest upstream release
 # (scripts/latest-upstream.py: the Calimero images on Docker Hub, knxd in
-# Debian trixie, xknx on PyPI, KNXUltimate on npm, knxctl on the Go module
-# proxy) and of the digest of every base image. An adapter whose pin is behind
+# Debian trixie, xknx on PyPI, KNXUltimate on npm) and of the digest of every base image. An adapter whose pin is behind
 # is built at the latest release and the whole matrix runs with it, gated on
 # that adapter (scripts/candidate.sh; once per pin -> latest pair, later runs
 # reuse that result). The table goes to the Job Summary and to the issue
@@ -44,7 +43,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        adapter: [calimero-server, calimero-tools, knxd, xknx, knxultimate, goknx]
+        adapter: [calimero-server, calimero-tools, knxd, xknx, knxultimate]
     steps:
       - uses: actions/checkout@v7
 
@@ -100,8 +99,7 @@ jobs:
             - **Package** (knxd): `ARG KNXD_VERSION` in `adapters/knxd/Dockerfile`, the Debian
               trixie version.
             - **Library:** xknx in `adapters/xknx/requirements.txt`, knxultimate in
-              `adapters/knxultimate/package.json` and `package-lock.json`, goknx in
-              `ARG KNXCTL_VERSION` of `adapters/goknx/Dockerfile` and the Makefile's `KNXCTL_VERSION`.
+              `adapters/knxultimate/package.json` and `package-lock.json`.
             - Every pin is also in `versions.yaml` and `scripts/check-versions.py`
               (`make validate`). Reproduce a candidate with `scripts/candidate.sh <adapter>
               <version>`; a `failure` needs the matrix report of the run first (a new deviation
