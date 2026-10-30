@@ -1,7 +1,8 @@
 # knx-interop
 
-[![CI](https://github.com/otfabric/knx-interop/actions/workflows/ci.yml/badge.svg)](https://github.com/otfabric/knx-interop/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![CI Status](https://github.com/otfabric/knx-interop/actions/workflows/ci.yml/badge.svg)](https://github.com/otfabric/knx-interop/actions/workflows/ci.yml)
+[![Latest Release](https://img.shields.io/github/v/release/otfabric/knx-interop?label=release)](https://github.com/otfabric/knx-interop/releases)
 
 Interoperability tests for KNX over KNXnet/IP between independent
 implementations, run headless in containers on an isolated Docker network:
