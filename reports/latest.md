@@ -1,8 +1,8 @@
 # knx-interop results
 
-Started 2026-10-30T02:39:29.949924+00:00, finished 2026-10-30T02:47:46.871324+00:00 on darwin/arm64.
+Started 2026-10-30T05:54:18.591582+00:00, finished 2026-10-30T06:02:55.483948+00:00 on darwin/arm64.
 
-Summary: known-difference 5, pass 215, unsupported 39
+Summary: known-difference 5, pass 220, unsupported 51
 
 ## Implementations
 
@@ -297,9 +297,31 @@ Summary: known-difference 5, pass 215, unsupported 39
 | secure routing write (DPT 1.001) | xknx | calimero-tools | PASS |  |
 | Data Secure group write over secure routing (DPT 9.001) | xknx | calimero-tools | PASS |  |
 | secure routing write (DPT 1.001) | calimero-tools | xknx | PASS |  |
-| Data Secure group write over secure routing (DPT 9.001) | calimero-tools | xknx | KNOWN-DIFFERENCE | calimero-tools 3.0-M1 send Data Secure group telegrams only through a surrogate device; xknx does not act as one, and the pairing has no go-knx on the network. Towards go-knx, the surrogate, it passes. (observed: 02:46:49.892 [ERROR  ] io.calimero.tools.ProcComm: completed with error io.calimero.sec |
+| Data Secure group write over secure routing (DPT 9.001) | calimero-tools | xknx | KNOWN-DIFFERENCE | calimero-tools 3.0-M1 send Data Secure group telegrams only through a surrogate device; xknx does not act as one, and the pairing has no go-knx on the network. Towards go-knx, the surrogate, it passes. (observed: 06:01:50.730 [ERROR  ] io.calimero.tools.ProcComm: completed with error io.calimero.sec |
 | server secure routing | - | knxd | UNSUPPORTED | no secure routing in the server |
 | secure routing into the server, seen by a secure tunnel | xknx | calimero-server | PASS | observer/responder calimero-tools.  |
 | secure routing into the server, seen by a secure tunnel | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
 | secure routing out of the server, from a secure tunnel | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
 | secure routing out of the server, from a secure tunnel | xknx | calimero-server | PASS | observer/responder calimero-tools.  |
+
+## management
+
+| Scenario | Client | Peer | Result | Detail |
+|---|---|---|---|---|
+| remote property services | - | knxd | UNSUPPORTED | no remote device management on the server |
+| remote property read: friendly name (A_PropertyValue_Read) | xknx | calimero-server | UNSUPPORTED | xknx's management answers come only in transport connections |
+| remote property read in a transport connection | xknx | calimero-server | PASS |  |
+| remote property write, then read back (A_PropertyValue_Write) | xknx | calimero-server | PASS |  |
+| tool access read: S-A_Sync, then S-A_Data (tool key) | xknx | calimero-server | UNSUPPORTED | no tool key access on the server |
+| tool access read in a transport connection | xknx | calimero-server | UNSUPPORTED | no tool key access on the server |
+| tool access write (S-A_Data, tool key) | xknx | calimero-server | UNSUPPORTED | no tool key access on the server |
+| plain management refused by a secured device | xknx | calimero-server | UNSUPPORTED | no tool key access on the server |
+| remote property services | knxultimate | calimero-server | UNSUPPORTED | no remote device management on the client |
+| remote property read: friendly name (A_PropertyValue_Read) | calimero-tools | calimero-server | PASS |  |
+| remote property read in a transport connection | calimero-tools | calimero-server | PASS |  |
+| remote property write, then read back (A_PropertyValue_Write) | calimero-tools | calimero-server | PASS |  |
+| tool access read: S-A_Sync, then S-A_Data (tool key) | calimero-tools | calimero-server | UNSUPPORTED | no tool key access on the server |
+| tool access read in a transport connection | calimero-tools | calimero-server | UNSUPPORTED | no tool key access on the server |
+| tool access write (S-A_Data, tool key) | calimero-tools | calimero-server | UNSUPPORTED | no tool key access on the server |
+| plain management refused by a secured device | calimero-tools | calimero-server | UNSUPPORTED | no tool key access on the server |
+| remote property services | knxd | calimero-server | UNSUPPORTED | no remote device management on the client |

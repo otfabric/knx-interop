@@ -9,7 +9,7 @@ import time
 
 SCHEMA_VERSION = "1.0"
 
-OPS = ["discover", "describe", "connect", "write", "read", "monitor", "answer", "property", "busmonitor"]
+OPS = ["discover", "describe", "connect", "write", "read", "monitor", "answer", "property", "busmonitor", "remote-property"]
 
 
 def parser():
@@ -20,6 +20,8 @@ def parser():
     s.add_argument("--routing", action="store_true")
     s.add_argument("--name", default="knx-interop")
     s.add_argument("--secure", action="store_true", help="KNX IP Secure with the test profile (common/secure)")
+    s.add_argument("--tool-access", action="store_true",
+                   help="secure the remote management of the server's device with its tool key from the test profile (1.4)")
     c = sub.add_parser("client")
     c.add_argument("op", choices=OPS)
     c.add_argument("--target", default="")
@@ -38,6 +40,11 @@ def parser():
     c.add_argument("--value", default="")
     c.add_argument("--data", default="", help="the expected encoding of --value, hexadecimal (for adapters without a DPT codec)")
     c.add_argument("--count", type=int, default=1)
+    c.add_argument("--device", default="1.1.0", help="remote-property: the device's individual address (1.4)")
+    c.add_argument("--start", type=int, default=1, help="remote-property: the first element (1.4)")
+    c.add_argument("--connected", action="store_true", help="remote-property: in a transport layer connection (1.4)")
+    c.add_argument("--tool-access", action="store_true",
+                   help="remote-property: secured with the device's tool key from the test profile (KNX Data Secure, 1.4)")
     c.add_argument("--timeout", type=float, default=5.0)
     return p
 

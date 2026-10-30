@@ -1,5 +1,5 @@
 {
-  "finishedAt": "2026-10-30T02:47:46.871324+00:00",
+  "finishedAt": "2026-10-30T06:02:55.483948+00:00",
   "host": {
     "machine": "arm64",
     "platform": "darwin"
@@ -55,10 +55,10 @@
       "clientVersion": "4.0.0",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.22.0.2:3671",
+        "endpoint": "172.18.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3383,
+      "durationMs": 3442,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "discover (multicast search)",
@@ -75,7 +75,7 @@
           "Tunnelling": 1
         }
       },
-      "durationMs": 326,
+      "durationMs": 379,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "describe",
@@ -89,7 +89,7 @@
         "address": "1.1.10",
         "channel": 1
       },
-      "durationMs": 327,
+      "durationMs": 402,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "connect and disconnect",
@@ -107,7 +107,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 1307,
+      "durationMs": 1413,
       "observer": "calimero-tools",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -123,7 +123,7 @@
         "source": "1.3.250",
         "value": 21.5
       },
-      "durationMs": 4005,
+      "durationMs": 4038,
       "observer": "knxultimate",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -142,7 +142,7 @@
           "source": "1.1.16"
         }
       },
-      "durationMs": 1284,
+      "durationMs": 1480,
       "observer": "calimero-tools",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -161,7 +161,7 @@
           "source": "1.1.10"
         }
       },
-      "durationMs": 1310,
+      "durationMs": 1431,
       "observer": "calimero-tools",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -180,7 +180,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 1317,
+      "durationMs": 1418,
       "observer": "calimero-tools",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -199,7 +199,7 @@
           "source": "1.1.14"
         }
       },
-      "durationMs": 1289,
+      "durationMs": 1407,
       "observer": "calimero-tools",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -218,7 +218,7 @@
           "source": "1.1.16"
         }
       },
-      "durationMs": 1293,
+      "durationMs": 1419,
       "observer": "calimero-tools",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -237,7 +237,7 @@
           "source": "1.1.10"
         }
       },
-      "durationMs": 1301,
+      "durationMs": 1388,
       "observer": "calimero-tools",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -256,7 +256,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 1310,
+      "durationMs": 1414,
       "observer": "calimero-tools",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -275,7 +275,7 @@
           "source": "1.1.14"
         }
       },
-      "durationMs": 1274,
+      "durationMs": 1491,
       "observer": "calimero-tools",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -294,7 +294,7 @@
           "source": "1.1.16"
         }
       },
-      "durationMs": 1312,
+      "durationMs": 1462,
       "observer": "calimero-tools",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -313,7 +313,7 @@
           "source": "1.1.10"
         }
       },
-      "durationMs": 1288,
+      "durationMs": 1402,
       "observer": "calimero-tools",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -332,7 +332,7 @@
           "source": "1.1.12"
         }
       },
-      "durationMs": 1309,
+      "durationMs": 1376,
       "observer": "calimero-tools",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -351,7 +351,7 @@
           "source": "1.1.14"
         }
       },
-      "durationMs": 1275,
+      "durationMs": 1313,
       "observer": "calimero-tools",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -408,10 +408,10 @@
       "clientVersion": "6.3.1",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.22.0.2:3671",
+        "endpoint": "172.18.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3326,
+      "durationMs": 3383,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "discover (multicast search)",
@@ -421,7 +421,7 @@
     {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
-      "durationMs": 5339,
+      "durationMs": 5344,
       "error": "KNXUltimate 6.3.1 announces <local IP>:3671 in its DESCRIPTION_REQUEST HPAI while it listens on an ephemeral port (src/KNXClient.ts sendDescriptionRequestMessage: new HPAI(localIPAddress), default port 3671); servers that answer to the HPAI, as the standard requires, answer a port nobody listens on. Reported: https://github.com/Supergiovane/KNXUltimate/issues/117 (observed: no description response)",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -436,7 +436,7 @@
         "address": "1.3.250",
         "channel": 1
       },
-      "durationMs": 2649,
+      "durationMs": 2648,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "connect and disconnect",
@@ -454,7 +454,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4263,
+      "durationMs": 4222,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -467,10 +467,10 @@
       "clientVersion": "6.3.1",
       "data": {
         "data": "0C33",
-        "source": "1.1.10",
+        "source": "1.1.13",
         "value": 21.5
       },
-      "durationMs": 3252,
+      "durationMs": 3263,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -489,7 +489,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4244,
+      "durationMs": 4230,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -508,7 +508,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4249,
+      "durationMs": 4230,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -527,7 +527,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4228,
+      "durationMs": 4242,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -546,7 +546,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4247,
+      "durationMs": 4237,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -565,7 +565,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4254,
+      "durationMs": 4221,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -584,7 +584,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4242,
+      "durationMs": 4205,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -603,7 +603,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4216,
+      "durationMs": 4209,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -622,7 +622,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4246,
+      "durationMs": 4247,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -641,7 +641,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4247,
+      "durationMs": 4216,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -660,7 +660,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4242,
+      "durationMs": 4210,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -679,7 +679,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4247,
+      "durationMs": 4237,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -698,7 +698,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4237,
+      "durationMs": 4236,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -755,10 +755,10 @@
       "clientVersion": "3.0-M1",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.22.0.2:3671",
+        "endpoint": "172.18.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3459,
+      "durationMs": 3462,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "discover (multicast search)",
@@ -777,7 +777,7 @@
           "Tunnelling": 1
         }
       },
-      "durationMs": 362,
+      "durationMs": 364,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "describe",
@@ -788,10 +788,10 @@
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
       "data": {
-        "address": "1.1.12",
+        "address": "1.1.10",
         "channel": 1
       },
-      "durationMs": 401,
+      "durationMs": 402,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "connect and disconnect",
@@ -806,10 +806,10 @@
           "data": "01",
           "group": "1/0/1",
           "service": "write",
-          "source": "1.1.14"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1073,
+      "durationMs": 1047,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -824,7 +824,7 @@
         "text": "21.5 \u00b0C",
         "value": 21.5
       },
-      "durationMs": 1328,
+      "durationMs": 1332,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -840,10 +840,10 @@
           "data": "01",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 1071,
+      "durationMs": 1057,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -859,10 +859,10 @@
           "data": "00",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 1096,
+      "durationMs": 1068,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -878,10 +878,10 @@
           "data": "FF",
           "group": "1/1/2",
           "service": "write",
-          "source": "1.1.14"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1082,
+      "durationMs": 1049,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -897,10 +897,10 @@
           "data": "C8",
           "group": "1/1/3",
           "service": "write",
-          "source": "1.1.16"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 1074,
+      "durationMs": 1060,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -916,10 +916,10 @@
           "data": "1234",
           "group": "1/1/4",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 1084,
+      "durationMs": 1077,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -935,10 +935,10 @@
           "data": "0C33",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 1068,
+      "durationMs": 1121,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -954,10 +954,10 @@
           "data": "8A24",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.14"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1071,
+      "durationMs": 1073,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -973,10 +973,10 @@
           "data": "3753",
           "group": "1/1/6",
           "service": "write",
-          "source": "1.1.16"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 1075,
+      "durationMs": 1119,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -992,10 +992,10 @@
           "data": "12345678",
           "group": "1/1/7",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 1066,
+      "durationMs": 1056,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1011,10 +1011,10 @@
           "data": "FFFFFFFE",
           "group": "1/1/8",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 1077,
+      "durationMs": 1067,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1030,10 +1030,10 @@
           "data": "449A5000",
           "group": "1/1/9",
           "service": "write",
-          "source": "1.1.14"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 1075,
+      "durationMs": 1086,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1049,10 +1049,10 @@
           "data": "4B4E5820696E7465726F70000000",
           "group": "1/1/10",
           "service": "write",
-          "source": "1.1.16"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 1071,
+      "durationMs": 1056,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1099,11 +1099,11 @@
       "data": {
         "frames": [
           {
-            "raw": "BC110A0807E1008137"
+            "raw": "BC11100807E100812D"
           }
         ]
       },
-      "durationMs": 1326,
+      "durationMs": 1327,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1139,7 +1139,7 @@
       "data": {
         "channel": 1
       },
-      "durationMs": 318,
+      "durationMs": 311,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "connect and disconnect",
@@ -1154,10 +1154,10 @@
           "data": "01",
           "group": "1/0/1",
           "service": "write",
-          "source": "1.1.13"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 921,
+      "durationMs": 895,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1170,9 +1170,9 @@
       "clientVersion": "0.14.73",
       "data": {
         "data": "0C33",
-        "source": "1.1.14"
+        "source": "1.1.13"
       },
-      "durationMs": 1561,
+      "durationMs": 1520,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1188,10 +1188,10 @@
           "data": "01",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.17"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 923,
+      "durationMs": 941,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1207,10 +1207,10 @@
           "data": "00",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 930,
+      "durationMs": 902,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1226,10 +1226,10 @@
           "data": "FF",
           "group": "1/1/2",
           "service": "write",
-          "source": "1.1.13"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 943,
+      "durationMs": 907,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1245,10 +1245,10 @@
           "data": "C8",
           "group": "1/1/3",
           "service": "write",
-          "source": "1.1.15"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 936,
+      "durationMs": 907,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1264,10 +1264,10 @@
           "data": "1234",
           "group": "1/1/4",
           "service": "write",
-          "source": "1.1.17"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 924,
+      "durationMs": 959,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1283,10 +1283,10 @@
           "data": "0C33",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 921,
+      "durationMs": 899,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1302,10 +1302,10 @@
           "data": "8A24",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.13"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 913,
+      "durationMs": 928,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1321,10 +1321,10 @@
           "data": "3753",
           "group": "1/1/6",
           "service": "write",
-          "source": "1.1.15"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 927,
+      "durationMs": 906,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1340,10 +1340,10 @@
           "data": "12345678",
           "group": "1/1/7",
           "service": "write",
-          "source": "1.1.17"
+          "source": "1.1.16"
         }
       },
-      "durationMs": 939,
+      "durationMs": 916,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1359,10 +1359,10 @@
           "data": "FFFFFFFE",
           "group": "1/1/8",
           "service": "write",
-          "source": "1.1.11"
+          "source": "1.1.10"
         }
       },
-      "durationMs": 918,
+      "durationMs": 928,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1378,10 +1378,10 @@
           "data": "449A5000",
           "group": "1/1/9",
           "service": "write",
-          "source": "1.1.13"
+          "source": "1.1.12"
         }
       },
-      "durationMs": 923,
+      "durationMs": 935,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1397,10 +1397,10 @@
           "data": "4B4E5820696E7465726F70000000",
           "group": "1/1/10",
           "service": "write",
-          "source": "1.1.15"
+          "source": "1.1.14"
         }
       },
-      "durationMs": 928,
+      "durationMs": 914,
       "observer": "xknx",
       "peer": "knxd",
       "peerVersion": "0.14.73",
@@ -1793,10 +1793,10 @@
       "clientVersion": "4.0.0",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.22.0.2:3671",
+        "endpoint": "172.18.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3391,
+      "durationMs": 3442,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "discover (multicast search)",
@@ -1813,7 +1813,7 @@
           "Tunnelling": 1
         }
       },
-      "durationMs": 340,
+      "durationMs": 352,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "describe",
@@ -1827,7 +1827,7 @@
         "address": "1.1.10",
         "channel": 1
       },
-      "durationMs": 330,
+      "durationMs": 362,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "connect and disconnect",
@@ -1845,7 +1845,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1289,
+      "durationMs": 1493,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -1861,7 +1861,7 @@
         "source": "1.3.250",
         "value": 21.5
       },
-      "durationMs": 3738,
+      "durationMs": 3739,
       "observer": "knxultimate",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -1880,7 +1880,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1270,
+      "durationMs": 1481,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -1899,7 +1899,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1314,
+      "durationMs": 1421,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -1918,7 +1918,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1298,
+      "durationMs": 1447,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -1937,7 +1937,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1299,
+      "durationMs": 1484,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -1956,7 +1956,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1322,
+      "durationMs": 1417,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -1975,7 +1975,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1290,
+      "durationMs": 1487,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -1994,7 +1994,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1292,
+      "durationMs": 1537,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2013,7 +2013,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1297,
+      "durationMs": 1413,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2032,7 +2032,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1271,
+      "durationMs": 1396,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2051,7 +2051,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1296,
+      "durationMs": 1416,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2070,7 +2070,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1278,
+      "durationMs": 1422,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2089,7 +2089,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1300,
+      "durationMs": 1445,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2108,7 +2108,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1295,
+      "durationMs": 1417,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2124,7 +2124,7 @@
         "source": "1.3.250",
         "value": 21.5
       },
-      "durationMs": 3749,
+      "durationMs": 3735,
       "observer": "knxultimate",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2159,10 +2159,10 @@
       "clientVersion": "6.3.1",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.22.0.2:3671",
+        "endpoint": "172.18.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3333,
+      "durationMs": 3322,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "discover (multicast search)",
@@ -2177,7 +2177,7 @@
         "name": "knx-interop",
         "services": {}
       },
-      "durationMs": 5326,
+      "durationMs": 5337,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "describe",
@@ -2189,9 +2189,9 @@
       "clientVersion": "6.3.1",
       "data": {
         "address": "1.3.250",
-        "channel": 48
+        "channel": 1
       },
-      "durationMs": 2641,
+      "durationMs": 2663,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "connect and disconnect",
@@ -2209,7 +2209,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4243,
+      "durationMs": 4234,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2222,10 +2222,10 @@
       "clientVersion": "6.3.1",
       "data": {
         "data": "0C33",
-        "source": "1.3.250",
+        "source": "1.1.10",
         "value": 21.5
       },
-      "durationMs": 3278,
+      "durationMs": 3285,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2244,7 +2244,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4249,
+      "durationMs": 4238,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2263,7 +2263,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4241,
+      "durationMs": 4224,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2282,7 +2282,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4209,
+      "durationMs": 4217,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2301,7 +2301,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4243,
+      "durationMs": 4285,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2320,7 +2320,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4247,
+      "durationMs": 4249,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2339,7 +2339,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4240,
+      "durationMs": 4250,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2358,7 +2358,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4264,
+      "durationMs": 4240,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2377,7 +2377,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4235,
+      "durationMs": 4245,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2396,7 +2396,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4252,
+      "durationMs": 4251,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2415,7 +2415,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4247,
+      "durationMs": 4253,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2434,7 +2434,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4257,
+      "durationMs": 4256,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2453,7 +2453,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 4221,
+      "durationMs": 4244,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2472,7 +2472,7 @@
           "source": "1.3.250"
         }
       },
-      "durationMs": 2187,
+      "durationMs": 2223,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2488,7 +2488,7 @@
         "source": "1.1.10",
         "value": 21.5
       },
-      "durationMs": 1267,
+      "durationMs": 1300,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2523,10 +2523,10 @@
       "clientVersion": "3.0-M1",
       "data": {
         "address": "1.1.0",
-        "endpoint": "172.22.0.2:3671",
+        "endpoint": "172.18.0.2:3671",
         "name": "knx-interop"
       },
-      "durationMs": 3450,
+      "durationMs": 3439,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "discover (multicast search)",
@@ -2545,7 +2545,7 @@
           "Tunnelling": 2
         }
       },
-      "durationMs": 377,
+      "durationMs": 388,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "describe",
@@ -2557,9 +2557,9 @@
       "clientVersion": "3.0-M1",
       "data": {
         "address": "1.1.10",
-        "channel": 81
+        "channel": 1
       },
-      "durationMs": 402,
+      "durationMs": 516,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "connect and disconnect",
@@ -2574,10 +2574,10 @@
           "data": "01",
           "group": "1/0/1",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.11"
         }
       },
-      "durationMs": 1074,
+      "durationMs": 1106,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2592,7 +2592,7 @@
         "text": "21.5 \u00b0C",
         "value": 21.5
       },
-      "durationMs": 1335,
+      "durationMs": 1367,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2608,10 +2608,10 @@
           "data": "01",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.11"
         }
       },
-      "durationMs": 1058,
+      "durationMs": 1105,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2627,10 +2627,10 @@
           "data": "00",
           "group": "1/1/1",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.11"
         }
       },
-      "durationMs": 1089,
+      "durationMs": 1118,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2646,10 +2646,10 @@
           "data": "FF",
           "group": "1/1/2",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.11"
         }
       },
-      "durationMs": 1082,
+      "durationMs": 1119,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2665,10 +2665,10 @@
           "data": "C8",
           "group": "1/1/3",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.11"
         }
       },
-      "durationMs": 1060,
+      "durationMs": 1110,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2684,10 +2684,10 @@
           "data": "1234",
           "group": "1/1/4",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.11"
         }
       },
-      "durationMs": 1068,
+      "durationMs": 1095,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2703,10 +2703,10 @@
           "data": "0C33",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.11"
         }
       },
-      "durationMs": 1092,
+      "durationMs": 1115,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2722,10 +2722,10 @@
           "data": "8A24",
           "group": "1/1/5",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.11"
         }
       },
-      "durationMs": 1093,
+      "durationMs": 1126,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2741,10 +2741,10 @@
           "data": "3753",
           "group": "1/1/6",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.11"
         }
       },
-      "durationMs": 1077,
+      "durationMs": 1103,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2760,10 +2760,10 @@
           "data": "12345678",
           "group": "1/1/7",
           "service": "write",
-          "source": "1.1.12"
+          "source": "1.1.11"
         }
       },
-      "durationMs": 1097,
+      "durationMs": 1117,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2779,10 +2779,10 @@
           "data": "FFFFFFFE",
           "group": "1/1/8",
           "service": "write",
-          "source": "1.1.10"
+          "source": "1.1.11"
         }
       },
-      "durationMs": 1079,
+      "durationMs": 1107,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2801,7 +2801,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1086,
+      "durationMs": 1087,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2820,7 +2820,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1085,
+      "durationMs": 1114,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2839,7 +2839,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 1076,
+      "durationMs": 1088,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2854,7 +2854,7 @@
         "text": "21.5 \u00b0C",
         "value": 21.5
       },
-      "durationMs": 1329,
+      "durationMs": 1346,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2868,7 +2868,7 @@
       "data": {
         "data": "000000000000"
       },
-      "durationMs": 425,
+      "durationMs": 436,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "device management: device serial number (M_PropRead)",
@@ -2912,9 +2912,9 @@
       "client": "knxd",
       "clientVersion": "0.14.73",
       "data": {
-        "channel": 130
+        "channel": 1
       },
-      "durationMs": 299,
+      "durationMs": 309,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "connect and disconnect",
@@ -2932,7 +2932,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 925,
+      "durationMs": 995,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2947,7 +2947,7 @@
         "data": "0C33",
         "source": "1.1.10"
       },
-      "durationMs": 1546,
+      "durationMs": 1541,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2966,7 +2966,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 910,
+      "durationMs": 1002,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -2985,7 +2985,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 931,
+      "durationMs": 994,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3004,7 +3004,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 926,
+      "durationMs": 993,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3023,7 +3023,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 929,
+      "durationMs": 976,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3042,7 +3042,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 929,
+      "durationMs": 1000,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3061,7 +3061,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 935,
+      "durationMs": 976,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3080,7 +3080,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 988,
+      "durationMs": 1001,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3099,7 +3099,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 969,
+      "durationMs": 980,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3118,7 +3118,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 920,
+      "durationMs": 993,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3137,7 +3137,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 923,
+      "durationMs": 986,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3156,7 +3156,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 943,
+      "durationMs": 993,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3175,7 +3175,7 @@
           "source": "1.1.11"
         }
       },
-      "durationMs": 929,
+      "durationMs": 987,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3568,7 +3568,7 @@
     {
       "client": "xknx",
       "clientVersion": "4.0.0",
-      "durationMs": 1215,
+      "durationMs": 1204,
       "peer": "knxultimate",
       "peerVersion": "6.3.1",
       "scenario": "routing write (multicast)",
@@ -3578,7 +3578,7 @@
     {
       "client": "xknx",
       "clientVersion": "4.0.0",
-      "durationMs": 4137,
+      "durationMs": 4120,
       "peer": "calimero-tools",
       "peerVersion": "3.0-M1",
       "scenario": "routing write (multicast)",
@@ -3588,7 +3588,7 @@
     {
       "client": "xknx",
       "clientVersion": "4.0.0",
-      "durationMs": 2533,
+      "durationMs": 2537,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "routing write (multicast)",
@@ -3598,7 +3598,7 @@
     {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
-      "durationMs": 2202,
+      "durationMs": 2200,
       "peer": "xknx",
       "peerVersion": "4.0.0",
       "scenario": "routing write (multicast)",
@@ -3608,7 +3608,7 @@
     {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
-      "durationMs": 5091,
+      "durationMs": 5107,
       "peer": "calimero-tools",
       "peerVersion": "3.0-M1",
       "scenario": "routing write (multicast)",
@@ -3618,7 +3618,7 @@
     {
       "client": "knxultimate",
       "clientVersion": "6.3.1",
-      "durationMs": 3528,
+      "durationMs": 3521,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "routing write (multicast)",
@@ -3628,7 +3628,7 @@
     {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
-      "durationMs": 1067,
+      "durationMs": 1125,
       "peer": "xknx",
       "peerVersion": "4.0.0",
       "scenario": "routing write (multicast)",
@@ -3638,7 +3638,7 @@
     {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
-      "durationMs": 1292,
+      "durationMs": 1309,
       "peer": "knxultimate",
       "peerVersion": "6.3.1",
       "scenario": "routing write (multicast)",
@@ -3648,7 +3648,7 @@
     {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
-      "durationMs": 2371,
+      "durationMs": 2360,
       "peer": "knxd",
       "peerVersion": "0.14.73",
       "scenario": "routing write (multicast)",
@@ -3658,7 +3658,7 @@
     {
       "client": "knxd",
       "clientVersion": "0.14.73",
-      "durationMs": 2470,
+      "durationMs": 2432,
       "peer": "xknx",
       "peerVersion": "4.0.0",
       "scenario": "routing write (multicast)",
@@ -3668,7 +3668,7 @@
     {
       "client": "knxd",
       "clientVersion": "0.14.73",
-      "durationMs": 2364,
+      "durationMs": 2379,
       "peer": "knxultimate",
       "peerVersion": "6.3.1",
       "scenario": "routing write (multicast)",
@@ -3678,7 +3678,7 @@
     {
       "client": "knxd",
       "clientVersion": "0.14.73",
-      "durationMs": 5311,
+      "durationMs": 5287,
       "peer": "calimero-tools",
       "peerVersion": "3.0-M1",
       "scenario": "routing write (multicast)",
@@ -3768,7 +3768,7 @@
         "address": "1.1.10",
         "channel": 1
       },
-      "durationMs": 422,
+      "durationMs": 435,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "secure session connect (user 2, bound address)",
@@ -3786,7 +3786,7 @@
           "source": "1.1.10"
         }
       },
-      "durationMs": 2552,
+      "durationMs": 2509,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3816,7 +3816,7 @@
           "source": "1.1.10"
         }
       },
-      "durationMs": 2542,
+      "durationMs": 2485,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3831,7 +3831,7 @@
         "address": "1.1.10",
         "channel": 1
       },
-      "durationMs": 6578,
+      "durationMs": 6563,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "secure session connect (user 2, bound address)",
@@ -3849,7 +3849,7 @@
           "source": "1.1.10"
         }
       },
-      "durationMs": 2222,
+      "durationMs": 2258,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3864,7 +3864,7 @@
         "text": "21.5 \u00b0C",
         "value": 21.5
       },
-      "durationMs": 2506,
+      "durationMs": 2500,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3875,8 +3875,8 @@
     {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
-      "durationMs": 15482,
-      "error": "calimero-tools 3.0-M1 send Data Secure group telegrams only through a surrogate device (S-A_Sync and group object diagnostics with the surrogate's tool key) and require every sender of the group in the keyring to be such a device; the profile's tunnel groups list the tunnel addresses as senders, and no surrogate is on the tunnel. Through secure routing, with go-knx as the surrogate, it works (secure routing scenarios). (observed: 02:45:33.817 [ERROR  ] io.calimero.tools.ProcComm: completed with error io.calimero.secure.KnxSecureException: no device toolkey for 1.1.10)",
+      "durationMs": 15490,
+      "error": "calimero-tools 3.0-M1 send Data Secure group telegrams only through a surrogate device (S-A_Sync and group object diagnostics with the surrogate's tool key) and require every sender of the group in the keyring to be such a device; the profile's tunnel groups list the tunnel addresses as senders, and no surrogate is on the tunnel. Through secure routing, with go-knx as the surrogate, it works (secure routing scenarios). (observed: 06:00:35.399 [ERROR  ] io.calimero.tools.ProcComm: completed with error io.calimero.secure.KnxSecureException: no device toolkey for 1.1.10)",
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3891,7 +3891,7 @@
         "address": "1.1.10",
         "channel": 1
       },
-      "durationMs": 6595,
+      "durationMs": 6585,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "secure session over UDP (user 2)",
@@ -3909,7 +3909,7 @@
           "source": "1.1.10"
         }
       },
-      "durationMs": 2228,
+      "durationMs": 2247,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3924,7 +3924,7 @@
         "text": "21.5 \u00b0C",
         "value": 21.5
       },
-      "durationMs": 2505,
+      "durationMs": 2514,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -3938,7 +3938,7 @@
       "data": {
         "data": "000000000000"
       },
-      "durationMs": 1539,
+      "durationMs": 1520,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "secure device management: serial number (user 1)",
@@ -3948,7 +3948,7 @@
     {
       "client": "xknx",
       "clientVersion": "4.0.0",
-      "durationMs": 333,
+      "durationMs": 336,
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "plain connection refused by the secure server",
@@ -3978,7 +3978,7 @@
     {
       "client": "xknx",
       "clientVersion": "4.0.0",
-      "durationMs": 15369,
+      "durationMs": 15054,
       "peer": "calimero-tools",
       "peerVersion": "3.0-M1",
       "scenario": "secure routing write (DPT 1.001)",
@@ -3988,7 +3988,7 @@
     {
       "client": "xknx",
       "clientVersion": "4.0.0",
-      "durationMs": 15288,
+      "durationMs": 15007,
       "peer": "calimero-tools",
       "peerVersion": "3.0-M1",
       "scenario": "Data Secure group write over secure routing (DPT 9.001)",
@@ -3998,7 +3998,7 @@
     {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
-      "durationMs": 5551,
+      "durationMs": 5539,
       "peer": "xknx",
       "peerVersion": "4.0.0",
       "scenario": "secure routing write (DPT 1.001)",
@@ -4008,8 +4008,8 @@
     {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
-      "durationMs": 23754,
-      "error": "calimero-tools 3.0-M1 send Data Secure group telegrams only through a surrogate device; xknx does not act as one, and the pairing has no go-knx on the network. Towards go-knx, the surrogate, it passes. (observed: 02:46:49.892 [ERROR  ] io.calimero.tools.ProcComm: completed with error io.calimero.secure.KnxSecureException: no device toolkey for 15.15.240)",
+      "durationMs": 23732,
+      "error": "calimero-tools 3.0-M1 send Data Secure group telegrams only through a surrogate device; xknx does not act as one, and the pairing has no go-knx on the network. Towards go-knx, the surrogate, it passes. (observed: 06:01:50.730 [ERROR  ] io.calimero.tools.ProcComm: completed with error io.calimero.secure.KnxSecureException: no device toolkey for 15.15.240)",
       "peer": "xknx",
       "peerVersion": "4.0.0",
       "scenario": "Data Secure group write over secure routing (DPT 9.001)",
@@ -4029,7 +4029,7 @@
     {
       "client": "xknx",
       "clientVersion": "4.0.0",
-      "durationMs": 5854,
+      "durationMs": 5894,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4040,7 +4040,7 @@
     {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
-      "durationMs": 2223,
+      "durationMs": 2260,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4051,7 +4051,7 @@
     {
       "client": "calimero-tools",
       "clientVersion": "3.0-M1",
-      "durationMs": 5569,
+      "durationMs": 5544,
       "observer": "xknx",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
@@ -4062,20 +4062,221 @@
     {
       "client": "xknx",
       "clientVersion": "4.0.0",
-      "durationMs": 2470,
+      "durationMs": 2595,
       "observer": "calimero-tools",
       "peer": "calimero-server",
       "peerVersion": "3.0-M1",
       "scenario": "secure routing out of the server, from a secure tunnel",
       "status": "pass",
       "suite": "secure"
+    },
+    {
+      "client": "-",
+      "durationMs": 0,
+      "error": "no remote device management on the server",
+      "peer": "knxd",
+      "peerVersion": "0.14.73",
+      "scenario": "remote property services",
+      "status": "unsupported",
+      "suite": "management"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "durationMs": 316,
+      "error": "xknx's management answers come only in transport connections",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "remote property read: friendly name (A_PropertyValue_Read)",
+      "status": "unsupported",
+      "suite": "management"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "data": {
+        "data": "6B6E782D696E7465726F70",
+        "object": 8
+      },
+      "durationMs": 459,
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "remote property read in a transport connection",
+      "status": "pass",
+      "suite": "management"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "data": {
+        "data": "746F6F6C",
+        "object": 8
+      },
+      "durationMs": 453,
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "remote property write, then read back (A_PropertyValue_Write)",
+      "status": "pass",
+      "suite": "management"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "durationMs": 0,
+      "error": "no tool key access on the server",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "tool access read: S-A_Sync, then S-A_Data (tool key)",
+      "status": "unsupported",
+      "suite": "management"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "durationMs": 0,
+      "error": "no tool key access on the server",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "tool access read in a transport connection",
+      "status": "unsupported",
+      "suite": "management"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "durationMs": 0,
+      "error": "no tool key access on the server",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "tool access write (S-A_Data, tool key)",
+      "status": "unsupported",
+      "suite": "management"
+    },
+    {
+      "client": "xknx",
+      "clientVersion": "4.0.0",
+      "durationMs": 0,
+      "error": "no tool key access on the server",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "plain management refused by a secured device",
+      "status": "unsupported",
+      "suite": "management"
+    },
+    {
+      "client": "knxultimate",
+      "clientVersion": "6.3.1",
+      "durationMs": 0,
+      "error": "no remote device management on the client",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "remote property services",
+      "status": "unsupported",
+      "suite": "management"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "data": {
+        "data": "6B6E782D696E7465726F70",
+        "object": 8
+      },
+      "durationMs": 1080,
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "remote property read: friendly name (A_PropertyValue_Read)",
+      "status": "pass",
+      "suite": "management"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "data": {
+        "data": "6B6E782D696E7465726F70",
+        "object": 8
+      },
+      "durationMs": 1087,
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "remote property read in a transport connection",
+      "status": "pass",
+      "suite": "management"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "data": {
+        "data": "746F6F6C",
+        "object": 8
+      },
+      "durationMs": 1336,
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "remote property write, then read back (A_PropertyValue_Write)",
+      "status": "pass",
+      "suite": "management"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "durationMs": 0,
+      "error": "no tool key access on the server",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "tool access read: S-A_Sync, then S-A_Data (tool key)",
+      "status": "unsupported",
+      "suite": "management"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "durationMs": 0,
+      "error": "no tool key access on the server",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "tool access read in a transport connection",
+      "status": "unsupported",
+      "suite": "management"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "durationMs": 0,
+      "error": "no tool key access on the server",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "tool access write (S-A_Data, tool key)",
+      "status": "unsupported",
+      "suite": "management"
+    },
+    {
+      "client": "calimero-tools",
+      "clientVersion": "3.0-M1",
+      "durationMs": 0,
+      "error": "no tool key access on the server",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "plain management refused by a secured device",
+      "status": "unsupported",
+      "suite": "management"
+    },
+    {
+      "client": "knxd",
+      "clientVersion": "0.14.73",
+      "durationMs": 0,
+      "error": "no remote device management on the client",
+      "peer": "calimero-server",
+      "peerVersion": "3.0-M1",
+      "scenario": "remote property services",
+      "status": "unsupported",
+      "suite": "management"
     }
   ],
   "schemaVersion": "1.0",
-  "startedAt": "2026-10-30T02:39:29.949924+00:00",
+  "startedAt": "2026-10-30T05:54:18.591582+00:00",
   "summary": {
     "known-difference": 5,
-    "pass": 215,
-    "unsupported": 39
+    "pass": 220,
+    "unsupported": 51
   }
 }

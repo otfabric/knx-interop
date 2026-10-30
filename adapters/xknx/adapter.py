@@ -16,8 +16,9 @@ from xknx.core.value_reader import ValueReader  # noqa: E402
 from xknx.dpt import DPTArray, DPTBase, DPTBinary  # noqa: E402
 from xknx.io import ConnectionConfig, ConnectionType, GatewayScanner, SecureConfig  # noqa: E402
 from xknx.io.self_description import request_description  # noqa: E402
-from xknx.telegram import GroupAddress, Telegram  # noqa: E402
-from xknx.telegram.apci import GroupValueRead, GroupValueResponse, GroupValueWrite  # noqa: E402
+from xknx.telegram import GroupAddress, IndividualAddress, Telegram  # noqa: E402
+from xknx.telegram.apci import (GroupValueRead, GroupValueResponse, GroupValueWrite, PropertyValueRead,  # noqa: E402
+                                PropertyValueWrite)
 
 IMPL = "xknx"
 VERSION = importlib.metadata.version("xknx")
@@ -169,8 +170,42 @@ async def run(a):
             await x.telegrams.join()
             await asyncio.sleep(0.3)
             return done("pass", {"answered": answered})
+        if a.op == "remote-property":
+            return await remote_property(x, a)
     finally:
         await x.stop()
+
+
+async def remote_property(x, a):
+    """Contract 1.4: a property of a device through xknx's point-to-point
+    management connection; --object is the object type, found in the
+    device's interface object list (device object, PID 71)."""
+    async with x.management.connection(address=IndividualAddress(a.device)) as conn:
+        async def read(obj, pid, start, count):
+            t = await asyncio.wait_for(conn.request(PropertyValueRead(object_index=obj, property_id=pid, count=count, start_index=start)), a.timeout)
+            if t.payload.count == 0:
+                raise RuntimeError("%s refused object %d property %d" % (a.device, obj, pid))
+            return bytes(t.payload.data)
+
+        index = 0
+        if a.object != 0:
+            n = int.from_bytes(await read(0, 71, 0, 1), "big")
+            types = []
+            for start in range(1, n + 1, 15):
+                b = await read(0, 71, start, min(15, n - start + 1))
+                types += [int.from_bytes(b[i:i + 2], "big") for i in range(0, len(b), 2)]
+            if a.object not in types:
+                raise RuntimeError("no interface object of type %d" % a.object)
+            index = types.index(a.object)
+        if a.data:
+            t = await asyncio.wait_for(conn.request(PropertyValueWrite(object_index=index, property_id=a.pid, count=a.count,
+                                                                       start_index=a.start, data=bytes.fromhex(a.data))), a.timeout)
+            if t.payload.count == 0:
+                raise RuntimeError("%s refused the write of object %d property %d" % (a.device, index, a.pid))
+            b = bytes(t.payload.data)
+        else:
+            b = await read(index, a.pid, a.start, a.count)
+    return done("pass", {"data": b.hex().upper(), "object": index})
 
 
 def main():
@@ -181,8 +216,10 @@ def main():
     if a.role == "capabilities":
         contract.capabilities(IMPL, VERSION, ["client"],
                               {"discover": True, "describe": True, "tunnel": True, "routing": True, "nat": True,
-                               "answer": True, "secure": True, "dataSecure": True, "tcp": True, "property": False, "busmonitor": False},
-                              "Secure: tunnelling over TCP, routing and Data Secure with the test profile")
+                               "answer": True, "secure": True, "dataSecure": True, "tcp": True, "property": False, "busmonitor": False,
+                               "remoteProperty": True, "toolAccess": False},
+                              "Secure: tunnelling over TCP, routing and Data Secure with the test profile. Remote property access "
+                              "in transport connections only, plain (no tool key access).")
         return
     if a.role == "server":
         r = contract.Result(IMPL, VERSION, "server")
@@ -192,6 +229,10 @@ def main():
         r.finish("unsupported", error="xknx runs secure sessions over TCP only")
     if a.op in ("property", "busmonitor"):
         r.finish("unsupported", error="the adapter does not drive xknx's device management or busmonitor")
+    if a.op == "remote-property" and a.tool_access:
+        r.finish("unsupported", error="xknx has no Data Secure point to point (tool key) access")
+    if a.op == "remote-property" and not a.connected:
+        r.finish("unsupported", error="xknx's management answers come only in transport connections")
     try:
         res = asyncio.run(run(a))
         if res is None:

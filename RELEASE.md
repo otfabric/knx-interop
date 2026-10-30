@@ -5,6 +5,44 @@ versions.yaml; the Release workflow builds the images and takes this
 file's section of that version as the release notes. Add the section,
 headed exactly `## vX.Y.Z` and closed by a line `---`, before tagging.
 
+## v0.6.0
+
+**Date:** 2026-10-30
+**Previous release:** v0.5.0
+
+## Summary
+
+Container contract 1.4: remote device management, plain and secured with
+a device's tool key (KNX Data Secure point to point).
+
+## Additions
+
+- `remote-property` client operation: the remote property services
+  (A_PropertyValue_Read, _Write) of a device through a tunnel,
+  connectionless or in a transport connection (`--connected`), with the
+  object found by its type in the device's interface object list.
+  `--tool-access` secures the access with the device's tool key from the
+  test profile (S-A_Sync, then S-A_Data with tool access).
+- `server --tool-access`: the server's device accepts only management
+  secured with its tool key.
+- Capabilities `remoteProperty`, `toolAccess`, `server.remoteProperty`,
+  `server.toolAccess`.
+- `management` suite: per server and client, read, read in a connection
+  and write (friendly name of the KNXnet/IP parameter object); with tool
+  access the same, and the refusal of plain access by a secured device.
+- Adapters: Calimero tools (`get -r`, `-c`, keyring tool key), xknx (its
+  point-to-point management connection), Calimero server (its emulated
+  device answers the remote property services; no tool key access).
+
+## Notes
+
+- Calimero tools 3.0-M1 computes the Data Secure MAC over the source
+  address it sends, 0.0.0 unless set, while the tunnelling server
+  replaces it by the tunnel address; the adapter sets the tunnel address
+  (`-k 1.1.10`).
+
+---
+
 ## v0.5.0
 
 **Date:** 2026-10-30

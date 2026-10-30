@@ -63,6 +63,10 @@ def main():
         ("IP Secure routing (server)", lambda r, a: r["suite"] == "secure" and "the server" in r["scenario"] and r["peer"] in a),
         ("Data Secure (sender)", lambda r, a: r["suite"] == "secure" and r["scenario"].startswith("Data Secure") and r["client"] in a),
         ("Data Secure (receiver)", lambda r, a: r["suite"] == "secure" and r["scenario"].startswith("Data Secure") and (r.get("observer") or r["peer"]) in a),
+        ("Remote property services (tool)", lambda r, a: r["suite"] == "management" and r["scenario"].startswith("remote property") and r["client"] in a),
+        ("Remote property services (device)", lambda r, a: r["suite"] == "management" and r["scenario"].startswith("remote property") and r["peer"] in a),
+        ("Data Secure tool access (tool)", lambda r, a: r["suite"] == "management" and r["scenario"].startswith("tool access") and r["client"] in a),
+        ("Data Secure tool access (device)", lambda r, a: r["suite"] == "management" and r["scenario"].startswith(("tool access", "plain management")) and r["peer"] in a),
     ]
     print("| Feature | " + " | ".join(c for c, _ in cols) + " |")
     print("|---|" + "---|" * len(cols))
