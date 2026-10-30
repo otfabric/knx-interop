@@ -83,6 +83,16 @@ network on hosted runners), uploading the reports. It runs on every push,
 weekly, and on demand with chosen go-knx and knxctl refs. Releases are
 tag-driven ([RELEASE.md](RELEASE.md)).
 
+`.github/workflows/upstream.yml` compares every pin with the latest
+upstream release every day (`scripts/latest-upstream.py`: the Calimero
+images on Docker Hub, knxd in Debian trixie, xknx on PyPI, KNXUltimate on
+npm, knxctl on the Go module proxy) and checks whether the tag of every
+digest-pinned base image has moved. An adapter that is behind is built at
+the latest release and the whole matrix runs with it
+(`scripts/candidate.sh <adapter> <version>`). While a pin is behind, an issue
+holds the table; it is closed once every pin is current again. Pins only
+move by a reviewed change.
+
 ## Known limitations
 
 - Multicast discovery and routing need all participants on one Docker
