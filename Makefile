@@ -12,39 +12,20 @@ PLATFORMS ?= linux/amd64,linux/arm64
 # rate limits).
 BASE_REGISTRY ?= docker.io/library
 
-ADAPTERS ?= goknx xknx knxultimate knxd calimero-server calimero-tools probe
-# go-knx enters as the knxctl command: built from released sources
-# (KNXCTL_VERSION, Dockerfile) or, with GOKNX=local, from the sibling
-# checkouts KNXCTL_DIR (and the go-knx it replaces) (Dockerfile.local).
-GOKNX ?= local
-KNXCTL_DIR ?= ../knxctl
-# With GOKNX=local, knxctl is built against the go-knx checkout GOKNX_DIR
-# (through a temporary go.work) when it exists, else against the go-knx
-# version knxctl's go.mod requires.
-GOKNX_DIR ?= ../go-knx
-KNXCTL_VERSION ?= v0.4.0
-ARCH := $(shell docker version --format '{{.Server.Arch}}' 2>/dev/null || uname -m)
+# The adapters: independent third-party stacks and the probe. A system
+# under test (go-knx) is not part of this repository: it brings its own
+# adapter image and runs the matrix with ADAPTER=name=image.
+ADAPTERS ?= xknx knxultimate knxd calimero-server calimero-tools probe
+ADAPTER ?=
 
 image = $(REGISTRY)/knx-interop-$(1):$(VERSION)
 
-.PHONY: help images image-% goknx-binary validate lint matrix matrix-quick capabilities clean release-notes
+.PHONY: help images image-% validate lint matrix matrix-quick capabilities release-notes fixture
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9_%-]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 images: $(addprefix image-,$(ADAPTERS)) ## Build every adapter image for this machine's architecture
-
-goknx-binary: ## Build knxctl for Linux from KNXCTL_DIR (GOKNX=local)
-	@mkdir -p adapters/goknx/bin
-	@work=off; if [ -d "$(GOKNX_DIR)" ]; then \
-		printf 'go 1.23\n\nuse (\n\t%s\n\t%s\n)\n' "$$(cd $(KNXCTL_DIR) && pwd)" "$$(cd $(GOKNX_DIR) && pwd)" > adapters/goknx/bin/go.work; \
-		work=$(CURDIR)/adapters/goknx/bin/go.work; echo "knxctl from $(KNXCTL_DIR) with go-knx from $(GOKNX_DIR)"; fi; \
-	cd $(KNXCTL_DIR) && GOWORK=$$work CGO_ENABLED=0 GOOS=linux GOARCH=$(ARCH) go build -trimpath -o $(CURDIR)/adapters/goknx/bin/knxctl-linux-$(ARCH) .
-
-image-goknx: $(if $(filter local,$(GOKNX)),goknx-binary)
-	@echo "build $(call image,goknx) ($(GOKNX))"
-	@docker build -q --build-arg BASE_REGISTRY=$(BASE_REGISTRY) --build-arg KNXCTL_VERSION=$(KNXCTL_VERSION) \
-		-f adapters/goknx/$(if $(filter local,$(GOKNX)),Dockerfile.local,Dockerfile) -t $(call image,goknx) adapters >/dev/null
 
 image-%:
 	@echo "build $(call image,$*)"
@@ -62,17 +43,19 @@ lint: ## Shellcheck the shell adapters, byte-compile the Python ones, check the 
 	@for f in adapters/*/*.py adapters/common/*.py scripts/*.py; do python3 -m py_compile $$f || exit 1; done
 	@if command -v node >/dev/null 2>&1; then node --check adapters/knxultimate/adapter.js; fi
 
-# GATE: fail only on failures that involve this adapter (go-knx, the
-# implementation the matrix exists for); GATE= fails on any failure.
-GATE ?= goknx
+# GATE: fail only on failures that involve this adapter (a system under
+# test); empty fails on any failure. ADAPTER adds an external adapter,
+# name=image (a system under test with its own contract image).
+GATE ?=
 matrix: ## Run every scenario between every pair of adapters (Docker); writes reports/latest.{json,md}
-	@python3 scripts/run-matrix.py --registry $(REGISTRY) --version $(VERSION) --gate "$(GATE)"
+	@python3 scripts/run-matrix.py --registry $(REGISTRY) --version $(VERSION) --gate "$(GATE)" $(if $(ADAPTER),--adapter $(ADAPTER))
 
-matrix-quick: ## Run the tunnel suite against the go-knx server and go-knx against the others
-	@python3 scripts/run-matrix.py --registry $(REGISTRY) --version $(VERSION) --suites tunnel --report quick
+matrix-quick: ## Run the tunnel suite only
+	@python3 scripts/run-matrix.py --registry $(REGISTRY) --version $(VERSION) --suites tunnel --report quick $(if $(ADAPTER),--adapter $(ADAPTER))
+
+fixture: ## Regenerate the KNX Secure test profile (adapters/common/secure) in the xknx image
+	@docker run --rm -v $(CURDIR):/w -w /w --entrypoint python3 $(call image,xknx) scripts/secure-fixture.py adapters/common/secure
 
 release-notes: ## Print the release notes of VERSION from RELEASE.md
 	@scripts/release-notes.sh $(VERSION)
 
-clean: ## Remove built binaries
-	@rm -rf adapters/goknx/bin

@@ -1,16 +1,33 @@
 {
+  "note": "Public test values of the knx-interop KNX Secure profile. Never use them in an installation.",
+  "keyring": "knx-interop.knxkeys",
+  "keyringPassword": "knx-interop",
+  "host": "1.1.0",
+  "devicePassword": "knx-interop-device",
+  "deviceCode": "30c3dd3364a62347cbad1a517f6dbd3c",
   "backboneKey": "6b6e782d696e7465726f702d6b657921",
+  "latencyMs": 1000,
+  "users": {
+    "1": {
+      "password": "knx-interop-user1",
+      "role": "management"
+    },
+    "2": {
+      "password": "knx-interop-user2",
+      "address": "1.1.10"
+    },
+    "3": {
+      "password": "knx-interop-user3",
+      "address": "1.1.11"
+    }
+  },
   "dataSecureGroups": {
     "1/3/1": "64732d67726f75702d6b65792d303031",
     "1/3/2": "64732d67726f75702d6b65792d303032"
   },
-  "deviceCode": "30c3dd3364a62347cbad1a517f6dbd3c",
-  "devicePassword": "knx-interop-device",
-  "host": "1.1.0",
-  "keyring": "knx-interop.knxkeys",
-  "keyringPassword": "knx-interop",
-  "latencyMs": 1000,
-  "note": "Public test values of the knx-interop KNX Secure profile. Never use them in an installation.",
+  "surrogateGroup": {
+    "1/3/3": "64732d67726f75702d6b65792d303033"
+  },
   "senders": [
     "1.1.10",
     "1.1.11",
@@ -24,22 +41,5 @@
     "15.15.250",
     "15.15.255"
   ],
-  "surrogate": "15.15.255",
-  "surrogateGroup": {
-    "1/3/3": "64732d67726f75702d6b65792d303033"
-  },
-  "users": {
-    "1": {
-      "password": "knx-interop-user1",
-      "role": "management"
-    },
-    "2": {
-      "address": "1.1.10",
-      "password": "knx-interop-user2"
-    },
-    "3": {
-      "address": "1.1.11",
-      "password": "knx-interop-user3"
-    }
-  }
+  "surrogate": "15.15.255"
 }

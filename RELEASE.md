@@ -5,6 +5,35 @@ versions.yaml; the Release workflow builds the images and takes this
 file's section of that version as the release notes. Add the section,
 headed exactly `## vX.Y.Z` and closed by a line `---`, before tagging.
 
+## v0.5.0
+
+**Date:** 2026-10-30
+**Previous release:** v0.4.0
+
+## Summary
+
+knx-interop holds third-party stacks only and depends on no system under
+test.
+
+## Changes
+
+- The goknx adapter (knxctl) is removed, with its build from sibling go-knx
+  and knxctl checkouts and the CI checkouts of their `main` branches.
+- The runner takes external adapters: `--adapter name=image` (`make
+  matrix ADAPTER=...`) adds a system under test that implements the
+  container contract in an image of its own; it joins the roles of its
+  capabilities and is preferred as observer and responder. go-knx runs
+  the matrix this way from its own repository.
+- Observers and responders default to third-party stacks (xknx, Calimero
+  tools, KNXUltimate); the surrogate scenario of Calimero tools' Data
+  Secure runs when a monitor offers the `surrogate` capability.
+- The KNX Secure test profile is written by `scripts/secure-fixture.py`
+  (Python, `make fixture`) instead of a Go tool importing go-knx; the
+  profile is unchanged.
+- `matrix-table.py` adds a column per external adapter.
+
+---
+
 ## v0.4.0
 
 **Date:** 2026-10-30

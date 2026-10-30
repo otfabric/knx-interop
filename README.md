@@ -9,9 +9,14 @@ implementations, run headless in containers on an isolated Docker network:
 [Calimero](https://github.com/calimero-project) (Java),
 [knxd](https://github.com/knxd/knxd) (C++), [xknx](https://github.com/XKNX/xknx)
 (Python), [KNXUltimate](https://github.com/Supergiovane/KNXUltimate)
-(TypeScript) and [go-knx](https://github.com/otfabric/go-knx) (Go, through
-[knxctl](https://github.com/otfabric/knxctl)), plus a raw KNXnet/IP probe for
-negative tests. Part of [OT Fabric](https://otfabric.io).
+(TypeScript), plus a raw KNXnet/IP probe for negative tests. Part of
+[OT Fabric](https://otfabric.io).
+
+The repository holds third-party stacks only. A system under test brings
+its own adapter image, built from its own sources, and runs this matrix
+with it (`--adapter name=image`): [go-knx](https://github.com/otfabric/go-knx)
+does so in its interop suite. knx-interop depends on no system under test;
+they depend on it.
 
 Results: [docs/INTEROPERABILITY.md](docs/INTEROPERABILITY.md) and
 `reports/latest.{json,md}`.
@@ -45,7 +50,6 @@ evidence). Each result records the implementations and versions.
 | `knxd` | knxd and knxtool, dummy bus | 0.14.73-1 (Debian trixie) | server, client |
 | `xknx` | xknx | 4.0.0 | client |
 | `knxultimate` | KNXUltimate | 6.3.1 | client |
-| `goknx` | go-knx through knxctl | source | server, client |
 | `probe` | hand-built datagrams (Python standard library) | 1.0 | negative tests |
 
 How each was chosen, and the rejected candidates (openHAB embeds Calimero):
@@ -58,13 +62,15 @@ How each was chosen, and the rejected candidates (openHAB embeds Calimero):
 Docker (Docker Desktop on macOS works) and Python 3.
 
 ```bash
-make images                         # build every adapter (go-knx from ../knxctl and ../go-knx)
+make images                         # build every adapter image
 make matrix                         # every suite, every pair: reports/latest.{json,md}
-python3 scripts/run-matrix.py --servers goknx --clients xknx,calimero-tools --suites tunnel
+make matrix ADAPTER=sut=my/image:tag GATE=sut   # with a system under test, gating on it
+python3 scripts/run-matrix.py --servers calimero-server --clients xknx,calimero-tools --suites tunnel
 ```
 
-`make images GOKNX=release` builds go-knx from the released knxctl
-(`KNXCTL_VERSION`, default v0.1.0) instead of the sibling checkouts.
+A system under test's adapter implements the container contract
+([docs/CONTAINER_CONTRACT.md](docs/CONTAINER_CONTRACT.md)) and joins every
+role its capabilities declare; it is preferred as observer and responder.
 
 One scenario by hand:
 
@@ -80,7 +86,7 @@ docker run --rm --network knx ghcr.io/otfabric/knx-interop-xknx:dev client read 
 versions, builds every image natively on amd64 and arm64 GitHub runners,
 and runs the whole matrix (multicast works on a user-defined bridge
 network on hosted runners), uploading the reports. It runs on every push,
-weekly, and on demand with chosen go-knx and knxctl refs. Releases are
+weekly, and on demand. Releases are
 tag-driven ([RELEASE.md](RELEASE.md)).
 
 `.github/workflows/upstream.yml` compares every pin with the latest
@@ -96,13 +102,15 @@ move by a reviewed change.
 ## Known limitations
 
 - Multicast discovery and routing need all participants on one Docker
-  network; hosts outside it are not reached (go-knx's own interop suite
-  covers the unicast scenarios from the host, through NAT).
+  network; hosts outside it are not reached.
 - The knxd Debian package has no search or description tools.
 - The KNX Secure scenarios use one test profile (keyring, keyfile); keys
-  of real installations are never needed or used. Secure sessions run over
-  TCP only; KNXUltimate and knxd are not in the secure suite (their
-  adapters do not configure security).
+  of real installations are never needed or used. KNXUltimate and knxd are
+  not in the secure suite (their adapters do not configure security); xknx
+  runs secure sessions over TCP only.
+- Calimero tools send Data Secure group telegrams only through a surrogate
+  device; none of the third-party stacks acts as one, so that scenario
+  needs a system under test that does (see the known differences).
 - calimero-server 3.0-M2 has no image; 3.0-M1 is used.
 
 ## License

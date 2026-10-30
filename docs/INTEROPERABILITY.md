@@ -2,47 +2,51 @@
 
 Run of 2026-10-30 on Docker Desktop (macOS, arm64), report
 [reports/latest.json](../reports/latest.json) /
-[reports/latest.md](../reports/latest.md): **423 pass, 7 known
-differences, 58 unsupported, 0 fail** (488 results). Each cell counts the
-results in which that implementation took the role named in the row (every
-pairing with every other implementation; go-knx is in most cells as a peer
-or an observer).
+[reports/latest.md](../reports/latest.md): **215 pass, 5 known
+differences, 39 unsupported, 0 fail** (259 results), the third-party stacks
+among themselves. Each cell counts the results in which that
+implementation took the role named in the row.
 
 Versions: calimero-server and calimero-tools 3.0-M1 (official images,
 pinned by digest), knxd 0.14.73-1 (Debian trixie), xknx 4.0.0, KNXUltimate
-6.3.1, go-knx v0.4.0 through knxctl v0.4.0, probe 1.0.
+6.3.1, probe 1.0.
 
-| Feature | calimero | knxd | xknx | KNXUltimate | go-knx |
-|---|---|---|---|---|---|
-| Discovery (as client) | PASS (3) | UNSUPPORTED 3 | PASS (3) | PASS (3) | PASS (3) |
-| Description (as client) | PASS (3) | UNSUPPORTED 3 | PASS (3) | KNOWN DIFFERENCE 2, PASS 1 | PASS (3) |
-| Tunnelling client | PASS (3) | PASS (3) | PASS (3) | PASS (3) | PASS (3) |
-| Tunnelling server | PASS (10) | PASS (10) | NOT TESTED | NOT TESTED | PASS (10) |
-| Group write | PASS 5, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 3 | PASS 5, UNSUPPORTED 1 | PASS 5, UNSUPPORTED 1 | PASS 5, UNSUPPORTED 1 |
-| Group read (client) | PASS 5, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 3 | PASS 5, UNSUPPORTED 1 | PASS 5, UNSUPPORTED 1 | PASS 5, UNSUPPORTED 1 |
-| Group response (responder/observer) | NOT TESTED | NOT TESTED | PASS (18) | NOT TESTED | PASS (5) |
-| Routing (sender) | PASS (4) | PASS (4) | PASS (4) | PASS (4) | PASS (4) |
-| Routing (receiver) | PASS (4) | PASS (4) | PASS (4) | PASS (4) | PASS (4) |
-| DPT encoding (sender) | PASS (36) | PASS (36) | PASS (36) | PASS (36) | PASS (36) |
-| DPT decoding (observer) | NOT TESTED | NOT TESTED | PASS (36) | NOT TESTED | PASS (144) |
-| Negative tests (server) | KNOWN DIFFERENCE 2, PASS 22 | PASS (24) | NOT TESTED | NOT TESTED | PASS (24) |
-| Tunnelling over TCP (client) | PASS 4, UNSUPPORTED 2 | UNSUPPORTED 6 | PASS 4, UNSUPPORTED 2 | PASS 4, UNSUPPORTED 2 | PASS 4, UNSUPPORTED 2 |
-| Tunnelling over TCP (server) | PASS 8, UNSUPPORTED 2 | UNSUPPORTED 10 | NOT TESTED | NOT TESTED | PASS 8, UNSUPPORTED 2 |
-| Device management (client) | PASS 2, UNSUPPORTED 1 | UNSUPPORTED 3 | UNSUPPORTED 3 | UNSUPPORTED 3 | PASS 2, UNSUPPORTED 1 |
-| Device management (server) | PASS 2, UNSUPPORTED 3 | UNSUPPORTED 5 | NOT TESTED | NOT TESTED | PASS 2, UNSUPPORTED 3 |
-| Busmonitor (client) | PASS 2, UNSUPPORTED 1 | UNSUPPORTED 3 | UNSUPPORTED 3 | UNSUPPORTED 3 | PASS 2, UNSUPPORTED 1 |
-| Busmonitor (server) | UNSUPPORTED 5 | PASS 2, UNSUPPORTED 3 | NOT TESTED | NOT TESTED | PASS 2, UNSUPPORTED 3 |
-| IP Secure tunnelling (client) | PASS (6) | UNSUPPORTED 2 | PASS (6) | UNSUPPORTED 2 | PASS (6) |
-| IP Secure tunnelling (server) | PASS 10, UNSUPPORTED 2 | UNSUPPORTED 1 | NOT TESTED | NOT TESTED | PASS 10, UNSUPPORTED 2 |
-| IP Secure sessions over UDP (client) | PASS (6) | NOT TESTED | UNSUPPORTED 6 | NOT TESTED | PASS (6) |
-| IP Secure sessions over UDP (server) | PASS 6, UNSUPPORTED 3 | NOT TESTED | NOT TESTED | NOT TESTED | PASS 6, UNSUPPORTED 3 |
-| IP Secure device management (client) | PASS (2) | NOT TESTED | UNSUPPORTED 2 | NOT TESTED | PASS (2) |
-| IP Secure device management (server) | PASS 2, UNSUPPORTED 1 | NOT TESTED | NOT TESTED | NOT TESTED | PASS 2, UNSUPPORTED 1 |
-| IP Secure routing (sender) | PASS (2) | UNSUPPORTED 1 | PASS (2) | UNSUPPORTED 1 | PASS (2) |
-| IP Secure routing (receiver) | PASS (2) | NOT TESTED | PASS (2) | NOT TESTED | PASS (2) |
-| IP Secure routing (server) | PASS (6) | NOT TESTED | NOT TESTED | NOT TESTED | PASS (5) |
-| Data Secure (sender) | KNOWN DIFFERENCE 3, PASS 1 | NOT TESTED | PASS (4) | NOT TESTED | PASS (4) |
-| Data Secure (receiver) | PASS (2) | NOT TESTED | KNOWN DIFFERENCE 1, PASS 3 | NOT TESTED | KNOWN DIFFERENCE 2, PASS 4 |
+A system under test runs this matrix from its own repository with its own
+adapter (`--adapter`): go-knx's results are in
+[go-knx's INTEROPERABILITY.md](https://github.com/otfabric/go-knx/blob/main/INTEROPERABILITY.md)
+(`make interop-matrix` there; 423 pass, 0 fail on 2026-10-30).
+
+| Feature | calimero | knxd | xknx | KNXUltimate |
+|---|---|---|---|---|
+| Discovery (as client) | PASS (2) | UNSUPPORTED 2 | PASS (2) | PASS (2) |
+| Description (as client) | PASS (2) | UNSUPPORTED 2 | PASS (2) | KNOWN DIFFERENCE 1, PASS 1 |
+| Tunnelling client | PASS (2) | PASS (2) | PASS (2) | PASS (2) |
+| Tunnelling server | PASS (8) | PASS (8) | NOT TESTED | NOT TESTED |
+| Group write | PASS 3, UNSUPPORTED 1 | PASS 2, UNSUPPORTED 2 | PASS 3, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 1 |
+| Group read (client) | PASS 3, UNSUPPORTED 1 | PASS 2, UNSUPPORTED 2 | PASS 3, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 1 |
+| Group response (responder/observer) | NOT TESTED | NOT TESTED | PASS (8) | PASS (3) |
+| Routing (sender) | PASS (3) | PASS (3) | PASS (3) | PASS (3) |
+| Routing (receiver) | PASS (3) | PASS (3) | PASS (3) | PASS (3) |
+| DPT encoding (sender) | PASS (24) | PASS (24) | PASS (24) | PASS (24) |
+| DPT decoding (observer) | PASS (24) | NOT TESTED | PASS (72) | NOT TESTED |
+| Negative tests (server) | KNOWN DIFFERENCE 2, PASS 22 | PASS (24) | NOT TESTED | NOT TESTED |
+| Tunnelling over TCP (client) | PASS 2, UNSUPPORTED 2 | UNSUPPORTED 4 | PASS 2, UNSUPPORTED 2 | PASS 2, UNSUPPORTED 2 |
+| Tunnelling over TCP (server) | PASS 6, UNSUPPORTED 2 | UNSUPPORTED 8 | NOT TESTED | NOT TESTED |
+| Device management (client) | PASS 1, UNSUPPORTED 1 | UNSUPPORTED 2 | UNSUPPORTED 2 | UNSUPPORTED 2 |
+| Device management (server) | PASS 1, UNSUPPORTED 3 | UNSUPPORTED 4 | NOT TESTED | NOT TESTED |
+| Busmonitor (client) | PASS 1, UNSUPPORTED 1 | UNSUPPORTED 2 | UNSUPPORTED 2 | UNSUPPORTED 2 |
+| Busmonitor (server) | UNSUPPORTED 4 | PASS 1, UNSUPPORTED 3 | NOT TESTED | NOT TESTED |
+| IP Secure tunnelling (client) | PASS (3) | UNSUPPORTED 1 | PASS 2, UNSUPPORTED 1 | UNSUPPORTED 1 |
+| IP Secure tunnelling (server) | PASS 6, UNSUPPORTED 3 | UNSUPPORTED 1 | NOT TESTED | NOT TESTED |
+| IP Secure sessions over UDP (client) | PASS (3) | NOT TESTED | UNSUPPORTED 3 | NOT TESTED |
+| IP Secure sessions over UDP (server) | PASS 3, UNSUPPORTED 3 | NOT TESTED | NOT TESTED | NOT TESTED |
+| IP Secure device management (client) | PASS (1) | NOT TESTED | UNSUPPORTED 1 | NOT TESTED |
+| IP Secure device management (server) | PASS 1, UNSUPPORTED 1 | NOT TESTED | NOT TESTED | NOT TESTED |
+| IP Secure routing (sender) | PASS (1) | UNSUPPORTED 1 | PASS (1) | UNSUPPORTED 1 |
+| IP Secure routing (receiver) | PASS (1) | NOT TESTED | PASS (1) | NOT TESTED |
+| IP Secure routing (server) | PASS (4) | NOT TESTED | NOT TESTED | NOT TESTED |
+| Data Secure (sender) | KNOWN DIFFERENCE 2 | NOT TESTED | PASS (2) | NOT TESTED |
+| Data Secure (receiver) | PASS (2) | NOT TESTED | KNOWN DIFFERENCE 2 | NOT TESTED |
 
 Legend: PASS, FAIL, UNSUPPORTED (the stack or its adapter does not offer
 it), NOT TESTED (no scenario uses the implementation in that role yet),
@@ -51,34 +55,16 @@ BLOCKED do not occur in this run: nothing needs hardware. The secure rows
 use the public test profile of contract 1.2; KNXUltimate and knxd take no
 part in them.
 
-## Bidirectional coverage
+## Coverage
 
-| Direction | Scenarios that pass |
-|---|---|
-| go-knx client → Calimero server | discovery, description, connect, write, read, 12 DPT vectors |
-| go-knx client → knxd server | discovery, description, connect, write, read (answered by xknx through knxd), 12 DPT vectors |
-| Calimero tools → go-knx server | discovery, description, connect, write, read, 12 DPT vectors |
-| xknx → go-knx server | discovery, description, connect, write, read, 12 DPT vectors |
-| KNXUltimate → go-knx server | discovery, connect, write, read, 12 DPT vectors (description: known difference) |
-| knxd → go-knx server | connect, write, read, 12 DPT vectors |
-| go-knx routing ↔ xknx, KNXUltimate, Calimero tools, knxd | both directions |
-| probe → go-knx server | all 24 negative checks |
-| Calimero tools, xknx, KNXUltimate → go-knx server over TCP | write, read |
-| go-knx → Calimero server over TCP | write, read (and feature services in go-knx's interop suite) |
-| Calimero tools → go-knx server: device management, busmonitor | serial number read; busmonitor sees another client's write |
-| go-knx → Calimero server: device management | serial number read |
-| go-knx, Calimero tools busmonitor → knxd server | see a write of another client |
-| xknx, Calimero tools → go-knx secure server | secure session with bound user address, write, read; Data Secure through the tunnel (xknx); device management as user 1 (Calimero tools); plain connections refused |
-| go-knx → Calimero secure server | secure session, write, read, Data Secure through the tunnel (decrypted by xknx), device management as user 1 |
-| go-knx secure routing ↔ xknx, Calimero tools | both directions, with Data Secure (Calimero tools → go-knx through go-knx as the surrogate) |
-| Secure sessions over UDP | go-knx and Calimero tools → go-knx and Calimero servers: connect, write, read |
-| Servers' secure routing (go-knx, Calimero) | in from xknx, Calimero tools and go-knx routers; out to them from a secure tunnel |
-| Third-party pairs (for example xknx → knxd, Calimero → knxd) | as reported; they validate the harness and the peers |
-
-Multiple clients: every server is used by the client, the observer and,
-for reads, the responder at the same time (three concurrent tunnels); the
-probe opens connections until the server refuses (go-knx and knxd: eight,
-then E_NO_MORE_CONNECTIONS).
+Every client against every server and every routing stack against every
+other, in both directions where both stacks offer the role: Calimero tools,
+xknx, KNXUltimate and knxd as clients of the Calimero and knxd servers;
+routing among xknx, KNXUltimate, Calimero tools and knxd; KNX Secure among
+xknx, Calimero tools and Calimero server (secure tunnelling over TCP and
+UDP, secure routing, Data Secure, the server's secure routing). Each
+secure scenario gets a fresh secure server: a peer stopped while connected
+(Calimero tools' monitor) leaves its user's session on Calimero server.
 
 ## Known differences
 

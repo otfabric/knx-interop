@@ -14,7 +14,7 @@ it only against servers you own.
 
 The KNX Secure scenarios use one test profile
 ([adapters/common/secure](adapters/common/secure), written by
-[tools/secure-fixture](tools/secure-fixture)): a keyring, a Calimero
+[scripts/secure-fixture.py](scripts/secure-fixture.py)): a keyring, a Calimero
 keyfile and their passwords, all **public test values** that are in every
 adapter image. Never use them in an installation; real installation keys
 are never needed. Reports do not contain keys or passwords.

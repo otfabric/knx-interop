@@ -11,7 +11,6 @@ software under its own licence, installed from upstream, unmodified:
 | knx-interop-knxd | knxd and knxd-tools 0.14.73-1 (Debian trixie packages) | GPL-2.0-only | <https://github.com/knxd/knxd>, Debian source package `knxd` 0.14.73-1 |
 | knx-interop-xknx | xknx 4.0.0 and its Python dependencies (cryptography, ifaddr) | MIT (xknx), Apache-2.0/BSD (cryptography), MIT (ifaddr) | <https://github.com/XKNX/xknx> |
 | knx-interop-knxultimate | KNXUltimate 6.3.1 and its npm dependencies (package-lock.json) | MIT (KNXUltimate) and the licences of its dependencies | <https://github.com/Supergiovane/KNXUltimate> |
-| knx-interop-goknx | knxctl and go-knx | MIT | <https://github.com/otfabric/knxctl>, <https://github.com/otfabric/go-knx> |
 
 Publishing policy (decided 2026-10-29): the release workflow publishes the
 MIT images only (xknx, knxultimate, probe). The images that contain GPL
