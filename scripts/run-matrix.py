@@ -14,6 +14,11 @@ capabilities declare and is preferred as observer and responder.
 
 Usage: run-matrix.py [--registry R] [--version V] [--adapter NAME=IMAGE ...] [--servers a,b] [--clients a,b]
                      [--suites tunnel,dpt,negative,routing,v2,secure] [--report NAME]
+
+Writes reports/results.json (reports/<name>.results.json with --report), the
+organisation's interop-result-v1. The run fails on a failure or infrastructure
+error (with --gate, one that involves that adapter), on a waiver that no longer
+reproduces, and when nothing passed.
 """
 
 import argparse
@@ -21,11 +26,14 @@ import datetime
 import fnmatch
 import json
 import os
+import shlex
 import subprocess
 import sys
 import threading
 import time
 import uuid
+
+import interop_result
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SERVERS = ["knxd", "calimero-server"]
@@ -47,15 +55,34 @@ def load_known():
         for line in f:
             if line.startswith("#") or not line.strip():
                 continue
-            c, p, sc, reason = line.rstrip("\n").split("\t", 3)
-            known.append((c, p, sc, reason))
+            f = line.rstrip("\n").split("\t")
+            if len(f) != 8:
+                raise SystemExit("tests/known-differences.tsv: want 8 columns: %r" % line)
+            known.append(dict(zip(("id", "client", "peer", "scenario", "scope", "upstream_version", "evidence_url", "note"), f)))
     return known
+
+
+def load_ids():
+    ids = {}
+    with open(os.path.join(ROOT, "scenarios", "ids.tsv")) as f:
+        for line in f:
+            if line.startswith("#") or not line.strip():
+                continue
+            suite, scenario, sid = line.rstrip("\n").split("\t")
+            ids[(suite, scenario)] = sid
+    return ids
+
+
+# Scenarios that record the harness or its environment, not a stack.
+INFRASTRUCTURE = {"server start", "secure server start", "negative suite"}
 
 
 class Matrix:
     def __init__(self, a):
         self.a = a
         self.known = load_known()
+        self.ids = load_ids()
+        self.reproduced = {}  # waiver id -> did it reproduce, for waivers that ran
         self.server_container = None
         self.net = "knxi-" + uuid.uuid4().hex[:8]
         self.results = []
@@ -144,13 +171,22 @@ class Matrix:
 
     # -- recording ---------------------------------------------------
     def record(self, suite, scenario, client, peer, status, start, error=None, data=None, observer=None):
-        if status == "fail":
-            for kc, kp, ks, reason in self.known:
-                if fnmatch.fnmatch(client, kc) and fnmatch.fnmatch(peer, kp) and fnmatch.fnmatch(scenario, ks):
-                    status, error = "known-difference", "%s (observed: %s)" % (reason, error)
-                    break
-        r = {"suite": suite, "scenario": scenario, "client": client, "peer": peer, "status": status,
+        sid = self.ids.get((suite, scenario))
+        if sid is None:
+            raise SystemExit("scenario %r of suite %r has no ID: add it to scenarios/ids.tsv" % (scenario, suite))
+        waiver = None
+        for k in self.known:
+            if fnmatch.fnmatch(client, k["client"]) and fnmatch.fnmatch(peer, k["peer"]) and fnmatch.fnmatch(scenario, k["scenario"]):
+                if status == "fail":
+                    status, error, waiver = "known-difference", "%s (observed: %s)" % (k["note"], error), k["id"]
+                    self.reproduced[k["id"]] = True
+                elif status == "pass":
+                    self.reproduced.setdefault(k["id"], False)
+                break
+        r = {"id": sid, "suite": suite, "scenario": scenario, "client": client, "peer": peer, "status": status,
              "durationMs": int((time.monotonic() - start) * 1000)}
+        if waiver:
+            r["waiver"] = waiver
         for adapter, key in ((client, "clientVersion"), (peer, "peerVersion")):
             if adapter in self.caps:
                 r[key] = self.caps[adapter].get("version")
@@ -665,11 +701,55 @@ class Matrix:
         with open(base + ".md", "w") as f:
             f.write(markdown(doc))
         print("\n%s\nreports: %s.json, %s.md" % (summary, base, base))
+        results = self.result_document(doc["finishedAt"])
+        path = os.path.join(ROOT, "reports", "results.json" if self.a.report == "latest" else self.a.report + ".results.json")
+        interop_result.write(path, results)
+        print("results: %s" % path)
         failed = [r for r in self.results if r["status"] == "fail"]
-        gated = [r for r in failed if not self.a.gate or self.a.gate in (r["client"], r["peer"], r.get("observer"))]
-        if failed and not gated:
+        problems = interop_result.problems(results)
+        for p in problems:
+            print("FAIL %s" % p)
+        if failed and not problems:
             print("%d failures, none involving %s: reported, not gating" % (len(failed), self.a.gate))
-        return not gated
+        return not problems
+
+    def result_document(self, finished):
+        """The run as interop-result-v1. The status "fail" of a scenario that
+        records the harness itself is the outcome "infra-error"."""
+        results = []
+        for r in self.results:
+            outcome = "infra-error" if r["status"] == "fail" and r["scenario"] in INFRASTRUCTURE else r["status"]
+            roles = {"client": r["client"], "peer": r["peer"]}
+            if r.get("observer"):
+                roles["observer"] = r["observer"]
+            res = {"id": r["id"], "title": r["scenario"], "suite": r["suite"], "outcome": outcome, "durationMs": r["durationMs"],
+                   "roles": {k: v for k, v in roles.items() if v != "-"}}
+            if outcome != "pass":
+                res["reason"] = r.get("error") or outcome
+            if r.get("waiver"):
+                res["waiver"] = r["waiver"]
+            results.append(res)
+        implementations = []
+        for name, caps in sorted(self.caps.items()):
+            i = {"name": name, "version": str(caps.get("version") or "unknown"), "independent": name not in self.a.external}
+            if caps.get("implementation"):
+                i["upstream"] = caps["implementation"]
+            digest = interop_result.repo_digest(self.image(name))
+            if digest:
+                i["image"] = digest
+            implementations.append(i)
+        waivers = []
+        for k in self.known:
+            if k["id"] in self.reproduced:
+                waivers.append({"id": k["id"], "scope": k["scope"], "evidence": k["evidence_url"], "reproduced": self.reproduced[k["id"]]})
+        doc = {"schemaVersion": "1.0", "repository": "otfabric/knx-interop", "interopVersion": interop_result.version_field(ROOT, "interop_version"),
+               "contractVersion": interop_result.version_field(ROOT, "contract_version"), "gitSha": interop_result.git_sha(ROOT),
+               "startedAt": self.started.strftime("%Y-%m-%dT%H:%M:%SZ"), "finishedAt": finished, "host": interop_result.host(),
+               "implementations": implementations or [{"name": "none", "version": "none"}], "waivers": waivers,
+               "reproduce": "python3 " + shlex.join(["scripts/run-matrix.py"] + sys.argv[1:]), "results": results}
+        if self.a.gate:
+            doc["gate"] = self.a.gate
+        return doc
 
 
 def parse_out(out):

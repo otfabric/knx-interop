@@ -1,0 +1,78 @@
+# Stable scenario IDs of the results (interop-result-v1). An ID never changes
+# when a display string does: change the second column, keep the third.
+# A scenario without a line stops the run (scripts/run-matrix.py).
+# suite	scenario	id
+tunnel	discover (multicast search)	tunnel.discover-multicast-search
+tunnel	describe	tunnel.describe
+tunnel	connect and disconnect	tunnel.connect-and-disconnect
+tunnel	group write (DPT 1.001)	tunnel.group-write-dpt-1-001
+tunnel	group read/response (DPT 9.001)	tunnel.group-read-response-dpt-9-001
+dpt	DPT 1.001 on	dpt.dpt-1-001-on
+dpt	DPT 1.001 off	dpt.dpt-1-001-off
+dpt	DPT 5.001 100	dpt.dpt-5-001-100
+dpt	DPT 5.010 200	dpt.dpt-5-010-200
+dpt	DPT 7.001 4660	dpt.dpt-7-001-4660
+dpt	DPT 9.001 21.5	dpt.dpt-9-001-21-5
+dpt	DPT 9.001 -30	dpt.dpt-9-001-30
+dpt	DPT 9.004 1200	dpt.dpt-9-004-1200
+dpt	DPT 12.001 305419896	dpt.dpt-12-001-305419896
+dpt	DPT 13.001 -2	dpt.dpt-13-001-2
+dpt	DPT 14.056 1234.5	dpt.dpt-14-056-1234-5
+dpt	DPT 16.000 KNX interop	dpt.dpt-16-000-knx-interop
+v2	group write over TCP (DPT 1.001)	v2.group-write-over-tcp-dpt-1-001
+v2	group read over TCP (DPT 9.001)	v2.group-read-over-tcp-dpt-9-001
+v2	device management: device serial number (M_PropRead)	v2.device-management-device-serial-number-m-propread
+v2	busmonitor sees a write (L_Busmon.ind, TP1 frame)	v2.busmonitor-sees-a-write-l-busmon-ind-tp1-frame
+negative	heartbeat on an open channel → E_NO_ERROR	negative.heartbeat-on-an-open-channel-to-e-no-error
+negative	TUNNELLING_REQUEST sequence 0 acknowledged	negative.tunnelling-request-sequence-0-acknowledged
+negative	repeated sequence 0 acknowledged again (duplicate)	negative.repeated-sequence-0-acknowledged-again-duplicate
+negative	out-of-order sequence 5 not acknowledged	negative.out-of-order-sequence-5-not-acknowledged
+negative	sequence numbers roll over 255 → 0	negative.sequence-numbers-roll-over-255-to-0
+negative	DISCONNECT_REQUEST → E_NO_ERROR	negative.disconnect-request-to-e-no-error
+negative	heartbeat after disconnect → E_CONNECTION_ID	negative.heartbeat-after-disconnect-to-e-connection-id
+negative	survives header length 7	negative.survives-header-length-7
+negative	survives protocol version 0x20	negative.survives-protocol-version-0x20
+negative	survives total length longer than the datagram	negative.survives-total-length-longer-than-the-datagram
+negative	survives total length shorter than the datagram	negative.survives-total-length-shorter-than-the-datagram
+negative	survives truncated header	negative.survives-truncated-header
+negative	survives unknown service type 0x0F00	negative.survives-unknown-service-type-0x0f00
+negative	survives HPAI of length 7	negative.survives-hpai-of-length-7
+negative	survives 2000-octet datagram	negative.survives-2000-octet-datagram
+negative	survives empty CONNECT_REQUEST	negative.survives-empty-connect-request
+negative	survives CRI length 0	negative.survives-cri-length-0
+negative	CONNECTIONSTATE_REQUEST of an unknown channel → E_CONNECTION_ID	negative.connectionstate-request-of-an-unknown-channel-to-e-connection-id
+negative	unsupported connection type → E_CONNECTION_TYPE	negative.unsupported-connection-type-to-e-connection-type
+negative	raw tunnelling layer → refused	negative.raw-tunnelling-layer-to-refused
+negative	TCP HPAI over UDP → refused	negative.tcp-hpai-over-udp-to-refused
+negative	heartbeat right after the malformed datagrams	negative.heartbeat-right-after-the-malformed-datagrams
+negative	channel exhaustion → E_NO_MORE_CONNECTIONS	negative.channel-exhaustion-to-e-no-more-connections
+negative	still serving after the tests	negative.still-serving-after-the-tests
+routing	routing write (multicast)	routing.routing-write-multicast
+secure	secure tunnelling server	secure.secure-tunnelling-server
+secure	secure session over UDP (user 2)	secure.secure-session-over-udp-user-2
+secure	secure group write over UDP (DPT 1.001)	secure.secure-group-write-over-udp-dpt-1-001
+secure	secure group read/response over UDP (DPT 9.001)	secure.secure-group-read-response-over-udp-dpt-9-001
+secure	secure device management: serial number (user 1)	secure.secure-device-management-serial-number-user-1
+secure	secure tunnelling	secure.secure-tunnelling
+secure	secure session connect (user 2, bound address)	secure.secure-session-connect-user-2-bound-address
+secure	secure tunnel group write (DPT 1.001)	secure.secure-tunnel-group-write-dpt-1-001
+secure	secure tunnel group read/response (DPT 9.001)	secure.secure-tunnel-group-read-response-dpt-9-001
+secure	Data Secure group write through a secure tunnel (DPT 9.001)	secure.data-secure-group-write-through-a-secure-tunnel-dpt-9-001
+secure	plain connection refused by the secure server	secure.plain-connection-refused-by-the-secure-server
+secure	secure routing	secure.secure-routing
+secure	secure routing write (DPT 1.001)	secure.secure-routing-write-dpt-1-001
+secure	Data Secure group write over secure routing (DPT 9.001)	secure.data-secure-group-write-over-secure-routing-dpt-9-001
+secure	server secure routing	secure.server-secure-routing
+secure	secure routing into the server, seen by a secure tunnel	secure.secure-routing-into-the-server-seen-by-a-secure-tunnel
+secure	secure routing out of the server, from a secure tunnel	secure.secure-routing-out-of-the-server-from-a-secure-tunnel
+management	remote property services	management.remote-property-services
+management	remote property read: friendly name (A_PropertyValue_Read)	management.remote-property-read-friendly-name-a-propertyvalue-read
+management	remote property read in a transport connection	management.remote-property-read-in-a-transport-connection
+management	remote property write, then read back (A_PropertyValue_Write)	management.remote-property-write-then-read-back-a-propertyvalue-write
+management	tool access read: S-A_Sync, then S-A_Data (tool key)	management.tool-access-read-s-a-sync-then-s-a-data-tool-key
+management	tool access read in a transport connection	management.tool-access-read-in-a-transport-connection
+management	tool access write (S-A_Data, tool key)	management.tool-access-write-s-a-data-tool-key
+management	plain management refused by a secured device	management.plain-management-refused-by-a-secured-device
+tunnel	server start	tunnel.server-start
+secure	secure server start	secure.secure-server-start
+negative	negative suite	negative.negative-suite

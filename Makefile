@@ -37,6 +37,7 @@ capabilities: ## Print the capabilities document of every image
 validate: ## Check versions.yaml against the Dockerfiles and the fixtures against their schema
 	@python3 scripts/check-versions.py
 	@python3 scripts/validate.py
+	@python3 -m unittest discover -q -s scripts -p 'test_*.py'
 
 lint: ## Shellcheck the shell adapters, byte-compile the Python ones, check the Node one
 	@if command -v shellcheck >/dev/null 2>&1; then shellcheck -s sh adapters/knxd/run.sh adapters/calimero-tools/run.sh adapters/calimero-server/run.sh; else echo "(shellcheck not installed)"; fi
@@ -47,7 +48,7 @@ lint: ## Shellcheck the shell adapters, byte-compile the Python ones, check the 
 # test); empty fails on any failure. ADAPTER adds an external adapter,
 # name=image (a system under test with its own contract image).
 GATE ?=
-matrix: ## Run every scenario between every pair of adapters (Docker); writes reports/latest.{json,md}
+matrix: ## Run every scenario between every pair of adapters (Docker); writes reports/latest.{json,md} and reports/results.json
 	@python3 scripts/run-matrix.py --registry $(REGISTRY) --version $(VERSION) --gate "$(GATE)" $(if $(ADAPTER),--adapter $(ADAPTER))
 
 matrix-quick: ## Run the tunnel suite only

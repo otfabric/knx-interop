@@ -19,7 +19,11 @@ does so in its interop suite. knx-interop depends on no system under test;
 they depend on it.
 
 Results: [docs/INTEROPERABILITY.md](docs/INTEROPERABILITY.md) and
-`reports/latest.{json,md}`.
+`reports/latest.{json,md}`,
+and `reports/results.json`, the organisation's
+[interop-result-v1](schemas/interop-result-v1.schema.json) with stable
+scenario IDs ([scenarios/ids.tsv](scenarios/ids.tsv)). A run with no pass, or
+with a waiver that no longer reproduces, fails.
 
 ## What is tested
 
