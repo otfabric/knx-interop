@@ -61,8 +61,8 @@ part in them.
 
 ## Coverage
 
-Every client against every server and every routing stack against every
-other, in both directions where both stacks offer the role: Calimero tools,
+Every client against every server (a fresh server for each client) and
+every routing stack against every other, in both directions where both stacks offer the role: Calimero tools,
 xknx, KNXUltimate and knxd as clients of the Calimero and knxd servers;
 routing among xknx, KNXUltimate, Calimero tools and knxd; KNX Secure among
 xknx, Calimero tools and Calimero server (secure tunnelling over TCP and
@@ -83,11 +83,12 @@ with a system under test as the device (go-knx).
 
 ## Failures investigated and fixed
 
-Two failures between third-party implementations were analysed and fixed
-in the harness (2026-10-29):
+Failures between third-party implementations that were analysed and
+fixed in the harness (2026-10-29 and 2026-10-30):
 
 | Failure | Root cause | Fix |
 |---|---|---|
+| KNXUltimate client → calimero-server, every scenario after its first write failed in some full runs (CI and local) | In those runs Calimero server received KNXUltimate's CONNECT_REQUEST and answered it, then nothing more from that container (no data, no DISCONNECT_REQUEST), while KNXUltimate reported its write as sent. Each such tunnel held one of the server's eight slots until its 120 s timeout, so the following scenarios got E_NO_MORE_CONNECTIONS. It never occurred with the client alone; the lost datagrams were not explained. | The tunnel suite now gives every client a fresh server, so a tunnel one client leaves behind no longer fails the others. |
 | knxd client → calimero-server, a DPT write lost every full run | knxd 0.14.73's `ipt` client builds its DISCONNECT_REQUEST on shutdown but closes the socket before sending it, so every short-lived knxd client left a dead tunnel on the server. The dead tunnels filled calimero-server's eight slots, and the adapter reported a write as passed without a tunnel, because knxtool only hands the telegram to the local daemon. | The knxd adapter now waits for the CONNECT_RESPONSE, requires the L_Data.con of each write, and sends the missing DISCONNECT_REQUEST itself. Reported as [knxd#667](https://github.com/knxd/knxd/issues/667). |
 | probe → calimero-server, heartbeat on an open channel | The check ran right after calimero-server's control endpoint restart. In that window Calimero answers E_KNX_CONNECTION (0x27): its subnet reports a non-zero MEDIUM_STATUS (`ControlEndpointService.subnetStatus`). The probe also waited only 2 s, where the standard gives the server 10 s. | The connection checks run before the malformed-input checks; the heartbeat waits the standard's 10 s; a heartbeat right after the malformed input is recorded as an observation. |
 

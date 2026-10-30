@@ -1,6 +1,6 @@
 # knx-interop results
 
-Started 2026-10-30T05:04:37.337112+00:00, finished 2026-10-30T05:13:14.423912+00:00 on darwin/arm64.
+Started 2026-10-30T05:54:18.591582+00:00, finished 2026-10-30T06:02:55.483948+00:00 on darwin/arm64.
 
 Summary: known-difference 5, pass 220, unsupported 51
 
@@ -297,7 +297,7 @@ Summary: known-difference 5, pass 220, unsupported 51
 | secure routing write (DPT 1.001) | xknx | calimero-tools | PASS |  |
 | Data Secure group write over secure routing (DPT 9.001) | xknx | calimero-tools | PASS |  |
 | secure routing write (DPT 1.001) | calimero-tools | xknx | PASS |  |
-| Data Secure group write over secure routing (DPT 9.001) | calimero-tools | xknx | KNOWN-DIFFERENCE | calimero-tools 3.0-M1 send Data Secure group telegrams only through a surrogate device; xknx does not act as one, and the pairing has no go-knx on the network. Towards go-knx, the surrogate, it passes. (observed: 05:12:08.695 [ERROR  ] io.calimero.tools.ProcComm: completed with error io.calimero.sec |
+| Data Secure group write over secure routing (DPT 9.001) | calimero-tools | xknx | KNOWN-DIFFERENCE | calimero-tools 3.0-M1 send Data Secure group telegrams only through a surrogate device; xknx does not act as one, and the pairing has no go-knx on the network. Towards go-knx, the surrogate, it passes. (observed: 06:01:50.730 [ERROR  ] io.calimero.tools.ProcComm: completed with error io.calimero.sec |
 | server secure routing | - | knxd | UNSUPPORTED | no secure routing in the server |
 | secure routing into the server, seen by a secure tunnel | xknx | calimero-server | PASS | observer/responder calimero-tools.  |
 | secure routing into the server, seen by a secure tunnel | calimero-tools | calimero-server | PASS | observer/responder xknx.  |

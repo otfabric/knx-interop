@@ -190,11 +190,15 @@ class Matrix:
         return None
 
     def tunnel_suite(self, server):
-        name, ip = self.start_server(server)
-        self.server_container = name
-        try:
-            for c in self.a.clients:
-                self.capabilities(c)
+        """The tunnel, dpt and v2 scenarios of every client, each client
+        against a fresh server: a tunnel a client leaves open (a peer that
+        stops without disconnecting) holds one of the server's slots until
+        it times out, and must not fail the clients after it."""
+        for c in self.a.clients:
+            self.capabilities(c)
+            name, ip = self.start_server(server)
+            self.server_container = name
+            try:
                 if "tunnel" in self.a.suites:
                     self.discover(c, server, ip)
                     self.describe(c, server, ip)
@@ -205,11 +209,17 @@ class Matrix:
                     self.dpt(c, server, ip)
                 if "v2" in self.a.suites:
                     self.v2(c, server, ip)
-            if "negative" in self.a.suites:
+            finally:
+                self.server_container = None
+                self.stop(name)
+        if "negative" in self.a.suites:
+            name, ip = self.start_server(server)
+            self.server_container = name
+            try:
                 self.negative(server, ip)
-        finally:
-            self.server_container = None
-            self.stop(name)
+            finally:
+                self.server_container = None
+                self.stop(name)
 
     def discover(self, c, server, ip):
         t = time.monotonic()
