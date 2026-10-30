@@ -33,13 +33,24 @@ var (
 	users       = map[uint8]string{1: "knx-interop-user1", 2: "knx-interop-user2", 3: "knx-interop-user3"}
 	userAddress = map[uint8]knx.IndividualAddress{2: knx.MustParseIndividualAddress("1.1.10"), 3: knx.MustParseIndividualAddress("1.1.11")}
 	groups      = map[string]string{"1/3/1": "64732d67726f75702d6b65792d303031", "1/3/2": "64732d67726f75702d6b65792d303032"}
+	// surrogateGroup is the Data Secure group Calimero tools write through
+	// the surrogate: its only sender is the surrogate, since Calimero
+	// requires every sender of the group (in all interfaces) to be a
+	// device and picks its surrogate among them.
+	surrogateGroup    = "1/3/3"
+	surrogateGroupKey = "64732d67726f75702d6b65792d303033"
 	// Every address an adapter may send secured telegrams from: the
 	// tunnelling addresses of the servers and the routing sources of the
 	// stacks (15.15.250 xknx, 15.15.255 go-knx, 15.15.240 Calimero tools).
 	senders = []string{"1.1.10", "1.1.11", "1.1.12", "1.1.13", "1.1.14", "1.1.15", "1.1.16", "1.1.17", "15.15.240", "15.15.250", "15.15.255"}
-	// Interfaces of the routing sources, so that keyring readers that look
-	// up their own address find the groups.
-	routingInterfaces = []string{"15.15.240", "15.15.250", "15.15.255"}
+	// The interface of Calimero tools' routing source, so that Calimero
+	// finds the groups and their senders.
+	routingInterfaces = []string{"15.15.240"}
+	// go-knx's routing source is a device with a tool key: the surrogate
+	// that Calimero tools ask (S-A_Sync, group object diagnostics) to send
+	// their secured group telegrams. A surrogate must be a device, not an
+	// interface.
+	surrogate = knx.MustParseIndividualAddress("15.15.255")
 )
 
 func main() {
@@ -67,14 +78,25 @@ func main() {
 		Backbone:  &keyring.Backbone{MulticastAddress: "224.0.23.12", Latency: time.Second, Key: backbone},
 		GroupKeys: gk,
 		Devices: []keyring.Device{{IndividualAddress: host, ToolKey: keyring.Key{0x74, 0x6f, 0x6f, 0x6c}, HasToolKey: true,
-			ManagementPassword: users[1], Authentication: devicePassword}},
+			ManagementPassword: users[1], Authentication: devicePassword},
+			{IndividualAddress: surrogate, ToolKey: keyring.Key{0x73, 0x75, 0x72, 0x72}, HasToolKey: true},
+			// Calimero tools sign their requests to the surrogate with their
+			// own device's tool key.
+			{IndividualAddress: knx.MustParseIndividualAddress(routingInterfaces[0]), ToolKey: keyring.Key{0x63, 0x61, 0x6c}, HasToolKey: true}},
 	}
 	for _, id := range []uint8{2, 3} {
 		kr.Interfaces = append(kr.Interfaces, keyring.Interface{Type: keyring.Tunneling, IndividualAddress: userAddress[id], Host: host, HasHost: true,
 			UserID: id, Password: users[id], Authentication: devicePassword, Groups: assigned})
 	}
+	// Calimero tools' interface receives the surrogate group only; its
+	// sender is the surrogate.
+	sg := knx.MustParseGroupAddress(surrogateGroup)
+	var sk keyring.Key
+	mustHex(surrogateGroupKey, sk[:])
+	kr.GroupKeys[sg] = sk
+	viaSurrogate := map[knx.GroupAddress][]knx.IndividualAddress{sg: {surrogate}}
 	for _, a := range routingInterfaces {
-		kr.Interfaces = append(kr.Interfaces, keyring.Interface{Type: keyring.USB, IndividualAddress: knx.MustParseIndividualAddress(a), Groups: assigned})
+		kr.Interfaces = append(kr.Interfaces, keyring.Interface{Type: keyring.USB, IndividualAddress: knx.MustParseIndividualAddress(a), Groups: viaSurrogate})
 	}
 	b, err := kr.Encode(keyringPassword)
 	check(err)
@@ -103,7 +125,9 @@ func main() {
 			"3": map[string]string{"password": users[3], "address": userAddress[3].String()},
 		},
 		"dataSecureGroups": groups,
+		"surrogateGroup":   map[string]string{surrogateGroup: surrogateGroupKey},
 		"senders":          senders,
+		"surrogate":        surrogate.String(),
 	}
 	pb, err := json.MarshalIndent(profile, "", "  ")
 	check(err)

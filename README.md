@@ -27,7 +27,7 @@ adapter against every other:
 | negative | the probe against each server: malformed headers, lengths, HPAIs and CRIs; unknown service types; status codes for unknown channels and connection types; duplicate and out-of-order sequence numbers; sequence roll-over; channel exhaustion |
 | routing | a routing indication written by one implementation and received by another on 224.0.23.12:3671 |
 | v2 | group write and read over TCP (KNXnet/IP core v2); device management (M_PropRead of the device serial number); a busmonitor connection that sees another client's write |
-| secure | KNX IP Secure tunnelling against each secure server (session with a bound user address, write, read, Data Secure group write through the tunnel, device management as the management user, refusal of plain connections); secure routing and Data Secure over secure routing between every pair of secure routers. All with the public test profile in [adapters/common/secure](adapters/common/secure) |
+| secure | KNX IP Secure tunnelling against each secure server over TCP and UDP (session with a bound user address, write, read, Data Secure group write through the tunnel, device management as the management user, refusal of plain connections); secure routing and Data Secure over secure routing between every pair of secure routers (Calimero tools through go-knx as the surrogate); each server's secure routing, in from and out to secure routers. All with the public test profile in [adapters/common/secure](adapters/common/secure) |
 
 Results are `pass`, `fail`, `unsupported` (the adapter or stack does not
 offer the operation), `not-tested` (a prerequisite failed) or

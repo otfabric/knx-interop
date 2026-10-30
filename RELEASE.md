@@ -5,6 +5,38 @@ versions.yaml; the Release workflow builds the images and takes this
 file's section of that version as the release notes. Add the section,
 headed exactly `## vX.Y.Z` and closed by a line `---`, before tagging.
 
+## v0.4.0
+
+**Date:** 2026-10-30
+**Previous release:** v0.3.0
+
+## Summary
+
+Container contract 1.3: KNX IP Secure sessions over UDP, the servers'
+secure routing, and Calimero tools' Data Secure through go-knx as the
+surrogate.
+
+## Additions
+
+- `--udp` with `--secure` in the goknx and calimero-tools adapters (xknx:
+  unsupported, its secure sessions are TCP only); `server --secure
+  --routing` in the goknx and calimero-server adapters.
+- The test profile: go-knx's routing source 15.15.255 is a device with a
+  tool key, the only sender of the new Data Secure group 1/3/3; Calimero
+  tools' tool key for 15.15.240.
+- The `secure` suite: secure sessions over UDP (connect, write, read);
+  each server's secure routing in from secure routers (seen through a
+  secure tunnel) and out to them (from a secure tunnel); Calimero tools
+  write Data Secure over secure routing through the surrogate.
+- calimero-server 3.0-M1 secure routing: the adapter sets the latency
+  tolerance and opens `io.calimero.knxnetip` to the server module (the
+  official image fails with an IllegalAccessException otherwise).
+- Known differences narrowed: Calimero tools' Data Secure through a tunnel
+  (no surrogate there) and towards xknx alone (xknx is no surrogate).
+- The goknx adapter builds knxctl v0.4.0 by default.
+
+---
+
 ## v0.3.0
 
 **Date:** 2026-10-30

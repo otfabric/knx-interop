@@ -188,6 +188,8 @@ def main():
         r = contract.Result(IMPL, VERSION, "server")
         r.finish("unsupported", error="xknx has no KNXnet/IP server")
     r = contract.Result(IMPL, VERSION, a.op)
+    if a.secure and a.udp:
+        r.finish("unsupported", error="xknx runs secure sessions over TCP only")
     if a.op in ("property", "busmonitor"):
         r.finish("unsupported", error="the adapter does not drive xknx's device management or busmonitor")
     try:
