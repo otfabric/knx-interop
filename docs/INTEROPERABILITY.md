@@ -14,7 +14,7 @@ pinned by digest), knxd 0.14.73-1 (Debian trixie), xknx 4.0.0, KNXUltimate
 A system under test runs this matrix from its own repository with its own
 adapter (`--adapter`): go-knx's results are in
 [go-knx's INTEROPERABILITY.md](https://github.com/otfabric/go-knx/blob/main/INTEROPERABILITY.md)
-(`make interop-matrix` there).
+(`make -C ../go-knx interop-matrix` from a go-knx checkout next to this one).
 
 | Feature | calimero | knxd | xknx | KNXUltimate |
 |---|---|---|---|---|
