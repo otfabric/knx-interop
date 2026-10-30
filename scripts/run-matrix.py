@@ -77,11 +77,13 @@ class Matrix:
                 self.caps[adapter] = {"implementation": adapter, "version": "unknown", "features": {}}
         return self.caps[adapter]
 
-    def start_server(self, adapter, routing=False, secure=False):
+    def start_server(self, adapter, routing=False, secure=False, tool_access=False):
         name = "knxi-srv-%s-%s" % (adapter, uuid.uuid4().hex[:6])
         args = ["docker", "run", "-d", "--name", name, "--network", self.net, self.image(adapter), "server", "--name", SERVER_NAME]
         if routing:
             args.append("--routing")
+        if tool_access:
+            args.append("--tool-access")
         if secure:
             args.append("--secure")
         sh(args, check=True)
@@ -413,6 +415,82 @@ class Matrix:
             self.record("secure", sc, c, server, "unsupported", time.monotonic(), "no device management on the %s" % ("client" if not self.feature(c, "property") else "server"))
         return steps
 
+    # -- remote device management (contract 1.4) ------------------------
+    def management_suite(self):
+        """The remote property services of the server's device (1.1.0)
+        through a tunnel: plain, connectionless and in a transport
+        connection; with --tool-access, secured with the device's tool key
+        (KNX Data Secure point to point), and plain access refused. A fresh
+        server for each client: the write changes the friendly name."""
+        name_hex = SERVER_NAME.encode().hex().upper()
+        name_args = ["--object", "11", "--pid", "76", "--start", "1", "--count", str(len(SERVER_NAME))]
+        write_args = ["--object", "11", "--pid", "76", "--start", "1", "--count", "4", "--data", "746F6F6C"]
+        plain = [
+            ("remote property read: friendly name (A_PropertyValue_Read)", [], name_hex),
+            ("remote property read in a transport connection", ["--connected"], name_hex),
+            ("remote property write, then read back (A_PropertyValue_Write)", ["--connected", "write"], "746F6F6C"),
+        ]
+        secured = [
+            ("tool access read: S-A_Sync, then S-A_Data (tool key)", ["--tool-access"], name_hex),
+            ("tool access read in a transport connection", ["--tool-access", "--connected"], name_hex),
+            ("tool access write (S-A_Data, tool key)", ["--tool-access", "write"], "746F6F6C"),
+        ]
+        refused = "plain management refused by a secured device"
+        for server in self.a.servers:
+            self.capabilities(server)
+            if not self.server_feature(server, "remoteProperty"):
+                self.record("management", "remote property services", "-", server, "unsupported", time.monotonic(), "no remote device management on the server")
+                continue
+            for c in self.a.clients:
+                self.capabilities(c)
+                if not self.feature(c, "remoteProperty"):
+                    self.record("management", "remote property services", c, server, "unsupported", time.monotonic(), "no remote device management on the client")
+                    continue
+                self.management_run(c, server, plain, name_args, write_args, False)
+                if not self.server_feature(server, "toolAccess"):
+                    for sc, _, _ in secured + [(refused, None, None)]:
+                        self.record("management", sc, c, server, "unsupported", time.monotonic(), "no tool key access on the server")
+                    continue
+                steps = secured if self.feature(c, "toolAccess") else []
+                if not steps:
+                    for sc, _, _ in secured:
+                        self.record("management", sc, c, server, "unsupported", time.monotonic(), "no tool key access on the client")
+                self.management_run(c, server, steps, name_args, write_args, True, refused)
+
+    def management_run(self, c, server, steps, name_args, write_args, tool_access, refused=None):
+        if not steps and not refused:
+            return
+        t = time.monotonic()
+        try:
+            name, ip = self.start_server(server, tool_access=tool_access)
+        except RuntimeError as e:
+            return self.record("management", "server start", c, server, "fail", t, str(e))
+        self.server_container = name
+        try:
+            for sc, flags, want in steps:
+                t = time.monotonic()
+                args = ["--target", ip] + (write_args if "write" in flags else name_args) + [f for f in flags if f != "write"]
+                r = self.client(c, "remote-property", args)
+                data = r.get("data", {}).get("data", "")
+                status, err = r["status"], r.get("error")
+                if status == "pass" and data.upper() != want:
+                    status, err = "fail", "data %r, want %r" % (data, want)
+                self.record("management", sc, c, server, status, t, err, r.get("data"))
+            if refused:
+                # Plain access to the secured device: in a connection, which
+                # every remote property client has.
+                t = time.monotonic()
+                r = self.client(c, "remote-property", ["--target", ip, "--connected", "--timeout", "3"] + name_args)
+                status, err = r["status"], r.get("error")
+                if status == "pass":
+                    status, err = "fail", "plain access answered: %r" % r.get("data")
+                elif status == "fail":
+                    status, err = "pass", None
+                self.record("management", refused, c, server, status, t, err)
+        finally:
+            self.server_container = None
+            self.stop(name)
+
     def secure_routing(self):
         routers = [x for x in self.a.routers if self.feature(x, "secure")]
         for x in self.a.routers:
@@ -629,7 +707,7 @@ def main():
     p.add_argument("--servers", default=",".join(SERVERS))
     p.add_argument("--clients", default=",".join(CLIENTS))
     p.add_argument("--routers", default=",".join(ROUTERS))
-    p.add_argument("--suites", default="tunnel,dpt,negative,routing,v2,secure")
+    p.add_argument("--suites", default="tunnel,dpt,negative,routing,v2,secure,management")
     p.add_argument("--report", default="latest")
     p.add_argument("--gate", default="", help="fail only on failures involving this adapter (empty: any failure)")
     p.add_argument("--adapter", action="append", default=[], metavar="NAME=IMAGE",
@@ -669,6 +747,8 @@ def main():
             m.routing_suite()
         if "secure" in a.suites:
             m.secure_suite()
+        if "management" in a.suites:
+            m.management_suite()
     finally:
         ids = sh(["docker", "ps", "-aq", "--filter", "network=" + m.net]).stdout.split()
         if ids:

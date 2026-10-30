@@ -21,7 +21,7 @@ while [ $# -gt 0 ]; do
 done
 case "$ROLE" in
 capabilities)
-	printf '{"features":{"discover":true,"describe":true,"tunnel":true,"routing":true,"nat":true,"secure":true,"emulatedReads":true,"server":{"tcp":true,"property":true,"busmonitor":false,"secure":true,"secureUdp":true,"secureRouting":true}},"implementation":"calimero-server","notes":"The emulated subnet answers a read with the last value written; a busmonitor connection is exclusive and the emulated subnet sends nothing while it is open. --secure: secure tunnelling and device management with the test profile (keyfile; users 2 and 3 bound to 1.1.10 and 1.1.11, user 1 management).","roles":["server"],"schemaVersion":"1.0","version":"%s"}\n' "$VERSION"
+	printf '{"features":{"discover":true,"describe":true,"tunnel":true,"routing":true,"nat":true,"secure":true,"emulatedReads":true,"server":{"tcp":true,"property":true,"busmonitor":false,"secure":true,"secureUdp":true,"secureRouting":true,"remoteProperty":true,"toolAccess":false}},"implementation":"calimero-server","notes":"The emulated subnet answers a read with the last value written; a busmonitor connection is exclusive and the emulated subnet sends nothing while it is open. --secure: secure tunnelling and device management with the test profile (keyfile; users 2 and 3 bound to 1.1.10 and 1.1.11, user 1 management). The emulated device answers the remote property services; it has no Data Secure point to point (tool key) access.","roles":["server"],"schemaVersion":"1.0","version":"%s"}\n' "$VERSION"
 	exit 0 ;;
 server)
 	group=""

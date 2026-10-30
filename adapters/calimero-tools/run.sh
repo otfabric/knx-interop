@@ -28,6 +28,7 @@ ROLE=${1:-}
 OP=$ROLE
 if [ "$ROLE" = client ]; then OP=${1:-}; shift; fi
 TARGET="" PORT=3671 NAT=0 TCP=0 OBJECT=0 PID=11 ROUTING=0 GROUP="" DPT="" VALUE="" COUNT=1 TIMEOUT=5 SECURE=0 SUSER=2 SUDP=0
+DATA="" DEVICE=1.1.0 FIRST=1 CONNECTED=0 TOOLACCESS=0
 while [ $# -gt 0 ]; do
 	case "$1" in
 	--target) TARGET=$2; shift ;;
@@ -45,7 +46,12 @@ while [ $# -gt 0 ]; do
 	--value) VALUE=$2; shift ;;
 	--count) COUNT=$2; shift ;;
 	--timeout) TIMEOUT=${2%.*}; shift ;;
-	--data | --name) shift ;;
+	--data) DATA=$2; shift ;;
+	--device) DEVICE=$2; shift ;;
+	--start) FIRST=$2; shift ;;
+	--connected) CONNECTED=1 ;;
+	--tool-access) TOOLACCESS=1 ;;
+	--name) shift ;;
 	esac
 	shift
 done
@@ -102,7 +108,7 @@ groupmon_json() {
 
 case "$ROLE" in
 capabilities)
-	printf '{"features":{"answer":false,"connect":true,"describe":true,"discover":true,"nat":true,"routing":true,"secure":true,"dataSecure":true,"secureUdp":true,"tunnel":true,"dptCodec":true,"tcp":true,"property":true,"busmonitor":true},"implementation":"%s","notes":"The Calimero process communication tool has no responder. Secure: tunnelling over TCP, routing and Data Secure with the test profile.","roles":["client"],"schemaVersion":"1.0","version":"%s"}\n' "$IMPL" "$VERSION"
+	printf '{"features":{"answer":false,"connect":true,"describe":true,"discover":true,"nat":true,"routing":true,"secure":true,"dataSecure":true,"secureUdp":true,"tunnel":true,"dptCodec":true,"tcp":true,"property":true,"busmonitor":true,"remoteProperty":true,"toolAccess":true},"implementation":"%s","notes":"The Calimero process communication tool has no responder. Secure: tunnelling over TCP, routing and Data Secure with the test profile. Tool access: the keyring tool key, with the tunnel address set (-k 1.1.10) because the tool computes the MAC over the source it sends.","roles":["client"],"schemaVersion":"1.0","version":"%s"}\n' "$IMPL" "$VERSION"
 	exit 0 ;;
 server) finish unsupported '{}' "use the calimero-server adapter" ;;
 client) ;;
@@ -203,6 +209,47 @@ property)
 	data=$(printf '%s\n' "$out" | sed -n 's/.*(\([0-9a-fA-F]*\)).*/\1/p' | head -1 | tr a-f A-F)
 	[ -n "$data" ] || finish fail '{}' "$(printf '%s\n' "$out" | grep -v '^\s*at ' | tail -3)"
 	finish pass "{\"data\":\"$data\"}" ;;
+remote-property)
+	# Contract 1.4: the remote property services (Property tool, -r)
+	# through a tunnel; objects by index, found in the IO list (PID 71).
+	ropts="-r $DEVICE"
+	[ "$CONNECTED" = 1 ] && ropts="$ropts -c"
+	if [ "$TOOLACCESS" = 1 ]; then
+		# The device's tool key comes from the keyring. Calimero tools
+		# 3.0-M1 computes the MAC over the source address it sends (0.0.0
+		# unless -k), which the server replaces by the tunnel address: -k
+		# gives the address the server assigns to this tunnel (the first,
+		# or user 2's bound address).
+		if [ "$SECURE" = 1 ]; then
+			ropts="$ropts -k 1.1.10"
+		else
+			kpw=$(sed -n 's/.*"keyringPassword": "\([^"]*\)".*/\1/p' "$SEC/profile.json")
+			ropts="$ropts --keyring $SEC/knx-interop.knxkeys --keyring-pwd $kpw --udp -k 1.1.10"
+		fi
+	fi
+	rp() { tools get $ropts --json $(opts) "$TARGET" "$@"; }
+	# elems prints the hex elements of a JSON answer, comma separated.
+	elems() { tr -d '\n ' | sed -n 's/.*"data":\[\([^]]*\)\].*/\1/p' | tr -d '"'; }
+	errs() { printf '%s\n' "$1" | grep -E 'ERROR|Exception' | grep -v '^\s*at ' | head -3; }
+	idx=0
+	if [ "$OBJECT" != 0 ]; then
+		out=$(rp get 0 71 0 1)
+		n=$(printf '%s' "$out" | elems)
+		[ -n "$n" ] || finish fail '{}' "interface object list: $(errs "$out")"
+		out=$(rp get 0 71 1 $((0x$n)))
+		list=$(printf '%s' "$out" | elems)
+		idx=$(printf '%s\n' "$list" | tr ',' '\n' | awk -v t="$(printf '%04x' "$OBJECT")" 'tolower($0) == t {print NR - 1; exit}')
+		[ -n "$idx" ] || finish fail '{}' "no interface object of type $OBJECT in [$list] $(errs "$out")"
+	fi
+	if [ -n "$DATA" ]; then
+		# The tool prints nothing for a write: the answer is read back.
+		out=$(rp set "$idx" "$PID" "$FIRST" "$COUNT" "0x$DATA")
+		[ -n "$(errs "$out")" ] && finish fail '{}' "write: $(errs "$out")"
+	fi
+	out=$(rp get "$idx" "$PID" "$FIRST" "$COUNT")
+	data=$(printf '%s' "$out" | elems | tr -d ',' | tr a-f A-F)
+	[ -n "$data" ] || finish fail '{}' "$(errs "$out")"
+	finish pass "{\"data\":\"$data\",\"object\":$idx}" ;;
 busmonitor)
 	bgtools monitor "$TARGET" $(opts)
 	i=0

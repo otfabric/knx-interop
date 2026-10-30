@@ -34,6 +34,7 @@ adapter against every other:
 | routing | a routing indication written by one implementation and received by another on 224.0.23.12:3671 |
 | v2 | group write and read over TCP (KNXnet/IP core v2); device management (M_PropRead of the device serial number); a busmonitor connection that sees another client's write |
 | secure | KNX IP Secure tunnelling against each secure server over TCP and UDP (session with a bound user address, write, read, Data Secure group write through the tunnel, device management as the management user, refusal of plain connections); secure routing and Data Secure over secure routing between every pair of secure routers (Calimero tools through go-knx as the surrogate); each server's secure routing, in from and out to secure routers. All with the public test profile in [adapters/common/secure](adapters/common/secure) |
+| management | remote device management of each server's device (1.1.0) through a tunnel: property read connectionless and in a transport connection, property write read back; with tool access (KNX Data Secure point to point with the device's tool key, after S-A_Sync) the same, and plain access refused by the secured device |
 
 Results are `pass`, `fail`, `unsupported` (the adapter or stack does not
 offer the operation), `not-tested` (a prerequisite failed) or
@@ -112,6 +113,11 @@ move by a reviewed change.
   device; none of the third-party stacks acts as one, so that scenario
   needs a system under test that does (see the known differences).
 - calimero-server 3.0-M2 has no image; 3.0-M1 is used.
+- Remote device management: knxd and KNXUltimate take no part (their
+  adapters do not drive it); xknx manages devices only in transport
+  connections and without tool keys; Calimero server's emulated device has
+  no tool key access, so the tool access scenarios need a system under test
+  as the device.
 
 ## License
 

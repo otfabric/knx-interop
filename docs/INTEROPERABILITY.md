@@ -2,8 +2,8 @@
 
 Run of 2026-10-30 on Docker Desktop (macOS, arm64), report
 [reports/latest.json](../reports/latest.json) /
-[reports/latest.md](../reports/latest.md): **215 pass, 5 known
-differences, 39 unsupported, 0 fail** (259 results), the third-party stacks
+[reports/latest.md](../reports/latest.md): **220 pass, 5 known
+differences, 51 unsupported, 0 fail** (276 results), the third-party stacks
 among themselves. Each cell counts the results in which that
 implementation took the role named in the row.
 
@@ -14,7 +14,7 @@ pinned by digest), knxd 0.14.73-1 (Debian trixie), xknx 4.0.0, KNXUltimate
 A system under test runs this matrix from its own repository with its own
 adapter (`--adapter`): go-knx's results are in
 [go-knx's INTEROPERABILITY.md](https://github.com/otfabric/go-knx/blob/main/INTEROPERABILITY.md)
-(`make interop-matrix` there; 423 pass, 0 fail on 2026-10-30).
+(`make interop-matrix` there).
 
 | Feature | calimero | knxd | xknx | KNXUltimate |
 |---|---|---|---|---|
@@ -47,6 +47,10 @@ adapter (`--adapter`): go-knx's results are in
 | IP Secure routing (server) | PASS (4) | NOT TESTED | NOT TESTED | NOT TESTED |
 | Data Secure (sender) | KNOWN DIFFERENCE 2 | NOT TESTED | PASS (2) | NOT TESTED |
 | Data Secure (receiver) | PASS (2) | NOT TESTED | KNOWN DIFFERENCE 2 | NOT TESTED |
+| Remote property services (tool) | PASS (3) | UNSUPPORTED 1 | PASS 2, UNSUPPORTED 1 | UNSUPPORTED 1 |
+| Remote property services (device) | PASS 5, UNSUPPORTED 3 | UNSUPPORTED 1 | NOT TESTED | NOT TESTED |
+| Data Secure tool access (tool) | UNSUPPORTED 3 | NOT TESTED | UNSUPPORTED 3 | NOT TESTED |
+| Data Secure tool access (device) | UNSUPPORTED 8 | NOT TESTED | NOT TESTED | NOT TESTED |
 
 Legend: PASS, FAIL, UNSUPPORTED (the stack or its adapter does not offer
 it), NOT TESTED (no scenario uses the implementation in that role yet),
@@ -65,6 +69,10 @@ xknx, Calimero tools and Calimero server (secure tunnelling over TCP and
 UDP, secure routing, Data Secure, the server's secure routing). Each
 secure scenario gets a fresh secure server: a peer stopped while connected
 (Calimero tools' monitor) leaves its user's session on Calimero server.
+Remote device management (contract 1.4): Calimero tools and xknx manage
+Calimero server's device; the tool access scenarios need a device with a
+tool key, which none of the third-party servers offers, so they run only
+with a system under test as the device (go-knx).
 
 ## Known differences
 
@@ -115,6 +123,16 @@ in the harness (2026-10-29):
 - KNX Secure: Calimero server and go-knx both refuse plain connections to a
   secure server with E_CONNECTION_TYPE, and allow secure device
   management for the management user (1) only.
+- Remote device management: Calimero tools 3.0-M1 computes the Data
+  Secure MAC of tool access over the source address it sends, 0.0.0
+  unless given its own address (`-k`), while the tunnelling server
+  replaces the source by the tunnel address, so a device refuses the
+  frames; the adapter passes the tunnel address. Calimero tools reads the
+  property description (A_PropertyDescription_Read) before a property
+  access; xknx's management takes answers in transport connections only.
+- Calimero server 3.0-M1's emulated device answers the remote property
+  services (its friendly name is writable) and reports a security object
+  with security mode off; it has no tool key access, also with a keyring.
 - Calimero tools open a device management connection after a tunnel; the
   go-knx server refuses it (E_CONNECTION_TYPE), harmlessly.
 - The knxd server drops a source address it learned on an earlier
