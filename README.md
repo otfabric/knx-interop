@@ -58,13 +58,15 @@ How each was chosen, and the rejected candidates (openHAB embeds Calimero):
 Docker (Docker Desktop on macOS works) and Python 3.
 
 ```bash
-make images                         # build every adapter (go-knx from ../knxctl and ../go-knx)
+make images                         # build every adapter image
 make matrix                         # every suite, every pair: reports/latest.{json,md}
 python3 scripts/run-matrix.py --servers goknx --clients xknx,calimero-tools --suites tunnel
 ```
 
-`make images GOKNX=release` builds go-knx from the released knxctl
-(`KNXCTL_VERSION`, default v0.1.0) instead of the sibling checkouts.
+go-knx is an external input like the other stacks: the goknx image
+installs the released knxctl `KNXCTL_VERSION` (v0.5.0). knx-interop never
+builds go-knx or knxctl from source; go-knx and knxctl depend on
+knx-interop, not the other way round.
 
 One scenario by hand:
 

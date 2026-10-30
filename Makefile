@@ -13,38 +13,25 @@ PLATFORMS ?= linux/amd64,linux/arm64
 BASE_REGISTRY ?= docker.io/library
 
 ADAPTERS ?= goknx xknx knxultimate knxd calimero-server calimero-tools probe
-# go-knx enters as the knxctl command: built from released sources
-# (KNXCTL_VERSION, Dockerfile) or, with GOKNX=local, from the sibling
-# checkouts KNXCTL_DIR (and the go-knx it replaces) (Dockerfile.local).
-GOKNX ?= local
-KNXCTL_DIR ?= ../knxctl
-# With GOKNX=local, knxctl is built against the go-knx checkout GOKNX_DIR
-# (through a temporary go.work) when it exists, else against the go-knx
-# version knxctl's go.mod requires.
-GOKNX_DIR ?= ../go-knx
-KNXCTL_VERSION ?= v0.4.0
-ARCH := $(shell docker version --format '{{.Server.Arch}}' 2>/dev/null || uname -m)
+# go-knx enters as an external, released input: the knxctl release
+# KNXCTL_VERSION, installed in the goknx image. knx-interop never builds
+# from go-knx or knxctl sources (go-knx and knxctl depend on knx-interop,
+# not the other way round).
+KNXCTL_VERSION ?= v0.5.0
 
 image = $(REGISTRY)/knx-interop-$(1):$(VERSION)
 
-.PHONY: help images image-% goknx-binary validate lint matrix matrix-quick capabilities clean release-notes
+.PHONY: help images image-% validate lint matrix matrix-quick capabilities release-notes
 
 help: ## Show this help
 	@awk 'BEGIN {FS = ":.*?## "} /^[a-zA-Z0-9_%-]+:.*?## / {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}' $(MAKEFILE_LIST)
 
 images: $(addprefix image-,$(ADAPTERS)) ## Build every adapter image for this machine's architecture
 
-goknx-binary: ## Build knxctl for Linux from KNXCTL_DIR (GOKNX=local)
-	@mkdir -p adapters/goknx/bin
-	@work=off; if [ -d "$(GOKNX_DIR)" ]; then \
-		printf 'go 1.23\n\nuse (\n\t%s\n\t%s\n)\n' "$$(cd $(KNXCTL_DIR) && pwd)" "$$(cd $(GOKNX_DIR) && pwd)" > adapters/goknx/bin/go.work; \
-		work=$(CURDIR)/adapters/goknx/bin/go.work; echo "knxctl from $(KNXCTL_DIR) with go-knx from $(GOKNX_DIR)"; fi; \
-	cd $(KNXCTL_DIR) && GOWORK=$$work CGO_ENABLED=0 GOOS=linux GOARCH=$(ARCH) go build -trimpath -o $(CURDIR)/adapters/goknx/bin/knxctl-linux-$(ARCH) .
-
-image-goknx: $(if $(filter local,$(GOKNX)),goknx-binary)
-	@echo "build $(call image,goknx) ($(GOKNX))"
+image-goknx:
+	@echo "build $(call image,goknx) (knxctl $(KNXCTL_VERSION))"
 	@docker build -q --build-arg BASE_REGISTRY=$(BASE_REGISTRY) --build-arg KNXCTL_VERSION=$(KNXCTL_VERSION) \
-		-f adapters/goknx/$(if $(filter local,$(GOKNX)),Dockerfile.local,Dockerfile) -t $(call image,goknx) adapters >/dev/null
+		-f adapters/goknx/Dockerfile -t $(call image,goknx) adapters >/dev/null
 
 image-%:
 	@echo "build $(call image,$*)"
@@ -74,5 +61,3 @@ matrix-quick: ## Run the tunnel suite against the go-knx server and go-knx again
 release-notes: ## Print the release notes of VERSION from RELEASE.md
 	@scripts/release-notes.sh $(VERSION)
 
-clean: ## Remove built binaries
-	@rm -rf adapters/goknx/bin

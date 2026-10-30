@@ -5,6 +5,21 @@ versions.yaml; the Release workflow builds the images and takes this
 file's section of that version as the release notes. Add the section,
 headed exactly `## vX.Y.Z` and closed by a line `---`, before tagging.
 
+## v0.4.1
+
+**Date:** 2026-10-30
+**Previous release:** v0.4.0
+
+## Changes
+
+- go-knx is an external input only: the goknx image installs the released
+  knxctl v0.5.0 (go-knx v0.4.1). The local build from sibling go-knx and
+  knxctl checkouts (`GOKNX=local`, `Dockerfile.local`) and the CI
+  checkouts of go-knx and knxctl `main` are removed, so knx-interop no
+  longer depends on their sources. Container contract unchanged (1.3).
+
+---
+
 ## v0.4.0
 
 **Date:** 2026-10-30
