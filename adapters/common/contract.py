@@ -30,6 +30,7 @@ def parser():
     c.add_argument("--secure", action="store_true",
                    help="KNX IP Secure (secure session or secure routing) and KNX Data Secure with the test profile (common/secure)")
     c.add_argument("--user", type=int, default=2, help="secure tunnelling user of the test profile (1 management, 2, 3)")
+    c.add_argument("--udp", action="store_true", help="with --secure: the secure session over UDP instead of TCP (1.3)")
     c.add_argument("--object", type=int, default=0, help="property: interface object type (0 device)")
     c.add_argument("--pid", type=int, default=11, help="property: property identifier (11 serial number)")
     c.add_argument("--group", default="")

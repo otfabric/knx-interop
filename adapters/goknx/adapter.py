@@ -32,6 +32,8 @@ def secure(a):
     args = ["--keyring", p["keyringPath"], "--keyring-password", p["keyringPassword"]]
     if not a.routing:
         args += ["--user-id", str(a.user)]
+        if a.udp:
+            args.append("--udp")
     return args
 
 
@@ -72,10 +74,10 @@ def main():
         contract.capabilities(IMPL, version(), ["server", "client"],
                               {"discover": True, "describe": True, "tunnel": True, "routing": True, "nat": True,
                                "answer": True, "secure": True, "tcp": True, "property": True, "busmonitor": True,
-                               "dataSecure": True,
-                               "server": {"tcp": True, "property": True, "busmonitor": True, "secure": True}},
+                               "dataSecure": True, "secureUdp": True, "surrogate": True,
+                               "server": {"tcp": True, "property": True, "busmonitor": True, "secure": True, "secureUdp": True, "secureRouting": True}},
                               "The server runs with --concurrent-busmonitor (a simulator: busmonitor next to tunnels). "
-                              "Secure: tunnelling over TCP, routing and Data Secure; Data Secure without S-A_Sync.")
+                              "Secure: tunnelling over TCP and UDP, routing (client and server) and Data Secure, with S-A_Sync and the surrogate role.")
         return
     if a.role == "server":
         args = [KNXCTL, "serve", "--concurrent-busmonitor", "--name", a.name[:30], "--tunnels", ",".join("1.1.%d" % i for i in range(10, 18)),

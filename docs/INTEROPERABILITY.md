@@ -2,15 +2,15 @@
 
 Run of 2026-10-30 on Docker Desktop (macOS, arm64), report
 [reports/latest.json](../reports/latest.json) /
-[reports/latest.md](../reports/latest.md): **399 pass, 8 known
-differences, 51 unsupported, 0 fail** (458 results). Each cell counts the
+[reports/latest.md](../reports/latest.md): **423 pass, 7 known
+differences, 58 unsupported, 0 fail** (488 results). Each cell counts the
 results in which that implementation took the role named in the row (every
 pairing with every other implementation; go-knx is in most cells as a peer
 or an observer).
 
 Versions: calimero-server and calimero-tools 3.0-M1 (official images,
 pinned by digest), knxd 0.14.73-1 (Debian trixie), xknx 4.0.0, KNXUltimate
-6.3.1, go-knx v0.3.0 through knxctl v0.3.0, probe 1.0.
+6.3.1, go-knx v0.4.0 through knxctl v0.4.0, probe 1.0.
 
 | Feature | calimero | knxd | xknx | KNXUltimate | go-knx |
 |---|---|---|---|---|---|
@@ -34,12 +34,15 @@ pinned by digest), knxd 0.14.73-1 (Debian trixie), xknx 4.0.0, KNXUltimate
 | Busmonitor (server) | UNSUPPORTED 5 | PASS 2, UNSUPPORTED 3 | NOT TESTED | NOT TESTED | PASS 2, UNSUPPORTED 3 |
 | IP Secure tunnelling (client) | PASS (6) | UNSUPPORTED 2 | PASS (6) | UNSUPPORTED 2 | PASS (6) |
 | IP Secure tunnelling (server) | PASS 10, UNSUPPORTED 2 | UNSUPPORTED 1 | NOT TESTED | NOT TESTED | PASS 10, UNSUPPORTED 2 |
+| IP Secure sessions over UDP (client) | PASS (6) | NOT TESTED | UNSUPPORTED 6 | NOT TESTED | PASS (6) |
+| IP Secure sessions over UDP (server) | PASS 6, UNSUPPORTED 3 | NOT TESTED | NOT TESTED | NOT TESTED | PASS 6, UNSUPPORTED 3 |
 | IP Secure device management (client) | PASS (2) | NOT TESTED | UNSUPPORTED 2 | NOT TESTED | PASS (2) |
 | IP Secure device management (server) | PASS 2, UNSUPPORTED 1 | NOT TESTED | NOT TESTED | NOT TESTED | PASS 2, UNSUPPORTED 1 |
 | IP Secure routing (sender) | PASS (2) | UNSUPPORTED 1 | PASS (2) | UNSUPPORTED 1 | PASS (2) |
 | IP Secure routing (receiver) | PASS (2) | NOT TESTED | PASS (2) | NOT TESTED | PASS (2) |
-| Data Secure (sender) | KNOWN DIFFERENCE 4 | NOT TESTED | PASS (4) | NOT TESTED | PASS (4) |
-| Data Secure (receiver) | PASS (2) | NOT TESTED | KNOWN DIFFERENCE 1, PASS 3 | NOT TESTED | KNOWN DIFFERENCE 3, PASS 3 |
+| IP Secure routing (server) | PASS (6) | NOT TESTED | NOT TESTED | NOT TESTED | PASS (5) |
+| Data Secure (sender) | KNOWN DIFFERENCE 3, PASS 1 | NOT TESTED | PASS (4) | NOT TESTED | PASS (4) |
+| Data Secure (receiver) | PASS (2) | NOT TESTED | KNOWN DIFFERENCE 1, PASS 3 | NOT TESTED | KNOWN DIFFERENCE 2, PASS 4 |
 
 Legend: PASS, FAIL, UNSUPPORTED (the stack or its adapter does not offer
 it), NOT TESTED (no scenario uses the implementation in that role yet),
@@ -67,7 +70,9 @@ part in them.
 | go-knx, Calimero tools busmonitor → knxd server | see a write of another client |
 | xknx, Calimero tools → go-knx secure server | secure session with bound user address, write, read; Data Secure through the tunnel (xknx); device management as user 1 (Calimero tools); plain connections refused |
 | go-knx → Calimero secure server | secure session, write, read, Data Secure through the tunnel (decrypted by xknx), device management as user 1 |
-| go-knx secure routing ↔ xknx, Calimero tools | both directions, with Data Secure (Calimero tools → go-knx Data Secure: known difference) |
+| go-knx secure routing ↔ xknx, Calimero tools | both directions, with Data Secure (Calimero tools → go-knx through go-knx as the surrogate) |
+| Secure sessions over UDP | go-knx and Calimero tools → go-knx and Calimero servers: connect, write, read |
+| Servers' secure routing (go-knx, Calimero) | in from xknx, Calimero tools and go-knx routers; out to them from a secure tunnel |
 | Third-party pairs (for example xknx → knxd, Calimero → knxd) | as reported; they validate the harness and the peers |
 
 Multiple clients: every server is used by the client, the observer and,
@@ -103,6 +108,17 @@ in the harness (2026-10-29):
 
 ## Other observations
 
+- KNX Secure: calimero-server 3.0-M1's secure routing needs a latency
+  tolerance (`<routing latencyTolerance="1000">`) and fails in the official
+  image with "module io.calimero.core does not open io.calimero.knxnetip
+  to module io.calimero.server" unless the JVM runs with `--add-opens
+  io.calimero.core/io.calimero.knxnetip=io.calimero.server`; the adapter
+  sets both.
+- KNX Secure: Calimero tools send Data Secure group telegrams through a
+  surrogate device (S-A_Sync, then A_FunctionPropertyExt_Command for group
+  object diagnostics, object type 9, PID 66, with the surrogate's tool
+  key); every sender of the group in the keyring must be a device with a
+  tool key. go-knx acts as the surrogate.
 - KNX Secure: Calimero server 3.0-M1 ends a secure session when its tunnel
   disconnects, and logs the client's following SESSION_STATUS close as
   "invalid session ID"; xknx and go-knx both send it, harmlessly.

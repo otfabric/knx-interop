@@ -27,7 +27,7 @@ ROLE=${1:-}
 [ $# -gt 0 ] && shift
 OP=$ROLE
 if [ "$ROLE" = client ]; then OP=${1:-}; shift; fi
-TARGET="" PORT=3671 NAT=0 TCP=0 OBJECT=0 PID=11 ROUTING=0 GROUP="" DPT="" VALUE="" COUNT=1 TIMEOUT=5 SECURE=0 SUSER=2
+TARGET="" PORT=3671 NAT=0 TCP=0 OBJECT=0 PID=11 ROUTING=0 GROUP="" DPT="" VALUE="" COUNT=1 TIMEOUT=5 SECURE=0 SUSER=2 SUDP=0
 while [ $# -gt 0 ]; do
 	case "$1" in
 	--target) TARGET=$2; shift ;;
@@ -37,6 +37,7 @@ while [ $# -gt 0 ]; do
 	--tcp) TCP=1 ;;
 	--secure) SECURE=1 ;;
 	--user) SUSER=$2; shift ;;
+	--udp) SUDP=1 ;;
 	--object) OBJECT=$2; shift ;;
 	--pid) PID=$2; shift ;;
 	--group) GROUP=$2; shift ;;
@@ -67,7 +68,9 @@ secure_opts() {
 		# 15.15.240 is the profile's routing source of Calimero tools.
 		o="$o --group-key $(kf group.key) -k 15.15.240"
 	else
-		o="$o --tcp --user $SUSER --user-pwd $(kf "user\[$SUSER\].pwd") --device-key $(kf device.key)"
+		tr=--tcp
+		[ "$SUDP" = 1 ] && tr=--udp
+		o="$o $tr --user $SUSER --user-pwd $(kf "user\[$SUSER\].pwd") --device-key $(kf device.key)"
 	fi
 	echo "$o"
 }
@@ -99,7 +102,7 @@ groupmon_json() {
 
 case "$ROLE" in
 capabilities)
-	printf '{"features":{"answer":false,"connect":true,"describe":true,"discover":true,"nat":true,"routing":true,"secure":true,"dataSecure":true,"tunnel":true,"dptCodec":true,"tcp":true,"property":true,"busmonitor":true},"implementation":"%s","notes":"The Calimero process communication tool has no responder. Secure: tunnelling over TCP, routing and Data Secure with the test profile.","roles":["client"],"schemaVersion":"1.0","version":"%s"}\n' "$IMPL" "$VERSION"
+	printf '{"features":{"answer":false,"connect":true,"describe":true,"discover":true,"nat":true,"routing":true,"secure":true,"dataSecure":true,"secureUdp":true,"tunnel":true,"dptCodec":true,"tcp":true,"property":true,"busmonitor":true},"implementation":"%s","notes":"The Calimero process communication tool has no responder. Secure: tunnelling over TCP, routing and Data Secure with the test profile.","roles":["client"],"schemaVersion":"1.0","version":"%s"}\n' "$IMPL" "$VERSION"
 	exit 0 ;;
 server) finish unsupported '{}' "use the calimero-server adapter" ;;
 client) ;;

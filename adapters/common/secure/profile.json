@@ -24,6 +24,10 @@
     "15.15.250",
     "15.15.255"
   ],
+  "surrogate": "15.15.255",
+  "surrogateGroup": {
+    "1/3/3": "64732d67726f75702d6b65792d303033"
+  },
   "users": {
     "1": {
       "password": "knx-interop-user1",

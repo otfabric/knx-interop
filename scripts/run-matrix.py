@@ -328,6 +328,7 @@ class Matrix:
                 self.server_container = None
                 self.stop(name)
         self.secure_routing()
+        self.secure_server_routing()
 
     def secure_tunnel(self, c, server, ip):
         user2, user3 = ["--secure", "--user", "2"], ["--secure", "--user", "3"]
@@ -345,6 +346,18 @@ class Matrix:
             self.write(c, server, ip, v, sc, "secure", user2, user3)
         else:
             self.record("secure", sc, c, server, "unsupported", time.monotonic(), "no Data Secure")
+        # Contract 1.3: the secure session over UDP.
+        if self.feature(c, "secureUdp") and self.server_feature(server, "secureUdp"):
+            udp2 = user2 + ["--udp"]
+            t = time.monotonic()
+            r = self.client(c, "connect", ["--target", ip] + udp2)
+            self.record("secure", "secure session over UDP (user 2)", c, server, r["status"], t, r.get("error"), r.get("data"))
+            self.write(c, server, ip, None, "secure group write over UDP (DPT 1.001)", "secure", udp2, user3)
+            self.read(c, server, ip, "secure group read/response over UDP (DPT 9.001)", "secure", udp2, user3)
+        else:
+            for sc in ("secure session over UDP (user 2)", "secure group write over UDP (DPT 1.001)", "secure group read/response over UDP (DPT 9.001)"):
+                self.record("secure", sc, c, server, "unsupported", time.monotonic(),
+                            "no secure sessions over UDP on the %s" % ("client" if not self.feature(c, "secureUdp") else "server"))
         t = time.monotonic()
         sc = "secure device management: serial number (user 1)"
         if self.feature(c, "property") and self.server_feature(server, "property"):
@@ -369,6 +382,10 @@ class Matrix:
                     continue
                 for scenario, v, need in cases:
                     t = time.monotonic()
+                    if need == "dataSecure" and w == "calimero-tools":
+                        # Calimero tools send Data Secure through a surrogate
+                        # device, go-knx's routing source (profile group 1/3/3).
+                        v = dict(v, group="1/3/3")
                     if need and not (self.feature(w, need) and self.feature(m, need)):
                         self.record("secure", scenario, w, m, "unsupported", t, "no Data Secure")
                         continue
@@ -386,6 +403,66 @@ class Matrix:
                     ok = bool(seen) and seen[0].get("data", "").upper() == v["data"]
                     self.record("secure", scenario, w, m, "pass" if ok else "fail", t,
                                 None if ok else "monitor saw %s %s" % (obs.get("data"), obs.get("error") or ""))
+
+    def secure_server_routing(self):
+        """Contract 1.3: a server's secure routing, in from a secure router
+        (seen by a secure tunnel client) and out from a secure tunnel
+        client (seen by a secure router)."""
+        routers = [x for x in self.a.routers if self.feature(x, "secure")]
+        for server in self.a.servers:
+            t = time.monotonic()
+            if not self.server_feature(server, "secureRouting"):
+                self.record("secure", "server secure routing", "-", server, "unsupported", t, "no secure routing in the server")
+                continue
+            try:
+                name, ip = self.start_server(server, routing=True, secure=True)
+            except RuntimeError as e:
+                self.record("secure", "secure routing server start", "-", server, "fail", t, str(e))
+                continue
+            self.server_container = name
+            time.sleep(4)  # the server's timer synchronisation
+            try:
+                for w in routers:
+                    if w == "goknx" and server == "goknx":
+                        continue
+                    t = time.monotonic()
+                    sc = "secure routing into the server, seen by a secure tunnel"
+                    o = self.observer_for(w)
+                    h = self.background(o, "monitor", ["--target", ip, "--secure", "--user", "3", "--count", "1", "--timeout", "20"])
+                    if not h["ready"]:
+                        res = self.collect(h, 30)
+                        self.record("secure", sc, w, server, "not-tested", t, "observer %s: %s" % (o, res.get("error")), observer=o)
+                        continue
+                    r = self.client(w, "write", ["--routing", "--secure", "--group", "1/0/9", "--dpt", "1.001", "--value", "on", "--data", "01"])
+                    obs = self.collect(h)
+                    if r["status"] != "pass":
+                        self.record("secure", sc, w, server, r["status"], t, r.get("error"), observer=o)
+                        continue
+                    seen = [x for x in obs.get("data", {}).get("telegrams", []) if x.get("group") == "1/0/9"]
+                    ok = bool(seen) and seen[0].get("data", "").upper() == "01"
+                    self.record("secure", sc, w, server, "pass" if ok else "fail", t,
+                                None if ok else "observer %s saw %s %s" % (o, obs.get("data"), obs.get("error") or ""), observer=o)
+                for m in routers:
+                    t = time.monotonic()
+                    sc = "secure routing out of the server, from a secure tunnel"
+                    writer = "goknx" if m != "goknx" else "xknx"
+                    h = self.background(m, "monitor", ["--routing", "--secure", "--count", "1", "--timeout", "20"], ready_timeout=40)
+                    if not h["ready"]:
+                        res = self.collect(h, 30)
+                        self.record("secure", sc, writer, server, "not-tested", t, "router %s: %s" % (m, res.get("error")), observer=m)
+                        continue
+                    r = self.client(writer, "write", ["--target", ip, "--secure", "--user", "2", "--group", "1/0/7", "--dpt", "1.001", "--value", "on", "--data", "01"])
+                    obs = self.collect(h)
+                    if r["status"] != "pass":
+                        self.record("secure", sc, writer, server, r["status"], t, r.get("error"), observer=m)
+                        continue
+                    seen = [x for x in obs.get("data", {}).get("telegrams", []) if x.get("group") == "1/0/7"]
+                    ok = bool(seen) and seen[0].get("data", "").upper() == "01"
+                    self.record("secure", sc, writer, server, "pass" if ok else "fail", t,
+                                None if ok else "router %s saw %s %s" % (m, obs.get("data"), obs.get("error") or ""), observer=m)
+            finally:
+                self.server_container = None
+                self.stop(name)
 
     def dpt(self, c, server, ip):
         vectors = json.load(open(os.path.join(ROOT, "fixtures", "dpt-vectors.json")))["vectors"]
