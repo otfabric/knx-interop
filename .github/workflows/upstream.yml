@@ -11,7 +11,7 @@ run-name: "Upstream check (${{ github.event_name }})"
 # (with a comment when a new version shows up) and closed once every pin is
 # current. Pins are never changed here: a bump is a reviewed change. probe is
 # this repository's own tool and has no upstream. Shared steps:
-# https://github.com/otfabric/.github/tree/main/actions
+# https://github.com/otfabric/.github/tree/main/actions.1.1
 on:
   schedule:
     - cron: "31 0 * * *"
@@ -34,7 +34,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-      - uses: otfabric/.github/actions/upstream-images@v2.1.0
+      - uses: otfabric/.github/actions/upstream-images@v3.1.1
 
   candidate:
     name: ${{ matrix.adapter }}
@@ -56,7 +56,7 @@ jobs:
       - name: Build and run the matrix at the latest release
         id: test
         if: steps.resolve.outputs.update == 'yes'
-        uses: otfabric/.github/actions/upstream-candidate@v2.1.0
+        uses: otfabric/.github/actions/upstream-candidate@v3.1.1
         with:
           name: ${{ matrix.adapter }}
           pinned: ${{ steps.resolve.outputs.pin }}
@@ -68,7 +68,7 @@ jobs:
 
       - name: Table row
         if: always()
-        uses: otfabric/.github/actions/upstream-row@v2.1.0
+        uses: otfabric/.github/actions/upstream-row@v3.1.1
         with:
           component: ${{ matrix.adapter }}
           kind: ${{ steps.resolve.outputs.kind || 'library' }}
@@ -90,7 +90,7 @@ jobs:
       contents: read
       issues: write
     steps:
-      - uses: otfabric/.github/actions/upstream-report@v2.1.0
+      - uses: otfabric/.github/actions/upstream-report@v3.1.1
         with:
           needs: ${{ toJSON(needs) }}
           notes: |
