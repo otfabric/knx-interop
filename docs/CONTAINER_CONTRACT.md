@@ -45,7 +45,8 @@ Secure group communication) and `server.secure`.
 ## KNX Secure test profile (1.2)
 
 Every image carries the profile in `/adapter/common/secure` (from
-`adapters/common/secure`, written by `tools/secure-fixture`). **All of its
+`adapters/common/secure`, written by `scripts/secure-fixture.py`, `make
+fixture`). **All of its
 keys and passwords are public test values.**
 
 | Item | Value |
@@ -55,7 +56,7 @@ keys and passwords are public test values.**
 | Users | 1 management (`knx-interop-user1`); 2 → tunnelling address 1.1.10 (`knx-interop-user2`); 3 → 1.1.11 (`knx-interop-user3`) |
 | Backbone key (secure routing) | `6b6e782d696e7465726f702d6b657921`, latency 1000 ms |
 | Data Secure groups | 1/3/1 and 1/3/2, senders 1.1.10–1.1.17, 15.15.240 (Calimero tools), 15.15.250 (xknx), 15.15.255 (go-knx) |
-| Surrogate (1.3) | 15.15.255, go-knx's routing source: a device with a tool key; the only sender of Data Secure group 1/3/3, which Calimero tools write through it (Calimero requires every sender of a group to be a device and picks its surrogate among them) |
+| Surrogate (1.3) | 15.15.255, the routing source of a system under test that offers the `surrogate` capability (go-knx): a device with a tool key; the only sender of Data Secure group 1/3/3, which Calimero tools write through it (Calimero requires every sender of a group to be a device and picks its surrogate among them) |
 | Calimero server | the same profile as a keyfile, `calimero.keyfile` |
 
 With `--secure` a client opens a secure session over TCP as user `--user`
@@ -74,9 +75,19 @@ on, tunnelling with at least eight connections, `--routing` adds routing on
 stopped. It prints `READY` on stderr when it starts; the runner waits until
 the probe's DESCRIPTION_REQUEST is answered. The servers' virtual KNX
 networks differ (calimero: an emulated subnet that answers reads with the
-last written value; knxd: a dummy bus; go-knx: virtual devices with group
-objects 1/0/1 (1.001), 1/0/2 (9.001 = 21.5), 1/0/3 (5.001), 1/0/4
-(14.056), 1/0/5 (16.000)).
+last written value; knxd: a dummy bus; a system under test should offer
+virtual devices with group objects 1/0/1 (1.001), 1/0/2 (9.001 = 21.5),
+1/0/3 (5.001), 1/0/4 (14.056), 1/0/5 (16.000)).
+
+## External adapters
+
+knx-interop's own adapters are third-party stacks. A system under test
+implements this contract in an image of its own and passes it to the
+runner with `--adapter name=image` (`make matrix ADAPTER=name=image`): it
+joins the server, client and routing roles its capabilities declare and is
+preferred as observer and responder; `--gate name` fails the run only on
+failures that involve it. The image needs the test profile at
+`/adapter/common/secure` (it can copy it from a knx-interop image).
 
 ## client operations
 

@@ -7,7 +7,7 @@ import json
 import sys
 
 COLS = [("calimero", ["calimero-tools", "calimero-server"]), ("knxd", ["knxd"]), ("xknx", ["xknx"]),
-        ("KNXUltimate", ["knxultimate"]), ("go-knx", ["goknx"])]
+        ("KNXUltimate", ["knxultimate"])]
 MARK = {"pass": "PASS", "fail": "FAIL", "unsupported": "UNSUPPORTED", "not-tested": "NOT TESTED", "known-difference": "KNOWN DIFFERENCE"}
 
 
@@ -25,7 +25,14 @@ def cell(results, adapters, pred):
 
 def main():
     d = json.load(open(sys.argv[1]))
-    res = [r for r in d["results"] if "goknx" in (r["client"], r["peer"]) or r["suite"] == "negative"] if "--goknx" in sys.argv else d["results"]
+    res = d["results"]
+    # External adapters (systems under test, --adapter) get a column of
+    # their own.
+    cols = list(COLS)
+    known = {a for _, adapters in COLS for a in adapters} | {"probe"}
+    for name, impl in sorted(d.get("implementations", {}).items()):
+        if name not in known:
+            cols.append((impl.get("implementation") or name, [name]))
     rows = [
         ("Discovery (as client)", lambda r, a: r["scenario"].startswith("discover") and r["client"] in a),
         ("Description (as client)", lambda r, a: r["scenario"] == "describe" and r["client"] in a),
@@ -57,10 +64,10 @@ def main():
         ("Data Secure (sender)", lambda r, a: r["suite"] == "secure" and r["scenario"].startswith("Data Secure") and r["client"] in a),
         ("Data Secure (receiver)", lambda r, a: r["suite"] == "secure" and r["scenario"].startswith("Data Secure") and (r.get("observer") or r["peer"]) in a),
     ]
-    print("| Feature | " + " | ".join(c for c, _ in COLS) + " |")
-    print("|---|" + "---|" * len(COLS))
+    print("| Feature | " + " | ".join(c for c, _ in cols) + " |")
+    print("|---|" + "---|" * len(cols))
     for name, pred in rows:
-        print("| %s | %s |" % (name, " | ".join(cell(res, a, pred) for _, a in COLS)))
+        print("| %s | %s |" % (name, " | ".join(cell(res, a, pred) for _, a in cols)))
 
 
 if __name__ == "__main__":
