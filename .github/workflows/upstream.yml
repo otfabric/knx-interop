@@ -61,6 +61,8 @@ jobs:
           pinned: ${{ steps.resolve.outputs.pin }}
           latest: ${{ steps.resolve.outputs.latest }}
           result-pattern: '^\[candidate\] [0-9]+ passed'
+          # The matrix runs every adapter against the candidate: any recipe re-tests it.
+          cache-paths: adapters fixtures tests scripts Makefile
           command: scripts/candidate.sh "${{ matrix.adapter }}" "${{ steps.resolve.outputs.latest }}"
 
       - name: Table row
