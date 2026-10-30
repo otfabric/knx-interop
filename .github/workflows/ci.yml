@@ -61,5 +61,7 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: interop-reports-${{ matrix.arch }}
-          path: knx-interop/reports/latest.*
+          path: |
+            knx-interop/reports/latest.*
+            knx-interop/reports/results.json
           if-no-files-found: warn
