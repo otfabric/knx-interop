@@ -1,4 +1,9 @@
-bin/
+/bin/
 __pycache__/
 node_modules/
 .DS_Store
+
+# Build artefacts live in /bin/ and /release/ (otfabric/engineering REPO-005)
+/release/
+*.test
+coverage.out
