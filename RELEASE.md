@@ -1,9 +1,10 @@
 # knx-interop Releases
 
-A release is a pushed tag `vX.Y.Z` equal to `interop_version` in
-versions.yaml; the Release workflow builds the images and takes this
-file's section of that version as the release notes. Add the section,
-headed exactly `## vX.Y.Z` and closed by a line `---`, before tagging.
+A release is a tag `vX.Y.Z` equal to `interop_version` in versions.yaml:
+run the Release workflow on `main` and pick the bump (`patch` by default,
+`minor` or `major`), or push the tag. The workflow builds the images and
+takes this file's section of that version as the release notes. Add the
+section, headed exactly `## vX.Y.Z` and closed by a line `---`, first.
 
 ## v0.7.0
 
