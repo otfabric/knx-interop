@@ -4,7 +4,7 @@
 # adapters/knxultimate/package-lock.json are the source of truth for a
 # build: scripts/check-versions.py fails when this file disagrees with them.
 
-interop_version: "0.6.0"
+interop_version: "0.7.0"
 contract_version: "1.4"          # docs/CONTAINER_CONTRACT.md
 
 protocol:

@@ -5,6 +5,18 @@ versions.yaml; the Release workflow builds the images and takes this
 file's section of that version as the release notes. Add the section,
 headed exactly `## vX.Y.Z` and closed by a line `---`, before tagging.
 
+## v0.7.0
+
+**Date:** 2026-10-31
+**Previous release:** v0.6.0
+
+### Added
+
+- Adds `results.json` in the interop-result-v1 format.
+- Policy 1.2: build output in `bin/` and `release/`, and shared CI at v3.3.0.
+
+---
+
 ## v0.6.0
 
 **Date:** 2026-10-30
