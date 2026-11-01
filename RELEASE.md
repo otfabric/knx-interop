@@ -6,6 +6,17 @@ run the Release workflow on `main` and pick the bump (`patch` by default,
 takes this file's section of that version as the release notes. Add the
 section, headed exactly `## vX.Y.Z` and closed by a line `---`, first.
 
+## v0.7.1
+
+**Date:** 2026-11-01
+**Previous release:** v0.7.0
+
+### Changed
+
+- Policy 1.2: build output in `bin/` and `release/`, and shared CI at v3.3.0.
+
+---
+
 ## v0.7.0
 
 **Date:** 2026-10-31
