@@ -77,7 +77,7 @@ jobs:
             || { echo "::error::${tag} is not vX.Y.Z"; exit 1; }
           grep -qF "interop_version: \"${tag#v}\"" versions.yaml \
             || { echo "::error::versions.yaml does not say interop_version: \"${tag#v}\""; exit 1; }
-          scripts/release-notes.sh "${tag}" > /dev/null \
+          [ -n "$(scripts/release-notes.sh "${tag}")" ] \
             || { echo "::error::RELEASE.md has no notes for ${tag}"; exit 1; }
           echo "tag=${tag}" >> "$GITHUB_OUTPUT"
           echo "releasing ${tag} (from ${EVENT_NAME})"
