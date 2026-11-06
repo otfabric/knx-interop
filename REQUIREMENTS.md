@@ -40,8 +40,9 @@ framework.
 
 ## R2 - Reference implementations
 
-- R2.1 In scope: Calimero (server and tools), knxd, xknx, KNXUltimate, and a
-  probe of hand-built datagrams for negative tests (`versions.yaml`).
+- R2.1 In scope: Calimero (server and tools), knxd, xknx, KNXUltimate, cB-Sigma
+  knx (client) with its simulator knx-sim (the sim suite's gateway and router),
+  and a probe of hand-built datagrams for negative tests (`versions.yaml`).
 - R2.2 Each implementation is its own image. No image contains two.
 - R2.3 An adapter uses the implementation's public API or tools as an
   application would. It does not patch the implementation: what a stack

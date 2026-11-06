@@ -21,7 +21,6 @@ FROM ${BASE_REGISTRY}/golang:1.27.2-trixie@${GOLANG_DIGEST} AS build
 # The commits of the release tags (go.mod pins the versions).
 ARG UPSTREAM_SHA=8221e2fd1bdcefffd06344e0718d51f272fd13eb
 ARG SIM_SHA=c30a0f175db896b36db0eb1fd76be2862b4379d1
-ARG ADAPTER_VERSION=dev
 
 ENV CGO_ENABLED=0 GOFLAGS=-mod=readonly GOTOOLCHAIN=local
 WORKDIR /src
@@ -31,7 +30,6 @@ COPY cbsigma/*.go ./
 RUN test -z "$(gofmt -l .)" \
     && go vet ./... \
     && go build -trimpath -ldflags "-s -w \
-         -X main.adapterVersion=${ADAPTER_VERSION} \
          -X main.upstreamRevision=${UPSTREAM_SHA} \
          -X main.simRevision=${SIM_SHA}" \
          -o /out/run . \

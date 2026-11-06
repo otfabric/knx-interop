@@ -3,7 +3,8 @@ run-name: "Upstream check (${{ github.event_name }})"
 
 # Daily check of every pin against the latest upstream release
 # (scripts/latest-upstream.py: the Calimero images on Docker Hub, knxd in
-# Debian trixie, xknx on PyPI, KNXUltimate on npm) and of the digest of every base image. An adapter whose pin is behind
+# Debian trixie, xknx on PyPI, KNXUltimate on npm, cB-Sigma knx and knx-sim on the
+# Go module proxy) and of the digest of every base image. An adapter whose pin is behind
 # is built at the latest release and the whole matrix runs with it, gated on
 # that adapter (scripts/candidate.sh; once per pin -> latest pair, later runs
 # reuse that result). The table goes to the Job Summary and to the issue
