@@ -9,7 +9,7 @@ IMAGE ?= ghcr.io/otfabric/knx-interop-otfabric:dev
 # have no "v"). Only the published references: the GPL ones (knxd, Calimero)
 # are never published (THIRD_PARTY_NOTICES.md). The probe checks readiness.
 VERSION ?= $(patsubst v%,%,$(shell git tag -l 'v[0-9]*.[0-9]*.[0-9]*' --sort=-v:refname | head -1))
-REFERENCES ?= xknx knxultimate probe
+REFERENCES ?= xknx knxultimate cbsigma probe
 BASE_REGISTRY ?= docker.io/library
 
 # The latest go-knx release, as the workflow builds it.

@@ -16,8 +16,16 @@ adapters, each in the roles its capabilities declare (scripts/interop.sh).
 ADAPTER_IMAGE_<adapter> (a hyphen as "_") names the image of an adapter.
 
 Usage: run-matrix.py [--registry R] [--version V] [--adapter NAME=IMAGE ...] [--adapters a,b]
-                     [--servers a,b] [--clients a,b] [--suites tunnel,dpt,negative,routing,v2,secure]
+                     [--servers a,b] [--clients a,b]
+                     [--suites tunnel,dpt,negative,routing,v2,secure,management,sim,files]
                      [--report NAME] [--gate NAME]
+
+The sim suite runs every client against cB-Sigma knx-sim (the cbsigma
+image's "sim" command, driven with "sim-ctl" through docker exec): the
+gateway's fault switches (repeated indications, missing acknowledgements,
+replayed and tampered secure wrappers, ended and idle secure sessions) and
+a router's flow control frames. The files suite is offline: each adapter
+with the keyring operation reads the same ETS keyrings.
 
 Writes reports/results.json (reports/<name>.results.json with --report), the
 organisation's interop-result-v1. The run fails on a failure or infrastructure
@@ -31,8 +39,10 @@ import fnmatch
 import json
 import os
 import shlex
+import shutil
 import subprocess
 import sys
+import tempfile
 import threading
 import time
 import uuid
@@ -41,8 +51,18 @@ import interop_result
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SERVERS = ["knxd", "calimero-server"]
-CLIENTS = ["xknx", "knxultimate", "calimero-tools", "knxd"]
-ROUTERS = ["xknx", "knxultimate", "calimero-tools", "knxd"]
+CLIENTS = ["xknx", "knxultimate", "calimero-tools", "knxd", "cbsigma"]
+ROUTERS = ["xknx", "knxultimate", "calimero-tools", "knxd", "cbsigma"]
+# The adapter whose image carries cB-Sigma knx-sim (the sim suite's gateway
+# and router, "run sim"); not a contract server.
+SIMULATOR = "cbsigma"
+# The ROUTING_BUSY wait time of the flow control scenario, and how much
+# earlier than that an answer may leave (clock and scheduling slack).
+BUSY_WAIT_MS, BUSY_SLACK_MS = 500, 20
+# Seconds between a monitor's READY and the first frame the simulator sends:
+# Calimero tools listen about 3 s after "connection established" (they try a
+# device management connection first, which knx-sim refuses).
+SETTLE_S = 4
 SERVER_NAME = "knx-interop"
 
 
@@ -78,7 +98,7 @@ def load_ids():
 
 
 # Scenarios that record the harness or its environment, not a stack.
-INFRASTRUCTURE = {"server start", "secure server start", "negative suite"}
+INFRASTRUCTURE = {"server start", "secure server start", "negative suite", "simulator start"}
 
 
 class Matrix:
@@ -709,6 +729,346 @@ class Matrix:
                 ok = bool(seen) and seen[0].get("data", "").upper() == "01"
                 self.record("routing", scenario, w, m, "pass" if ok else "fail", t, None if ok else "monitor saw %s" % obs.get("data") or obs.get("error"))
 
+    # -- cB-Sigma knx-sim (the sim suite) --------------------------------
+    def start_sim(self, *flags):
+        """A fresh knx-sim gateway (or with --routing a router) per
+        scenario: knx-sim numbers its tunnels from 1.1.241 by channel and
+        never reuses a channel number, so a long-lived one runs out of the
+        addresses it announces (and Data Secure senders)."""
+        name = "knxi-sim-%s" % uuid.uuid4().hex[:6]
+        sh(["docker", "run", "-d", "--name", name, "--network", self.net, self.image(SIMULATOR), "sim"] + list(flags), check=True)
+        deadline = time.monotonic() + 30
+        while time.monotonic() < deadline:
+            p = sh(["docker", "logs", name])
+            if "READY" in p.stderr:
+                ip = sh(["docker", "inspect", "-f", "{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}", name], check=True).stdout.strip()
+                return name, ip
+            if sh(["docker", "inspect", "-f", "{{.State.Running}}", name]).stdout.strip() != "true":
+                break
+            time.sleep(0.3)
+        logs = sh(["docker", "logs", "--tail", "20", name])
+        self.stop(name)
+        raise RuntimeError("knx-sim did not start: %s" % (logs.stdout + logs.stderr)[-800:])
+
+    def sim_ctl(self, name, *args):
+        p = sh(["docker", "exec", name, "/adapter/run", "sim-ctl"] + list(args), timeout=60)
+        doc = parse_out(p.stdout)
+        if doc is None or "error" in doc:
+            raise RuntimeError("sim-ctl %s: %s" % (" ".join(args), (doc or {}).get("error") or p.stderr.strip()[-300:]))
+        return doc
+
+    def with_sim(self, scenario, c, flags, f):
+        """Run f(name, ip) against a fresh simulator; a scenario whose
+        simulator does not start is recorded as an infrastructure error."""
+        t = time.monotonic()
+        try:
+            name, ip = self.start_sim(*flags)
+        except RuntimeError as e:
+            return self.record("sim", "simulator start", c, SIMULATOR, "fail", t, "%s: %s" % (scenario, e))
+        self.server_container = name
+        try:
+            f(name, ip, t)
+        except RuntimeError as e:
+            self.record("sim", scenario, c, SIMULATOR, "not-tested", t, str(e))
+        finally:
+            self.server_container = None
+            self.stop(name)
+
+    def sim_suite(self):
+        if SIMULATOR not in self.a.clients and SIMULATOR not in self.a.only:
+            return
+        self.capabilities(SIMULATOR)
+        clients = [c for c in self.a.clients if c != SIMULATOR]
+        keepalive = []
+        for c in clients:
+            self.capabilities(c)
+            self.sim_gateway(c)
+            if self.feature(c, "secure"):
+                self.sim_secure(c)
+                keepalive.append(c)
+            else:
+                for sc in SIM_SECURE:
+                    self.record("sim", sc, c, SIMULATOR, "unsupported", time.monotonic(), "no KNX IP Secure client")
+            self.sim_routing(c)
+        # The idle session takes over a minute: all clients at once.
+        threads = [threading.Thread(target=self.sim_keepalive, args=(c,)) for c in keepalive]
+        for th in threads:
+            th.start()
+        for th in threads:
+            th.join()
+
+    def sim_gateway(self, c):
+        """Plain tunnelling against the simulated gateway: what reached its
+        bus, its answer, a repeated indication and a missing acknowledgement."""
+        def write_read(name, ip, t, extra, sw, sr):
+            r = self.client(c, "write", ["--target", ip, "--group", "1/0/1", "--dpt", "1.001", "--value", "on", "--data", "01"] + extra)
+            if r["status"] != "pass":
+                self.record("sim", sw, c, SIMULATOR, r["status"], t, r.get("error"))
+            else:
+                writes = self.sim_ctl(name, "stats").get("writes") or []
+                ok = {"group": "1/0/1", "data": "01"} in writes
+                self.record("sim", sw, c, SIMULATOR, "pass" if ok else "fail", t, None if ok else "knx-sim recorded %s" % writes)
+            t = time.monotonic()
+            r = self.client(c, "read", ["--target", ip, "--group", "1/0/2", "--dpt", "9.001", "--timeout", "5"] + extra)
+            d = r.get("data", {})
+            ok = r["status"] == "pass" and (str(d.get("data", "")).upper() == "0C33" or str(d.get("value")).startswith("21.5"))
+            status = r["status"] if r["status"] != "pass" else ("pass" if ok else "fail")
+            self.record("sim", sr, c, SIMULATOR, status, t, r.get("error") or (None if ok else "response %r" % d), d or None)
+
+        self.with_sim("knx-sim: tunnel write reaches the bus (UDP)", c, [],
+                      lambda n, ip, t: write_read(n, ip, t, [], "knx-sim: tunnel write reaches the bus (UDP)", "knx-sim: tunnel read answered (UDP, DPT 9.001)"))
+        if self.feature(c, "tcp"):
+            self.with_sim("knx-sim: tunnel write reaches the bus (TCP)", c, [],
+                          lambda n, ip, t: write_read(n, ip, t, ["--tcp"], "knx-sim: tunnel write reaches the bus (TCP)", "knx-sim: tunnel read answered (TCP, DPT 9.001)"))
+        else:
+            for sc in ("knx-sim: tunnel write reaches the bus (TCP)", "knx-sim: tunnel read answered (TCP, DPT 9.001)"):
+                self.record("sim", sc, c, SIMULATOR, "unsupported", time.monotonic(), "no TCP")
+
+        def duplicate(name, ip, t):
+            sc = "knx-sim: repeated indication delivered once (UDP)"
+            h = self.background(c, "monitor", ["--target", ip, "--count", "2", "--timeout", "8"])
+            if not h["ready"]:
+                res = self.collect(h, 30)
+                return self.record("sim", sc, c, SIMULATOR, "not-tested", t, "monitor: %s" % res.get("error"))
+            time.sleep(SETTLE_S)  # a monitor may print READY before it listens (Calimero tools)
+            self.sim_ctl(name, "inject-duplicate", "1/0/1", "01", "short")
+            time.sleep(0.5)
+            self.sim_ctl(name, "inject", "1/0/1", "00", "short")
+            res = self.collect(h)
+            got = [x.get("data", "").upper() for x in res.get("data", {}).get("telegrams", []) if x.get("group") == "1/0/1"]
+            ok = got == ["01", "00"]
+            self.record("sim", sc, c, SIMULATOR, "pass" if ok else "fail", t,
+                        None if ok else "telegrams %s (want 01 once, then 00) %s" % (got, res.get("error") or ""))
+        self.with_sim("knx-sim: repeated indication delivered once (UDP)", c, [], duplicate)
+
+        def unacked(name, ip, t):
+            sc = "knx-sim: unacknowledged request reported as failed (UDP)"
+            self.sim_ctl(name, "drop-acks", "on")
+            r = self.client(c, "write", ["--target", ip, "--group", "1/0/1", "--dpt", "1.001", "--value", "on", "--data", "01", "--timeout", "3"])
+            if r["status"] == "unsupported":
+                return self.record("sim", sc, c, SIMULATOR, "unsupported", t, r.get("error"))
+            ok = r["status"] == "fail"
+            self.record("sim", sc, c, SIMULATOR, "pass" if ok else "fail", t,
+                        None if ok else "the write was reported as sent; knx-sim acknowledged nothing")
+        self.with_sim("knx-sim: unacknowledged request reported as failed (UDP)", c, [], unacked)
+
+    def sim_secure(self, c):
+        """KNX IP Secure (TCP) and Data Secure against the simulated secure
+        gateway, and its secure-session faults."""
+        user = ["--secure", "--user", "2"]
+
+        def write_read(name, ip, t):
+            sw, sr = SIM_SECURE[0], SIM_SECURE[1]
+            r = self.client(c, "write", ["--target", ip, "--group", "1/0/1", "--dpt", "1.001", "--value", "on", "--data", "01"] + user)
+            st = self.sim_ctl(name, "stats")
+            if r["status"] != "pass":
+                self.record("sim", sw, c, SIMULATOR, r["status"], t, r.get("error"))
+            else:
+                ok = {"group": "1/0/1", "data": "01"} in (st.get("writes") or []) and st.get("sessions", 0) >= 1
+                self.record("sim", sw, c, SIMULATOR, "pass" if ok else "fail", t,
+                            None if ok else "knx-sim recorded %s in %s secure sessions" % (st.get("writes"), st.get("sessions")))
+            t = time.monotonic()
+            r = self.client(c, "read", ["--target", ip, "--group", "1/0/2", "--dpt", "9.001", "--timeout", "5"] + user)
+            d = r.get("data", {})
+            ok = r["status"] == "pass" and (str(d.get("data", "")).upper() == "0C33" or str(d.get("value")).startswith("21.5"))
+            self.record("sim", sr, c, SIMULATOR, r["status"] if r["status"] != "pass" else ("pass" if ok else "fail"), t,
+                        r.get("error") or (None if ok else "response %r" % d), d or None)
+        self.with_sim(SIM_SECURE[0], c, ["--secure"], write_read)
+
+        def data_secure(name, ip, t):
+            sw, sr = SIM_SECURE[2], SIM_SECURE[3]
+            r = self.client(c, "write", ["--target", ip, "--group", "1/3/2", "--dpt", "9.001", "--value", "21.5", "--data", "0C33"] + user)
+            st = self.sim_ctl(name, "stats")
+            if r["status"] != "pass":
+                self.record("sim", sw, c, SIMULATOR, r["status"], t, r.get("error"))
+            else:
+                ok = {"group": "1/3/2", "data": "0C33"} in (st.get("writes") or []) and st.get("dataSecureRefused") == 0
+                self.record("sim", sw, c, SIMULATOR, "pass" if ok else "fail", t,
+                            None if ok else "knx-sim opened %s, refused %s" % (st.get("writes"), st.get("dataSecureRefused")))
+            t = time.monotonic()
+            r = self.client(c, "read", ["--target", ip, "--group", "1/3/1", "--dpt", "9.001", "--timeout", "5"] + user)
+            d = r.get("data", {})
+            ok = r["status"] == "pass" and (str(d.get("data", "")).upper() == "0C33" or str(d.get("value")).startswith("21.5"))
+            self.record("sim", sr, c, SIMULATOR, r["status"] if r["status"] != "pass" else ("pass" if ok else "fail"), t,
+                        r.get("error") or (None if ok else "response %r" % d), d or None)
+        if self.feature(c, "dataSecure"):
+            self.with_sim(SIM_SECURE[2], c, ["--secure"], data_secure)
+        else:
+            for sc in SIM_SECURE[2:4]:
+                self.record("sim", sc, c, SIMULATOR, "unsupported", time.monotonic(), "no Data Secure")
+
+        def wrapper_fault(name, ip, t, sc, fault):
+            # replay: 01, the same wrapper again, then 00 must arrive as
+            # [01, 00]; tampered: a write of 01 with an altered MAC, then
+            # 00 must arrive as [00].
+            # One more telegram than judged: a warm-up on 1/0/9 first (Calimero
+            # tools' monitor drops the first telegram of a secure tunnel to
+            # knx-sim, with or without a fault); only 1/0/1 is judged.
+            count = "3" if fault == "replay" else "2"
+            h = self.background(c, "monitor", ["--target", ip, "--count", count, "--timeout", "10"] + user)
+            if not h["ready"]:
+                res = self.collect(h, 30)
+                return self.record("sim", sc, c, SIMULATOR, "not-tested", t, "monitor: %s" % res.get("error"))
+            time.sleep(SETTLE_S)  # a monitor may print READY before it listens (Calimero tools)
+            self.sim_ctl(name, "inject", "1/0/9", "01", "short")
+            time.sleep(0.5)
+            if fault == "replay":
+                self.sim_ctl(name, "inject", "1/0/1", "01", "short")
+                time.sleep(0.5)
+                self.sim_ctl(name, "replay")
+                want = ["01", "00"]
+            else:
+                self.sim_ctl(name, "inject-tampered", "1/0/1", "01", "short")
+                want = ["00"]
+            time.sleep(0.5)
+            self.sim_ctl(name, "inject", "1/0/1", "00", "short")
+            res = self.collect(h)
+            got = [x.get("data", "").upper() for x in res.get("data", {}).get("telegrams", []) if x.get("group") == "1/0/1"]
+            ok = got == want
+            self.record("sim", sc, c, SIMULATOR, "pass" if ok else "fail", t,
+                        None if ok else "telegrams %s, want %s %s" % (got, want, res.get("error") or ""))
+        self.with_sim(SIM_SECURE[4], c, ["--secure"], lambda n, ip, t: wrapper_fault(n, ip, t, SIM_SECURE[4], "replay"))
+        self.with_sim(SIM_SECURE[5], c, ["--secure"], lambda n, ip, t: wrapper_fault(n, ip, t, SIM_SECURE[5], "tampered"))
+
+        def ended(name, ip, t):
+            sc = SIM_SECURE[6]
+            h = self.background(c, "monitor", ["--target", ip, "--count", "1", "--timeout", "10"] + user)
+            if not h["ready"]:
+                res = self.collect(h, 30)
+                return self.record("sim", sc, c, SIMULATOR, "not-tested", t, "monitor: %s" % res.get("error"))
+            time.sleep(SETTLE_S)  # a monitor may print READY before it listens (Calimero tools)
+            self.sim_ctl(name, "end-sessions", "5")  # SESSION_STATUS STATUS_CLOSE
+            time.sleep(3)
+            st = self.sim_ctl(name, "stats")
+            sh(["docker", "rm", "-f", h["name"]])
+            self.collect(h, 30)
+            # The tunnel of the closed session must be gone: the client
+            # closed the connection (and may have opened a new session).
+            ok = st.get("connects", 0) >= 2 or st.get("channels", 1) == 0
+            self.record("sim", sc, c, SIMULATOR, "pass" if ok else "fail", t,
+                        None if ok else "3 s after SESSION_STATUS close the client still held its tunnel (%s)" % {k: st.get(k) for k in ("connects", "channels", "sessions")})
+        self.with_sim(SIM_SECURE[6], c, ["--secure"], ended)
+
+    def sim_keepalive(self, c):
+        sc = SIM_SECURE[7]
+
+        def idle(name, ip, t):
+            h = self.background(c, "monitor", ["--target", ip, "--count", "1", "--timeout", "100", "--secure", "--user", "2"])
+            if not h["ready"]:
+                res = self.collect(h, 30)
+                return self.record("sim", sc, c, SIMULATOR, "not-tested", t, "monitor: %s" % res.get("error"))
+            time.sleep(72)  # the session timeout is 60 s
+            st = self.sim_ctl(name, "stats")
+            self.sim_ctl(name, "inject", "1/0/1", "01", "short")
+            res = self.collect(h, 60)
+            got = [x for x in res.get("data", {}).get("telegrams", []) if x.get("group") == "1/0/1"]
+            ok = bool(got) and st.get("connects") == 1 and st.get("keepalives", 0) >= 1
+            self.record("sim", sc, c, SIMULATOR, "pass" if ok else "fail", t,
+                        None if ok else "after 72 s: %s keepalives, %s connections, telegram %s %s" % (
+                            st.get("keepalives"), st.get("connects"), got, res.get("error") or ""))
+        self.with_sim(sc, c, ["--secure"], idle)
+
+    def sim_routing(self, c):
+        """Routing flow control against a simulated router: an answer to a
+        GroupValue_Read that arrives right after a ROUTING_BUSY must wait
+        for the busy wait time; after a ROUTING_LOST_MESSAGE the client
+        keeps answering."""
+        busy, lost = SIM_ROUTING
+        if not (self.feature(c, "routing") and self.feature(c, "answer")):
+            for sc in SIM_ROUTING:
+                self.record("sim", sc, c, SIMULATOR, "unsupported", time.monotonic(), "no routing group responder")
+            return
+
+        def flow(name, ip, t):
+            h = self.background(c, "answer", ["--routing", "--group", "1/4/1", "--dpt", "1.001", "--value", "on", "--data", "01",
+                                              "--count", "3", "--timeout", "20"], ready_timeout=40)
+            if not h["ready"]:
+                res = self.collect(h, 30)
+                for sc in SIM_ROUTING:
+                    self.record("sim", sc, c, SIMULATOR, "not-tested", t, "responder: %s" % res.get("error"))
+                return
+            time.sleep(1)
+            self.sim_ctl(name, "route-read", "1/4/1")
+            time.sleep(1)
+            b = self.sim_ctl(name, "busy-read", str(BUSY_WAIT_MS), "1/4/1")
+            time.sleep(BUSY_WAIT_MS / 1000 + 1.5)
+            self.sim_ctl(name, "lost", "3")
+            time.sleep(0.3)
+            lr = self.sim_ctl(name, "route-read", "1/4/1")
+            time.sleep(1.5)
+            st = self.sim_ctl(name, "stats")
+            self.collect(h, 30)
+            answers = [x for x in st.get("routed") or [] if x.get("service") == "response" and x.get("group") == "1/4/1"]
+            after = [x["t"] for x in answers if x["t"] >= b["readAt"]]
+            if not after:
+                self.record("sim", busy, c, SIMULATOR, "fail", t, "no answer to the read after ROUTING_BUSY: %s" % answers)
+            else:
+                delay = after[0] - b["busyAt"]
+                ok = delay >= BUSY_WAIT_MS - BUSY_SLACK_MS
+                self.record("sim", busy, c, SIMULATOR, "pass" if ok else "fail", t,
+                            None if ok else "answered %d ms after a ROUTING_BUSY with wait time %d ms" % (delay, BUSY_WAIT_MS),
+                            {"delayMs": delay})
+            t2 = time.monotonic()
+            ok = any(x["t"] >= lr["readAt"] for x in answers)
+            self.record("sim", lost, c, SIMULATOR, "pass" if ok else "fail", t2,
+                        None if ok else "no answer after ROUTING_LOST_MESSAGE: %s" % answers)
+        self.with_sim(busy, c, ["--routing"], flow)
+
+    # -- offline file checks (the files suite) ---------------------------
+    def files_suite(self):
+        """ETS keyrings read by every adapter with the keyring operation:
+        the test profile (scripts/secure-fixture.py) and the same profile
+        written by knx-sim. Offline: no network traffic."""
+        readers = []
+        for x in dict.fromkeys(self.a.clients + list(self.a.external) + self.a.only):
+            if x != "probe" and "client" in (self.capabilities(x).get("roles") or []):
+                if self.feature(x, "keyring"):
+                    readers.append(x)
+                else:
+                    self.record("files", FILES[0], x, "-", "unsupported", time.monotonic(), "no keyring operation")
+        if not readers:
+            return
+        profile = json.load(open(os.path.join(ROOT, "adapters", "common", "secure", "profile.json")))
+        tmp = tempfile.mkdtemp(prefix="knxi-files-")
+        os.chmod(tmp, 0o755)
+        try:
+            p = sh(["docker", "run", "--rm", "--network", "none", self.image(SIMULATOR), "sim-keyring"])
+            sim_file = None
+            if p.returncode == 0 and "<Keyring" in p.stdout:
+                sim_file = os.path.join(tmp, "knx-sim.knxkeys")
+                with open(sim_file, "w") as f:
+                    f.write(p.stdout)
+                os.chmod(sim_file, 0o644)
+            for x in readers:
+                self.keyring_check(x, FILES[0], "/adapter/common/secure/knx-interop.knxkeys", None, profile, True)
+                if sim_file:
+                    self.keyring_check(x, FILES[1], "/files/knx-sim.knxkeys", tmp, profile, False)
+                else:
+                    self.record("files", FILES[1], x, SIMULATOR, "not-tested", time.monotonic(), "knx-sim wrote no keyring: %s" % p.stderr[-300:])
+                t = time.monotonic()
+                r = self.keyring_read(x, "/adapter/common/secure/knx-interop.knxkeys", None, "not-the-password")
+                ok = r["status"] == "fail"
+                self.record("files", FILES[2], x, "-", "pass" if ok else "fail", t, None if ok else "a wrong password was accepted: %r" % r.get("data"))
+        finally:
+            shutil.rmtree(tmp, ignore_errors=True)
+
+    def keyring_read(self, x, path, mount, password):
+        cmd = ["docker", "run", "--rm", "--network", "none"]
+        if mount:
+            cmd += ["-v", "%s:/files:ro" % mount]
+        p = sh(cmd + [self.image(x), "client", "keyring", "--file", path, "--password", password])
+        return parse_doc(p)
+
+    def keyring_check(self, x, scenario, path, mount, profile, fixture):
+        t = time.monotonic()
+        r = self.keyring_read(x, path, mount, profile["keyringPassword"])
+        if r["status"] != "pass":
+            return self.record("files", scenario, x, "fixture" if fixture else SIMULATOR, r["status"], t, r.get("error"))
+        problems = keyring_problems(r["data"], profile, fixture)
+        self.record("files", scenario, x, "fixture" if fixture else SIMULATOR, "fail" if problems else "pass", t,
+                    "; ".join(problems) or None)
+
+
     # -- reports -----------------------------------------------------
     def report(self):
         os.makedirs(os.path.join(ROOT, "reports"), exist_ok=True)
@@ -777,6 +1137,62 @@ class Matrix:
         return doc
 
 
+SIM_SECURE = [
+    "knx-sim: secure tunnel write (user 2)",
+    "knx-sim: secure tunnel read answered (user 2)",
+    "knx-sim: Data Secure write opened by the gateway",
+    "knx-sim: Data Secure response of the gateway opened",
+    "knx-sim: replayed secure wrapper discarded",
+    "knx-sim: tampered secure wrapper discarded",
+    "knx-sim: SESSION_STATUS close ends the session",
+    "knx-sim: idle secure session kept alive past 60 s",
+]
+SIM_ROUTING = [
+    "knx-sim router: ROUTING_BUSY holds back the answer (500 ms)",
+    "knx-sim router: answering goes on after ROUTING_LOST_MESSAGE",
+]
+FILES = [
+    "keyring: the test profile (scripts/secure-fixture.py)",
+    "keyring: the test profile written by knx-sim",
+    "keyring: wrong password refused",
+]
+
+
+def keyring_problems(d, profile, fixture):
+    """What a keyring summary gets wrong against the test profile. knx-sim
+    exports no tool keys, fixes the host's management password to "mgmt"
+    and leaves out the surrogate group."""
+    out = []
+    want_if = {(u["address"], int(k), u["password"]) for k, u in profile["users"].items() if u.get("address")}
+    got_if = {(i.get("address"), i.get("userId"), i.get("password")) for i in d.get("interfaces") or []}
+    if want_if - got_if:
+        out.append("interfaces: missing %s" % sorted(want_if - got_if))
+    host = [x for x in d.get("devices") or [] if x.get("address") == profile["host"]]
+    want_mgmt = profile["users"]["1"]["password"] if fixture else "mgmt"
+    if not host:
+        out.append("no device %s" % profile["host"])
+    else:
+        if host[0].get("managementPassword") != want_mgmt:
+            out.append("management password of %s: %r" % (profile["host"], host[0].get("managementPassword")))
+        if fixture and not host[0].get("toolKey"):
+            out.append("no tool key of %s" % profile["host"])
+    bb = d.get("backbone") or {}
+    if bb.get("key", "").lower() != profile["backboneKey"] or bb.get("latencyMs") != profile["latencyMs"]:
+        out.append("backbone %r" % bb)
+    groups = dict(profile["dataSecureGroups"])
+    if fixture:
+        groups.update(profile["surrogateGroup"])
+    got = d.get("groups") or {}
+    for g, key in groups.items():
+        if (got.get(g) or {}).get("key", "").lower() != key:
+            out.append("group key of %s: %r" % (g, (got.get(g) or {}).get("key")))
+    for g in profile["dataSecureGroups"]:
+        senders = set((got.get(g) or {}).get("senders") or [])
+        if set(profile["senders"]) - senders:
+            out.append("senders of %s: missing %s" % (g, sorted(set(profile["senders"]) - senders)))
+    return out
+
+
 def parse_out(out):
     for line in reversed(out.strip().splitlines()):
         line = line.strip()
@@ -822,7 +1238,7 @@ def main():
     p.add_argument("--servers", default=",".join(SERVERS))
     p.add_argument("--clients", default=",".join(CLIENTS))
     p.add_argument("--routers", default=",".join(ROUTERS))
-    p.add_argument("--suites", default="tunnel,dpt,negative,routing,v2,secure,management")
+    p.add_argument("--suites", default="tunnel,dpt,negative,routing,v2,secure,management,sim,files")
     p.add_argument("--report", default="latest")
     p.add_argument("--gate", default="", help="fail only on failures involving this adapter (empty: any failure)")
     p.add_argument("--adapter", action="append", default=[], metavar="NAME=IMAGE",
@@ -877,6 +1293,10 @@ def main():
             m.secure_suite()
         if "management" in a.suites:
             m.management_suite()
+        if "sim" in a.suites:
+            m.sim_suite()
+        if "files" in a.suites:
+            m.files_suite()
     finally:
         ids = sh(["docker", "ps", "-aq", "--filter", "network=" + m.net]).stdout.split()
         if ids:

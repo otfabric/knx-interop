@@ -6,6 +6,29 @@ run the Release workflow on `main` and pick the bump (`patch` by default,
 takes this file's section of that version as the release notes. Add the
 section, headed exactly `## vX.Y.Z` and closed by a line `---`, first.
 
+## v0.9.0
+
+**Date:** 2026-11-06
+**Previous release:** v0.8.1
+
+### Summary
+
+cB-Sigma knx v0.2.0 and its simulator knx-sim v0.2.0 (Apache-2.0, Go) join as an independent reference: `cbsigma` is a client in every suite, and knx-sim drives two new suites. `sim` runs every client against a simulated gateway and router with fault switches; `files` checks ETS keyring import offline. The cbsigma image is published.
+
+### Added
+
+- `adapters/cbsigma`: cB-Sigma knx v0.2.0 as a contract client (UDP and TCP tunnelling, discovery, busmonitor, routing, KNX IP Secure over TCP and secure routing, KNX Data Secure); the image also carries knx-sim v0.2.0 (`run sim`, `run sim-ctl`, `run sim-keyring`), which is no contract server. Published as `ghcr.io/otfabric/knx-interop-cbsigma`; the Upstream workflow follows both modules (`cbsigma`, `cbsigma-sim`).
+- Suite `sim`: against a fresh knx-sim per scenario, each client's tunnel writes and reads over UDP and TCP, a repeated indication, an unacknowledged TUNNELLING_REQUEST, secure tunnel writes and reads, Data Secure both ways, a replayed and a tampered SECURE_WRAPPER, a SESSION_STATUS close from the gateway, an idle secure session past the 60 s timeout, ROUTING_BUSY (an answer must wait the 500 ms wait time) and ROUTING_LOST_MESSAGE.
+- Suite `files` (offline, apart from the wire scenarios): each adapter with the new `keyring` operation reads the test profile's keyring and the same profile written by knx-sim, and refuses a wrong password.
+- Container contract 1.6: the client operation `keyring` and its feature; OT Fabric's own image implements it.
+- Known differences, found by the sim suite: knxd 0.14.73 and KNXUltimate 6.3.2 do not pause after ROUTING_BUSY; xknx 4.1.1 and KNXUltimate 6.3.2 cannot report an unacknowledged write to the application; calimero-tools 3.0-M1 keeps its tunnel after a SESSION_STATUS close and reads Data Secure groups only through a surrogate.
+
+### Changed
+
+- The Own stack workflow tests OT Fabric's image against cbsigma too.
+
+---
+
 ## v0.8.1
 
 **Date:** 2026-11-06

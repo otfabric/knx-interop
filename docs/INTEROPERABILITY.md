@@ -1,56 +1,61 @@
 # Interoperability matrix
 
-Run of 2026-10-30 on Docker Desktop (macOS, arm64), report
+Run of 2026-11-06 on Docker Desktop (macOS, arm64), report
 [reports/latest.json](../reports/latest.json) /
-[reports/latest.md](../reports/latest.md): **220 pass, 5 known
-differences, 51 unsupported, 0 fail** (276 results), the third-party stacks
+[reports/latest.md](../reports/latest.md): **319 pass, 12 known
+differences, 85 unsupported, 0 fail** (416 results), the third-party stacks
 among themselves. Each cell counts the results in which that
 implementation took the role named in the row.
 
 Versions: calimero-server and calimero-tools 3.0-M1 (official images,
 pinned by digest), knxd 0.14.73-1 (Debian trixie), xknx 4.1.1, KNXUltimate
-6.3.2, probe 1.0.
+6.3.2, cB-Sigma knx v0.2.0 and knx-sim v0.2.0, probe 1.0.
 
 A system under test runs this matrix from its own repository with its own
 adapter (`--adapter`): go-knx's results are in
 [go-knx's INTEROPERABILITY.md](https://github.com/otfabric/go-knx/blob/main/INTEROPERABILITY.md)
 (`make -C ../go-knx interop-matrix` from a go-knx checkout next to this one).
 
-| Feature | calimero | knxd | xknx | KNXUltimate |
-|---|---|---|---|---|
-| Discovery (as client) | PASS (2) | UNSUPPORTED 2 | PASS (2) | PASS (2) |
-| Description (as client) | PASS (2) | UNSUPPORTED 2 | PASS (2) | PASS (2) |
-| Tunnelling client | PASS (2) | PASS (2) | PASS (2) | PASS (2) |
-| Tunnelling server | PASS (8) | PASS (8) | NOT TESTED | NOT TESTED |
-| Group write | PASS 3, UNSUPPORTED 1 | PASS 2, UNSUPPORTED 2 | PASS 3, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 1 |
-| Group read (client) | PASS 3, UNSUPPORTED 1 | PASS 2, UNSUPPORTED 2 | PASS 3, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 1 |
-| Group response (responder/observer) | NOT TESTED | NOT TESTED | PASS (8) | PASS (3) |
-| Routing (sender) | PASS (3) | PASS (3) | PASS (3) | PASS (3) |
-| Routing (receiver) | PASS (3) | PASS (3) | PASS (3) | PASS (3) |
-| DPT encoding (sender) | PASS (24) | PASS (24) | PASS (24) | PASS (24) |
-| DPT decoding (observer) | PASS (24) | NOT TESTED | PASS (72) | NOT TESTED |
-| Negative tests (server) | KNOWN DIFFERENCE 2, PASS 22 | PASS (24) | NOT TESTED | NOT TESTED |
-| Tunnelling over TCP (client) | PASS 2, UNSUPPORTED 2 | UNSUPPORTED 4 | PASS 2, UNSUPPORTED 2 | PASS 2, UNSUPPORTED 2 |
-| Tunnelling over TCP (server) | PASS 6, UNSUPPORTED 2 | UNSUPPORTED 8 | NOT TESTED | NOT TESTED |
-| Device management (client) | PASS 1, UNSUPPORTED 1 | UNSUPPORTED 2 | UNSUPPORTED 2 | UNSUPPORTED 2 |
-| Device management (server) | PASS 1, UNSUPPORTED 3 | UNSUPPORTED 4 | NOT TESTED | NOT TESTED |
-| Busmonitor (client) | PASS 1, UNSUPPORTED 1 | UNSUPPORTED 2 | UNSUPPORTED 2 | UNSUPPORTED 2 |
-| Busmonitor (server) | UNSUPPORTED 4 | PASS 1, UNSUPPORTED 3 | NOT TESTED | NOT TESTED |
-| IP Secure tunnelling (client) | PASS (3) | UNSUPPORTED 1 | PASS 2, UNSUPPORTED 1 | UNSUPPORTED 1 |
-| IP Secure tunnelling (server) | PASS 6, UNSUPPORTED 3 | UNSUPPORTED 1 | NOT TESTED | NOT TESTED |
-| IP Secure sessions over UDP (client) | PASS (3) | NOT TESTED | UNSUPPORTED 3 | NOT TESTED |
-| IP Secure sessions over UDP (server) | PASS 3, UNSUPPORTED 3 | NOT TESTED | NOT TESTED | NOT TESTED |
-| IP Secure device management (client) | PASS (1) | NOT TESTED | UNSUPPORTED 1 | NOT TESTED |
-| IP Secure device management (server) | PASS 1, UNSUPPORTED 1 | NOT TESTED | NOT TESTED | NOT TESTED |
-| IP Secure routing (sender) | PASS (1) | UNSUPPORTED 1 | PASS (1) | UNSUPPORTED 1 |
-| IP Secure routing (receiver) | PASS (1) | NOT TESTED | PASS (1) | NOT TESTED |
-| IP Secure routing (server) | PASS (4) | NOT TESTED | NOT TESTED | NOT TESTED |
-| Data Secure (sender) | KNOWN DIFFERENCE 2 | NOT TESTED | PASS (2) | NOT TESTED |
-| Data Secure (receiver) | PASS (2) | NOT TESTED | KNOWN DIFFERENCE 2 | NOT TESTED |
-| Remote property services (tool) | PASS (3) | UNSUPPORTED 1 | PASS 2, UNSUPPORTED 1 | UNSUPPORTED 1 |
-| Remote property services (device) | PASS 5, UNSUPPORTED 3 | UNSUPPORTED 1 | NOT TESTED | NOT TESTED |
-| Data Secure tool access (tool) | UNSUPPORTED 3 | NOT TESTED | UNSUPPORTED 3 | NOT TESTED |
-| Data Secure tool access (device) | UNSUPPORTED 8 | NOT TESTED | NOT TESTED | NOT TESTED |
+| Feature | calimero | knxd | xknx | KNXUltimate | cB-Sigma |
+|---|---|---|---|---|---|
+| Discovery (as client) | PASS (2) | UNSUPPORTED 2 | PASS (2) | PASS (2) | PASS (2) |
+| Description (as client) | PASS (2) | UNSUPPORTED 2 | PASS (2) | PASS (2) | PASS (2) |
+| Tunnelling client | PASS (2) | PASS (2) | PASS (2) | PASS (2) | PASS (2) |
+| Tunnelling server | PASS (10) | PASS (10) | NOT TESTED | NOT TESTED | NOT TESTED |
+| Group write | PASS 3, UNSUPPORTED 1 | PASS 2, UNSUPPORTED 2 | PASS 3, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 1 |
+| Group read (client) | PASS 3, UNSUPPORTED 1 | PASS 2, UNSUPPORTED 2 | PASS 3, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 1 |
+| Group response (responder/observer) | NOT TESTED | NOT TESTED | PASS (11) | PASS (3) | NOT TESTED |
+| Routing (sender) | PASS (4) | PASS (4) | PASS (4) | PASS (4) | PASS (4) |
+| Routing (receiver) | PASS (4) | PASS (4) | PASS (4) | PASS (4) | PASS (4) |
+| DPT encoding (sender) | PASS (24) | PASS (24) | PASS (24) | PASS (24) | PASS (24) |
+| DPT decoding (observer) | PASS (24) | NOT TESTED | PASS (96) | NOT TESTED | NOT TESTED |
+| Negative tests (server) | KNOWN DIFFERENCE 2, PASS 22 | PASS (24) | NOT TESTED | NOT TESTED | NOT TESTED |
+| Tunnelling over TCP (client) | PASS 2, UNSUPPORTED 2 | UNSUPPORTED 4 | PASS 2, UNSUPPORTED 2 | PASS 2, UNSUPPORTED 2 | PASS 2, UNSUPPORTED 2 |
+| Tunnelling over TCP (server) | PASS 8, UNSUPPORTED 2 | UNSUPPORTED 10 | NOT TESTED | NOT TESTED | NOT TESTED |
+| Device management (client) | PASS 1, UNSUPPORTED 1 | UNSUPPORTED 2 | UNSUPPORTED 2 | UNSUPPORTED 2 | UNSUPPORTED 2 |
+| Device management (server) | PASS 1, UNSUPPORTED 4 | UNSUPPORTED 5 | NOT TESTED | NOT TESTED | NOT TESTED |
+| Busmonitor (client) | PASS 1, UNSUPPORTED 1 | UNSUPPORTED 2 | UNSUPPORTED 2 | UNSUPPORTED 2 | PASS 1, UNSUPPORTED 1 |
+| Busmonitor (server) | UNSUPPORTED 5 | PASS 2, UNSUPPORTED 3 | NOT TESTED | NOT TESTED | NOT TESTED |
+| IP Secure tunnelling (client) | PASS (3) | UNSUPPORTED 1 | PASS 2, UNSUPPORTED 1 | UNSUPPORTED 1 | PASS (3) |
+| IP Secure tunnelling (server) | PASS 9, UNSUPPORTED 3 | UNSUPPORTED 1 | NOT TESTED | NOT TESTED | NOT TESTED |
+| IP Secure sessions over UDP (client) | PASS (3) | NOT TESTED | UNSUPPORTED 3 | NOT TESTED | UNSUPPORTED 3 |
+| IP Secure sessions over UDP (server) | PASS 3, UNSUPPORTED 6 | NOT TESTED | NOT TESTED | NOT TESTED | NOT TESTED |
+| IP Secure device management (client) | PASS (1) | NOT TESTED | UNSUPPORTED 1 | NOT TESTED | UNSUPPORTED 1 |
+| IP Secure device management (server) | PASS 1, UNSUPPORTED 2 | NOT TESTED | NOT TESTED | NOT TESTED | NOT TESTED |
+| IP Secure routing (sender) | PASS (2) | UNSUPPORTED 1 | PASS (2) | UNSUPPORTED 1 | PASS (2) |
+| IP Secure routing (receiver) | PASS (2) | NOT TESTED | PASS (2) | NOT TESTED | PASS (2) |
+| IP Secure routing (server) | PASS (6) | NOT TESTED | NOT TESTED | NOT TESTED | NOT TESTED |
+| Data Secure (sender) | KNOWN DIFFERENCE 3 | NOT TESTED | PASS (3) | NOT TESTED | PASS (3) |
+| Data Secure (receiver) | PASS (3) | NOT TESTED | KNOWN DIFFERENCE 2, PASS 2 | NOT TESTED | KNOWN DIFFERENCE 1, PASS 1 |
+| Remote property services (tool) | PASS (3) | UNSUPPORTED 1 | PASS 2, UNSUPPORTED 1 | UNSUPPORTED 1 | UNSUPPORTED 1 |
+| Remote property services (device) | PASS 5, UNSUPPORTED 4 | UNSUPPORTED 1 | NOT TESTED | NOT TESTED | NOT TESTED |
+| Data Secure tool access (tool) | UNSUPPORTED 3 | NOT TESTED | UNSUPPORTED 3 | NOT TESTED | NOT TESTED |
+| Data Secure tool access (device) | UNSUPPORTED 8 | NOT TESTED | NOT TESTED | NOT TESTED | NOT TESTED |
+| knx-sim: tunnelling, repeats, missing acks (client) | PASS (6) | PASS 4, UNSUPPORTED 2 | KNOWN DIFFERENCE 1, PASS 5 | KNOWN DIFFERENCE 1, PASS 5 | NOT TESTED |
+| knx-sim: IP Secure and Data Secure (client) | KNOWN DIFFERENCE 2, PASS 2 | UNSUPPORTED 4 | PASS (4) | UNSUPPORTED 4 | NOT TESTED |
+| knx-sim: secure session faults (client) | KNOWN DIFFERENCE 1, PASS 3 | UNSUPPORTED 4 | PASS (4) | UNSUPPORTED 4 | NOT TESTED |
+| knx-sim router: flow control (client) | UNSUPPORTED 2 | KNOWN DIFFERENCE 1, PASS 1 | PASS (2) | KNOWN DIFFERENCE 1, PASS 1 | NOT TESTED |
+| ETS keyring import (offline) | UNSUPPORTED 1 | UNSUPPORTED 1 | UNSUPPORTED 1 | UNSUPPORTED 1 | PASS (3) |
 
 Legend: PASS, FAIL, UNSUPPORTED (the stack or its adapter does not offer
 it), NOT TESTED (no scenario uses the implementation in that role yet),
@@ -69,6 +74,12 @@ xknx, Calimero tools and Calimero server (secure tunnelling over TCP and
 UDP, secure routing, Data Secure, the server's secure routing). Each
 secure scenario gets a fresh secure server: a peer stopped while connected
 (Calimero tools' monitor) leaves its user's session on Calimero server.
+cB-Sigma knx is a client in all of these. The sim suite runs every other
+client against cB-Sigma knx-sim: a fresh simulated gateway or router per
+scenario, driven through `sim-ctl` (faults injected, what it received read
+back); the files suite has each adapter with the `keyring` operation read
+two ETS keyrings offline, and its results are kept apart from the wire
+protocol rows above.
 Remote device management (contract 1.4): Calimero tools and xknx manage
 Calimero server's device; the tool access scenarios need a device with a
 tool key, which none of the third-party servers offers, so they run only
@@ -79,6 +90,10 @@ with a system under test as the device (go-knx).
 | Implementation | Difference | Evidence |
 |---|---|---|
 | calimero-server 3.0-M1 | About 10 s without answers after a 3-octet datagram, and after a CONNECT_REQUEST whose CRI has length 0; its log shows the control endpoint starting again | probe negative suite; server log |
+| knxd 0.14.73 | Ignores ROUTING_BUSY: answered 31 to 114 ms after a ROUTING_BUSY with wait time 500 ms | sim suite; its router backend has no handling for it |
+| KNXUltimate 6.3.2 | Ignores ROUTING_BUSY (an error event only; answered after 5 ms); `write` is fire and forget, so an unacknowledged tunnelling request is not reported | sim suite; `KNXClient.ts` |
+| xknx 4.1.1 | Repeats an unacknowledged TUNNELLING_REQUEST once and closes the tunnel, as the standard asks, but only logs the failure: the application's write does not fail | sim suite; `cemi_handler.py` |
+| calimero-tools 3.0-M1 | Keeps its tunnel and connection after the gateway's SESSION_STATUS close (still open 18 s later) | sim suite |
 
 ## Failures investigated and fixed
 
@@ -151,6 +166,40 @@ fixed in the harness (2026-10-29 and 2026-10-30):
   matrix.
 - go-knx's server announced its own address as the data endpoint to NAT
   clients; fixed (route back endpoint), found by go-knx's interop suite.
+
+## cB-Sigma knx and knx-sim
+
+Found while adding them (2026-11-06), each in a real run; not reported
+upstream:
+
+- knx-sim v0.2.0 gives a tunnel the address 1.1.(240 + channel) and never
+  reuses a channel number, so from the fifth connection of a simulator's
+  life its tunnels get 1.1.245 and up: outside the four slots its extended
+  search announces (1.1.241 to 1.1.244) and the Data Secure senders it
+  documents. cB-Sigma knx's Data Secure write from 1.1.245 was refused
+  (`dataSecureRefused` 2); on a fresh simulator the same write and read
+  pass. Channel 15 would get 1.1.255, the gateway's own address. The sim
+  suite starts a fresh simulator for every scenario.
+- cB-Sigma knx v0.2.0's router counts its own ROUTING_BUSY, seen on the
+  multicast loopback, and then sometimes holds back its own next frame
+  for the wait time (one run of two). knx-sim's test reads therefore leave
+  through a socket of their own.
+- knx-sim keeps a tunnel's group writes to itself (other tunnels do not
+  see them) and has a fixed friendly name, so it is no contract server.
+- Calimero tools 3.0-M1's monitor starts listening about 3 s after it
+  reports the connection (it first tries a device management connection,
+  which knx-sim refuses); the sim suite waits 4 s.
+
+OT Fabric's own go-knx v0.8.0 against knx-sim and cB-Sigma knx (local run
+with `scripts/interop.sh otfabric xknx knxultimate cbsigma probe`: 202 pass,
+3 known differences of xknx and KNXUltimate, 0 fail): it honours ROUTING_BUSY
+(answer 513 ms after a ROUTING_BUSY with wait time 500 ms), keeps answering
+after ROUTING_LOST_MESSAGE, discards replayed and tampered secure wrappers,
+drops a session the gateway closes, keeps an idle secure session past the
+60 s timeout with keepalives, delivers a repeated indication once, reports
+an unacknowledged request as a failure and reads both keyrings. cB-Sigma knx
+as a client of the go-knx server passes the tunnel, TCP, busmonitor, secure
+and routing scenarios.
 
 ## Reproduce
 

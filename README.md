@@ -9,7 +9,9 @@ implementations, run headless in containers on an isolated Docker network:
 [Calimero](https://github.com/calimero-project) (Java),
 [knxd](https://github.com/knxd/knxd) (C++), [xknx](https://github.com/XKNX/xknx)
 (Python), [KNXUltimate](https://github.com/Supergiovane/KNXUltimate)
-(TypeScript), plus a raw KNXnet/IP probe for negative tests. Part of
+(TypeScript), [cB-Sigma knx](https://github.com/cB-Sigma/knx) (Go) with its
+simulator [knx-sim](https://github.com/cB-Sigma/knx-sim), plus a raw
+KNXnet/IP probe for negative tests. Part of
 [OT Fabric](https://otfabric.io).
 
 The repository holds third-party stacks only. A system under test brings
@@ -63,6 +65,7 @@ evidence). Each result records the implementations and versions.
 | `knxd` | knxd and knxtool, dummy bus | 0.14.73-1 (Debian trixie) | server, client |
 | `xknx` | xknx | 4.1.1 | client |
 | `knxultimate` | KNXUltimate | 6.3.2 | client |
+| `cbsigma` | cB-Sigma knx, and knx-sim for the sim suite | v0.2.0, v0.2.0 | client (the simulator is no contract server) |
 | `probe` | hand-built datagrams (Python standard library) | 1.0 | negative tests |
 
 How each was chosen, and the rejected candidates (openHAB embeds Calimero):
@@ -79,7 +82,7 @@ make images                         # build every adapter image
 make smoke                          # the contract of each image on its own (scripts/smoke.sh)
 make interop                        # every suite, every pair: reports/latest.{json,md}
 scripts/interop.sh xknx calimero-server probe            # some adapters, each in the roles it declares
-ADAPTER_IMAGE_sut=my/image:tag GATE=sut scripts/interop.sh sut xknx knxultimate knxd calimero-server calimero-tools probe
+ADAPTER_IMAGE_sut=my/image:tag GATE=sut scripts/interop.sh sut xknx knxultimate knxd calimero-server calimero-tools cbsigma probe
 make matrix ADAPTER=sut=my/image:tag GATE=sut   # the same with the default lists, gating on it
 python3 scripts/run-matrix.py --servers calimero-server --clients xknx,calimero-tools --suites tunnel
 ```
@@ -110,12 +113,24 @@ builds and publishes OT Fabric's own image, by hand only.
 `.github/workflows/upstream.yml` compares every pin with the latest
 upstream release every day (`scripts/latest-upstream.py`: the Calimero
 images on Docker Hub, knxd in Debian trixie, xknx on PyPI, KNXUltimate on
-npm) and checks whether the tag of every
+npm, cB-Sigma knx and knx-sim on the Go module proxy) and checks whether the tag of every
 digest-pinned base image has moved. An adapter that is behind is built at
 the latest release and the whole matrix runs with it
 (`scripts/candidate.sh <adapter> <version>`). While a pin is behind, an issue
 holds the table; it is closed once every pin is current again. Pins only
 move by a reviewed change.
+
+## Suites
+
+| Suite | What |
+|---|---|
+| `tunnel`, `dpt`, `v2` | every client against every server: discovery, description, tunnels over UDP and TCP, group write and read, datapoint encodings, device management, busmonitor |
+| `negative` | the probe's malformed datagrams against every server |
+| `routing` | every router to every other one over multicast |
+| `secure` | KNX IP Secure tunnelling and routing, KNX Data Secure |
+| `management` | remote property services and tool access of a server's device |
+| `sim` | every client against cB-Sigma knx-sim, a gateway and router with fault switches: repeated indications, missing acknowledgements, replayed and tampered secure wrappers, a session closed by the gateway, an idle secure session past the 60 s timeout, ROUTING_BUSY and ROUTING_LOST_MESSAGE |
+| `files` | offline: every adapter with the `keyring` operation reads the test profile's ETS keyring and the same profile written by knx-sim |
 
 ## Known limitations
 
@@ -130,6 +145,11 @@ move by a reviewed change.
   device; none of the third-party stacks acts as one, so that scenario
   needs a system under test that does (see the known differences).
 - calimero-server 3.0-M2 has no image; 3.0-M1 is used.
+- cB-Sigma knx-sim is no contract server: it keeps the writes of a tunnel to
+  itself (other tunnels do not see them) and its friendly name is fixed, so
+  it takes part in the sim suite only. It runs fresh for every scenario: it
+  numbers its tunnels by channel from 1.1.241 and never reuses a channel
+  number (docs/INTEROPERABILITY.md).
 - Remote device management: knxd and KNXUltimate take no part (their
   adapters do not drive it); xknx manages devices only in transport
   connections and without tool keys; Calimero server's emulated device has

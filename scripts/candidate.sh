@@ -9,7 +9,8 @@
 # package.json/package-lock.json), every image is built and
 # `make matrix GATE=<adapter>` runs. Used by the Upstream workflow on a
 # throwaway checkout; locally, `git checkout adapters/` undoes the edits.
-# knxultimate needs npm on the host to update the lock file.
+# knxultimate needs npm on the host to update the lock file, cbsigma and
+# cbsigma-sim (the two cB-Sigma modules of adapters/cbsigma) need Go.
 #
 # Ends with "[candidate] <n> passed, <n> failed, ..." from reports/latest.json.
 set -eu
@@ -18,7 +19,7 @@ cd "$(dirname "$0")/.."
 adapter=${1:-}
 version=${2:-}
 if [ -z "$adapter" ] || [ -z "$version" ]; then
-	echo "usage: candidate.sh calimero-server|calimero-tools|knxd|xknx|knxultimate <version>" >&2
+	echo "usage: candidate.sh calimero-server|calimero-tools|knxd|xknx|knxultimate|cbsigma|cbsigma-sim <version>" >&2
 	exit 2
 fi
 
@@ -45,6 +46,16 @@ case "$adapter" in
 		;;
 	knxultimate)
 		(cd adapters/knxultimate && npm install --package-lock-only --save-exact --no-audit --no-fund "knxultimate@$version")
+		;;
+	cbsigma | cbsigma-sim)
+		# Both are modules of adapters/cbsigma (go.mod, go.sum); the ARG is
+		# the tag's commit, for the capabilities.
+		module=github.com/cB-Sigma/knx arg=UPSTREAM_SHA
+		[ "$adapter" = cbsigma-sim ] && module=github.com/cB-Sigma/knx-sim arg=SIM_SHA
+		sha=$(git ls-remote "https://$module.git" "refs/tags/$version^{}" "refs/tags/$version" | head -1 | cut -f1)
+		(cd adapters/cbsigma && GOFLAGS=-mod=mod go get "$module@$version" && go mod tidy)
+		edit adapters/cbsigma/Dockerfile "^ARG $arg=" "ARG $arg=$sha"
+		adapter=cbsigma
 		;;
 	*)
 		echo "candidate: unknown adapter $adapter" >&2

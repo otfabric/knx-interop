@@ -1,6 +1,8 @@
-# Container contract (version 1.5)
+# Container contract (version 1.6)
 
-Version 1.5 adds the `upstream` object of the capabilities document: the
+Version 1.6 adds the `keyring` client operation (an offline check: the
+adapter reads an ETS keyring file and reports what it holds) and its
+`keyring` feature. Version 1.5 adds the `upstream` object of the capabilities document: the
 stack behind the adapter and whether its protocol engine is independent
 (`upstream.independentEngine`). Version 1.4 added remote device management: the `remote-property`
 operation (the remote property services of a device on the KNX network,
@@ -29,6 +31,7 @@ run client <op> [--target HOST] [--port 3671] [--nat] [--routing] [--tcp]
                 [--group G] [--dpt D] [--value V] [--data HEX]
                 [--count N] [--timeout SECONDS]
                 [--device IA] [--start N] [--connected] [--tool-access]
+                [--file PATH] [--password P]
 ```
 
 ## capabilities
@@ -58,7 +61,7 @@ time) for the server role; since 1.2 `secure` (KNX IP Secure: secure
 tunnelling and, with `--routing`, secure routing), `dataSecure` (KNX Data
 Secure group communication) and `server.secure`; since 1.4
 `remoteProperty` and `toolAccess` for the client and `server.remoteProperty`
-and `server.toolAccess` for the server role.
+and `server.toolAccess` for the server role; since 1.6 `keyring`.
 
 ## KNX Secure test profile (1.2)
 
@@ -154,9 +157,34 @@ stdout and exits 0 (pass), 1 (fail) or 3 (unsupported):
 | `property` (1.1) | device management (M_PropRead) of property `--pid` of interface object type `--object` | `{"data": "HEX"}` |
 | `busmonitor` (1.1) | open a busmonitor connection, report `--count` L_Busmon.ind frames; `READY` on stderr | `{"frames": [{"raw": "HEX"}]}` (the TP1 frame) |
 | `remote-property` (1.4) | remote property read (or with `--data` write) of `--device` through a tunnel to `--target` | `{"data": "HEX", "object": index}` |
+| `keyring` (1.6) | read the ETS keyring `--file` with `--password` (offline; a wrong password fails) | `{"interfaces": [{"address", "userId", "password"}], "devices": [{"address", "managementPassword", "toolKey": bool}], "backbone": {"key": "hex", "latencyMs"}, "groups": {"GA": {"key": "hex", "senders": [IA]}}}` |
 | `negative` (probe only) | the negative test suite against `--target` | `{"checks": [{"name", "status", "detail", "kind"}]}` |
 
 `--data` carries the expected encoding of `--value` from the fixtures, for
 adapters without a datapoint codec (knxd); adapters with a codec encode
 the value themselves and the runner compares what an observer received with
 the fixture.
+
+## The sim and files suites (1.6)
+
+The sim suite runs every client against cB-Sigma knx-sim, which the
+`knx-interop-cbsigma` image carries next to its client. These commands are
+that image's own, not part of the contract; a system under test only needs
+the client operations above:
+
+```text
+run sim [--secure] [--session-timeout S]   a simulated gateway on UDP and TCP 3671 (with --secure:
+                                           KNX IP Secure on TCP with the test profile's users and
+                                           Data Secure groups; tunnels 1.1.241 and up)
+run sim --routing                          a simulated KNX IP router on 224.0.23.12:3671 instead
+run sim-ctl CMD [ARG...]                   (docker exec) stats, inject GA HEX [short],
+                                           inject-duplicate, inject-tampered, replay,
+                                           end-sessions STATUS, drop-acks on|off, silent on|off,
+                                           drop-streams; with --routing: route-read GA,
+                                           busy-read MS GA, lost N
+run sim-keyring                            the test profile as an ETS keyring written by knx-sim
+```
+
+The files suite gives every adapter with the `keyring` feature the test
+profile's keyring and the one knx-sim writes, with `--network none`.
+

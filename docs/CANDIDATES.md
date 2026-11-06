@@ -10,6 +10,7 @@ same engine count once.
 | **knxd** + knxtool | GPL-2.0 | C++ | Debian trixie 0.14.73-1 (upstream tag 0.14.75 `5b5514c3`) | knxd | yes: UDP tunnelling, discovery (no extended search), routing; TCP tunnelling server ≥ 0.14.68 | yes: `ipt`/`iptn` tunnel client, `ip` routing, knxtool | yes | no | no | Debian package, amd64/arm64 | **used** (server and client) |
 | **xknx** | MIT | Python | 4.1.1 (`e3d82127`, 2026-11-05) | xknx | no | yes: UDP/TCP tunnelling, route back, discovery incl. extended search | yes | yes | yes | pip, pure Python | **used** (client) |
 | **KNXUltimate** | MIT | TypeScript | 6.3.2 (`cf104ba8`, 2026-10-30) | KNXUltimate | minimal UDP tunnel server (no discovery) | yes: UDP/TCP tunnelling, discovery, description | yes | yes | yes | npm | **used** (client) |
+| **cB-Sigma knx** + knx-sim | Apache-2.0 | Go | v0.2.0 (knx `8221e2fd`, knx-sim `c30a0f17`, 2026-10) | cB-Sigma knx (written for SigmaM2M; shares no code with go-knx) | knx-sim: a simulated gateway and router with fault switches (not a contract server: no forwarding between tunnels) | yes: UDP/TCP tunnelling, discovery, busmonitor, KNX IP Secure (TCP), Data Secure, ETS keyring | yes, with flow control and KNX IP Secure | yes (tunnelling over TCP, routing) | yes (group keys) | Go module proxy, static binary | **used** (client; knx-sim in the sim suite), added 2026-11-06 |
 | **openHAB KNX binding** | EPL-2.0 | Java | 5.2.3 / 5.3.0.M3 | **embeds calimero-core 3.0-M2** | — | — | — | — | — | needs an openHAB runtime | **rejected**: same engine as Calimero |
 | knx-go (vapourismo) | MIT | Go | no tags, last commit 2026-08-13, "no longer maintained" | knx-go | no | yes | yes | no | no | yes | watch list: unmaintained, same language as go-knx |
 | knx.js (ekarak, npm `knx`) | MIT | JavaScript | 2.5.4 (2024) | knx.js | no | yes | yes | no | no | yes | rejected: stale, superseded by KNXUltimate |
@@ -42,5 +43,12 @@ was rejected because it is Calimero.
   each L_Data.con from knxd's protocol trace.
 - **xknx**: no server. Scripts drive `xknx.XKNX` directly (tunnelling,
   routing, route back, value reader, telegram callbacks).
+- **cB-Sigma knx**: no stand-alone DESCRIPTION_REQUEST, so `describe` reads
+  the description that `DialTunnel` asks for (it opens and closes a tunnel);
+  no cEMI device management and no management sessions (`property`,
+  `remote-property` unsupported); KNX IP Secure over TCP only. Its routing
+  source is 1.1.17, a Data Secure sender of the test profile. knx-sim keeps
+  each tunnel's writes to itself and has a fixed friendly name, so it is no
+  contract server; the sim suite drives its fault switches instead.
 - **KNXUltimate**: no route back option; its describe announces the wrong
   port (known difference, [KNXUltimate#117](https://github.com/Supergiovane/KNXUltimate/issues/117)).

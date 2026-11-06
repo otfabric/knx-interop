@@ -73,7 +73,8 @@ branch, it stops before publishing. Nothing runs it automatically, so after
 a go-knx release the image stays on the old version until someone does.
 
 The workflow tests against the published references only: xknx,
-KNXUltimate and the probe. The images with GPL binaries (knxd, Calimero) are
+KNXUltimate, cB-Sigma knx (with knx-sim, the sim suite) and the probe.
+The images with GPL binaries (knxd, Calimero) are
 never published ([THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)), so
 there it has no third-party server. Locally, build them and run the whole
 matrix with it:
@@ -82,7 +83,7 @@ matrix with it:
 make -f own/go-knx/Makefile image smoke interop                 # from the repository root, published references
 make images                                                      # every reference as :dev
 ADAPTER_IMAGE_otfabric=ghcr.io/otfabric/knx-interop-otfabric:dev VERSION=dev \
-  scripts/interop.sh otfabric xknx knxultimate knxd calimero-server calimero-tools probe
+  scripts/interop.sh otfabric xknx knxultimate knxd calimero-server calimero-tools cbsigma probe
 ```
 
 ## What it cannot do

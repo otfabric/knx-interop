@@ -15,7 +15,8 @@ Prints key=value lines (the format of $GITHUB_OUTPUT):
 The pins are read from the build inputs (Dockerfiles, requirements.txt,
 package-lock.json): calimero-server and calimero-tools against the tags of
 their official images on Docker Hub, knxd against the Debian suite of its
-base image, xknx against PyPI and knxultimate against npm. Snapshots and pre-releases are never "latest";
+base image, xknx against PyPI, knxultimate against npm, and cbsigma (cB-Sigma
+knx) and cbsigma-sim (cB-Sigma knx-sim) against the Go module proxy. Snapshots and pre-releases are never "latest";
 Calimero milestones (3.0-M1) are, as only they have images. probe is this
 repository's own tool. Nothing is modified.
 """
@@ -104,6 +105,23 @@ def xknx():
     return "library", pin, newest(live), "PyPI"
 
 
+def go_module(module):
+    """The pin of a Go module in adapters/cbsigma/go.mod and its latest
+    release on the Go module proxy."""
+    pin = search(rf"^\s*{re.escape(module)} (v\S+)$", "adapters/cbsigma/go.mod")
+    escaped = re.sub(r"[A-Z]", lambda m: "!" + m.group(0).lower(), module)
+    versions = fetch(f"https://proxy.golang.org/{escaped}/@v/list").split()
+    return "library", pin, newest(versions), "Go module proxy"
+
+
+def cbsigma():
+    return go_module("github.com/cB-Sigma/knx")
+
+
+def cbsigma_sim():
+    return go_module("github.com/cB-Sigma/knx-sim")
+
+
 def knxultimate():
     pin = json.loads(read("adapters/knxultimate/package-lock.json"))["packages"]["node_modules/knxultimate"]["version"]
     meta = json.loads(fetch("https://registry.npmjs.org/knxultimate"))
@@ -119,6 +137,8 @@ RESOLVERS = {
     "knxd": knxd,
     "xknx": xknx,
     "knxultimate": knxultimate,
+    "cbsigma": cbsigma,
+    "cbsigma-sim": cbsigma_sim,
 }
 
 
