@@ -102,6 +102,9 @@ def capabilities(implementation, version, roles, features, notes=""):
         "version": version,
         "roles": roles,
         "features": features,
+        # Contract 1.5: the stack behind the adapter. Every adapter here runs
+        # a third-party engine (the probe: hand-built datagrams of its own).
+        "upstream": {"name": implementation, "version": version, "independentEngine": True},
     }
     if notes:
         doc["notes"] = notes

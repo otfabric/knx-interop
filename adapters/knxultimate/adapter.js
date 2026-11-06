@@ -80,7 +80,7 @@ function connect() {
 
 async function main() {
   if (args.role === 'capabilities') {
-    process.stdout.write(JSON.stringify({ features: { answer: true, connect: true, describe: true, discover: true, nat: false, routing: true, secure: false, tunnel: true, dptCodec: true, tcp: true, property: false, busmonitor: false }, implementation: IMPL, notes: 'KNXUltimate supports KNX IP Secure and Data Secure; this adapter does not exercise them yet. It has no route back (NAT) option.', roles: ['client'], schemaVersion: '1.0', version: VERSION }) + '\n')
+    process.stdout.write(JSON.stringify({ features: { answer: true, connect: true, describe: true, discover: true, nat: false, routing: true, secure: false, tunnel: true, dptCodec: true, tcp: true, property: false, busmonitor: false }, implementation: IMPL, notes: 'KNXUltimate supports KNX IP Secure and Data Secure; this adapter does not exercise them yet. It has no route back (NAT) option.', roles: ['client'], schemaVersion: '1.0', upstream: { name: IMPL, version: VERSION, independentEngine: true }, version: VERSION }) + '\n')
     return
   }
   if (args.role === 'server') return finish('unsupported', {}, 'the adapter uses KNXUltimate as a client only')

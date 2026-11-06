@@ -108,7 +108,7 @@ groupmon_json() {
 
 case "$ROLE" in
 capabilities)
-	printf '{"features":{"answer":false,"connect":true,"describe":true,"discover":true,"nat":true,"routing":true,"secure":true,"dataSecure":true,"secureUdp":true,"tunnel":true,"dptCodec":true,"tcp":true,"property":true,"busmonitor":true,"remoteProperty":true,"toolAccess":true},"implementation":"%s","notes":"The Calimero process communication tool has no responder. Secure: tunnelling over TCP, routing and Data Secure with the test profile. Tool access: the keyring tool key, with the tunnel address set (-k 1.1.10) because the tool computes the MAC over the source it sends.","roles":["client"],"schemaVersion":"1.0","version":"%s"}\n' "$IMPL" "$VERSION"
+	printf '{"features":{"answer":false,"connect":true,"describe":true,"discover":true,"nat":true,"routing":true,"secure":true,"dataSecure":true,"secureUdp":true,"tunnel":true,"dptCodec":true,"tcp":true,"property":true,"busmonitor":true,"remoteProperty":true,"toolAccess":true},"implementation":"%s","notes":"The Calimero process communication tool has no responder. Secure: tunnelling over TCP, routing and Data Secure with the test profile. Tool access: the keyring tool key, with the tunnel address set (-k 1.1.10) because the tool computes the MAC over the source it sends.","roles":["client"],"schemaVersion":"1.0","upstream":{"name":"%s","version":"%s","independentEngine":true},"version":"%s"}\n' "$IMPL" "$IMPL" "$VERSION" "$VERSION"
 	exit 0 ;;
 server) finish unsupported '{}' "use the calimero-server adapter" ;;
 client) ;;

@@ -12,6 +12,19 @@ software under its own licence, installed from upstream, unmodified:
 | knx-interop-xknx | xknx 4.0.0 and its Python dependencies (cryptography, ifaddr) | MIT (xknx), Apache-2.0/BSD (cryptography), MIT (ifaddr) | <https://github.com/XKNX/xknx> |
 | knx-interop-knxultimate | KNXUltimate 6.3.1 and its npm dependencies (package-lock.json) | MIT (KNXUltimate) and the licences of its dependencies | <https://github.com/Supergiovane/KNXUltimate> |
 
+## Image `knx-interop-otfabric`
+
+OT Fabric's own stack (`own/go-knx/`), not part of a release: the adapter
+(MIT) and the Go modules it is built from. Every module's licence text is in
+the image under `/licenses` (`/licenses/BUNDLED-MODULES.txt` lists them with
+their versions), with the KNX Secure test profile of this repository.
+
+| Component | Version | Licence | Source |
+|---|---|---|---|
+| go-knx | latest release when built | MIT | <https://github.com/otfabric/go-knx> |
+| Go standard library | the Go of the build image | BSD-3-Clause | <https://go.dev> |
+| Adapter | this repository, `own/go-knx/` | MIT | <https://github.com/otfabric/knx-interop> |
+
 Publishing policy (decided 2026-10-29): the release workflow publishes the
 MIT images only (xknx, knxultimate, probe). The images that contain GPL
 binaries (calimero-server, calimero-tools, knxd) are never published: they

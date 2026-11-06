@@ -26,9 +26,11 @@ def main():
             errors.append(msg)
 
     for name, digest in re.findall(r'^\s+(python|node|debian|golang): "[^"@]+@(sha256:[0-9a-f]{64})"', v, re.M):
-        files = [f for f in os.listdir(os.path.join(ROOT, "adapters")) if os.path.isdir(os.path.join(ROOT, "adapters", f))]
-        used = any(digest in read("adapters/%s/%s" % (f, d)) for f in files
-                   for d in os.listdir(os.path.join(ROOT, "adapters", f)) if d.startswith("Dockerfile"))
+        # The adapters, and the images of OT Fabric's own stacks (own/).
+        dirs = [os.path.join(top, f) for top in ("adapters", "own") if os.path.isdir(os.path.join(ROOT, top))
+                for f in os.listdir(os.path.join(ROOT, top)) if os.path.isdir(os.path.join(ROOT, top, f))]
+        used = any(digest in read(os.path.join(f, d)) for f in dirs
+                   for d in os.listdir(os.path.join(ROOT, f)) if d.startswith("Dockerfile"))
         want(used, "base image %s %s is used by no Dockerfile" % (name, digest))
     for d in ("70463ad74c4c976cbc8c062fc219b19059f417562051670deeaa65c5e13f7f9c",):
         want(d in read("adapters/calimero-server/Dockerfile") and d in v, "calimero-server digest")

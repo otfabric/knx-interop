@@ -4,7 +4,7 @@
 #
 #   docker compose up -d
 #   docker compose run --rm xknx client read --target calimero --group 1/0/2 --dpt 9.001
-#   docker compose run --rm goknx client discover
+#   docker compose run --rm otfabric client discover
 #   docker compose down
 #
 # The automated matrix (scripts/run-matrix.py) creates its own networks.
@@ -22,14 +22,13 @@ services:
     <<: *image
     image: ghcr.io/otfabric/knx-interop-knxd:${VERSION:-dev}
     command: ["server", "--name", "knxd"]
-  goknx-server:
-    <<: *image
-    image: ghcr.io/otfabric/knx-interop-goknx:${VERSION:-dev}
-    command: ["server", "--name", "go-knx", "--routing"]
+  # OT Fabric's own stack (own/), pulled from GHCR: not a reference.
+  otfabric-server:
+    image: ${ADAPTER_IMAGE_otfabric:-ghcr.io/otfabric/knx-interop-otfabric:latest}
+    command: ["server", "--name", "otfabric", "--routing"]
   # Clients, run with "docker compose run --rm <service> client ...".
-  goknx:
-    <<: *image
-    image: ghcr.io/otfabric/knx-interop-goknx:${VERSION:-dev}
+  otfabric:
+    image: ${ADAPTER_IMAGE_otfabric:-ghcr.io/otfabric/knx-interop-otfabric:latest}
     profiles: [client]
   xknx:
     <<: *image

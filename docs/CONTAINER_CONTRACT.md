@@ -1,6 +1,8 @@
-# Container contract (version 1.4)
+# Container contract (version 1.5)
 
-Version 1.4 adds remote device management: the `remote-property`
+Version 1.5 adds the `upstream` object of the capabilities document: the
+stack behind the adapter and whether its protocol engine is independent
+(`upstream.independentEngine`). Version 1.4 added remote device management: the `remote-property`
 operation (the remote property services of a device on the KNX network,
 through a tunnel), `server --tool-access` (the server's device accepts only
 management secured with its tool key, KNX Data Secure point to point), and
@@ -36,8 +38,16 @@ One JSON document on stdout:
 ```json
 {"schemaVersion": "1.0", "implementation": "xknx", "version": "4.0.0",
  "roles": ["client"], "features": {"discover": true, "describe": true, "tunnel": true,
- "routing": true, "nat": true, "answer": true, "secure": false}, "notes": "..."}
+ "routing": true, "nat": true, "answer": true, "secure": false},
+ "upstream": {"name": "xknx", "version": "4.0.0", "independentEngine": true}, "notes": "..."}
 ```
+
+`upstream` (1.5): `name` and `version` of the stack, optionally its
+`revision`, and `independentEngine`: false for an image whose stack is not
+independent of the systems tested against it (OT Fabric's own,
+`knx-interop-otfabric`). `results.json` records it as `independent`; an
+image of an earlier contract counts as independent unless it is an external
+adapter (`--adapter`).
 
 Features a runner relies on: `discover`, `describe`, `tunnel`, `routing`,
 `nat`, `answer` (group read responder), `dptCodec` (false: the adapter
@@ -110,7 +120,11 @@ virtual devices with group objects 1/0/1 (1.001), 1/0/2 (9.001 = 21.5),
 
 ## External adapters
 
-knx-interop's own adapters are third-party stacks. A system under test
+knx-interop's own adapters are third-party stacks. OT Fabric's own stack,
+go-knx, is published as `ghcr.io/otfabric/knx-interop-otfabric`
+(`own/go-knx/README.md`), adapter name `otfabric`, and runs in the matrix
+with `ADAPTER_IMAGE_otfabric=<image> scripts/interop.sh otfabric …`; it is not
+a reference and not part of a release. A system under test
 implements this contract in an image of its own and passes it to the
 runner with `--adapter name=image` (`make matrix ADAPTER=name=image`): it
 joins the server, client and routing roles its capabilities declare and is

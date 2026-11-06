@@ -100,6 +100,7 @@ fixed in the harness (2026-10-29 and 2026-10-30):
 | calimero-tools | [#24](https://github.com/calimero-project/calimero-tools/issues/24): `describe --json --nat` NullPointerException | open |
 | knxd | [#667](https://github.com/knxd/knxd/issues/667): the `ipt` client never sends its DISCONNECT_REQUEST | open |
 | calimero-server | not reported: the control endpoint crash is fixed on master (d276d8a8), not released yet | — |
+| calimero-core | [#176](https://github.com/calimero-project/calimero-core/issues/176) (by another reporter): S-A_Sync_Res random loses trailing zero octets | fixed on master (368d0929), not released yet |
 
 ## Other observations
 
@@ -131,6 +132,13 @@ fixed in the harness (2026-10-29 and 2026-10-30):
   frames; the adapter passes the tunnel address. Calimero tools reads the
   property description (A_PropertyDescription_Read) before a property
   access; xknx's management takes answers in transport connections only.
+- Remote device management: Calimero 3.0-M1 rebuilds the random of an
+  S-A_Sync_Res with `BitSet.toByteArray()`, which drops trailing zero
+  octets; a random ending in 0x00 (about 1 sync in 256) then fails with
+  "MAC mismatch" and the tool access scenario fails once. Seen with Calimero
+  tools against the go-knx server in a local full matrix; the captured
+  frames are valid AES-CCM. Not a waiver (a waiver that passes fails the
+  run); a rerun passes. calimero-core#176, fixed on master, not released.
 - Calimero server 3.0-M1's emulated device answers the remote property
   services (its friendly name is writable) and reports a security object
   with security mode off; it has no tool key access, also with a keyring.

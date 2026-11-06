@@ -12,6 +12,14 @@
    `ADAPTERS` and the runner's lists, and evaluate it in docs/CANDIDATES.md.
 4. Run `make images matrix` and add the results to docs/INTEROPERABILITY.md.
 
+## OT Fabric's own stack
+
+`own/go-knx/` is go-knx behind the contract, published by hand as
+`knx-interop-otfabric` (`.github/workflows/own-go-knx.yml`). It is not a
+reference and not in a release; nothing outside `own/` may name it or go-knx
+(REQUIREMENTS.md R1, checked in CI). Build and test it with
+`make -f own/go-knx/Makefile image smoke interop`.
+
 ## Rules
 
 - A result is pass, fail, unsupported, not-tested or known-difference. A

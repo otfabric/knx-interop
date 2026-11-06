@@ -4,8 +4,8 @@
 # adapters/knxultimate/package-lock.json are the source of truth for a
 # build: scripts/check-versions.py fails when this file disagrees with them.
 
-interop_version: "0.7.1"
-contract_version: "1.4"          # docs/CONTAINER_CONTRACT.md
+interop_version: "0.8.0"
+contract_version: "1.5"          # docs/CONTAINER_CONTRACT.md
 
 protocol:
   name: "KNXnet/IP (core, tunnelling, routing), cEMI, KNX datapoint types"
@@ -14,7 +14,8 @@ protocol:
 base_images:
   python: "python:3.12-slim-bookworm@sha256:e697c81897302a4c4333bade000d98038fbb21eb064f8ee1fd42d02ebcd9d337"
   node: "node:22-bookworm-slim@sha256:4b150b48b4116e2a22f2c39cc27025fbf4f153e2078fd3b14d159fdb5c7279da"
-  debian: "debian:trixie-slim@sha256:f6b08b09a05725f9431502d3b5714f5c4576e82c1a84fa1debe0c24a7e0c3ec4"
+  debian: "debian:trixie-slim@sha256:f6b08b09a05725f9431502d3b5714f5c4576e82c1a84fa1debe0c24a7e0c3ec4"   # knxd, own/go-knx
+  golang: "golang:1.27.2-trixie@sha256:e58d6f83b3416618d8bcac2b3dde1b7f7e3c4a77d25e88637f8bbae81536c48d"   # own/go-knx
 
 implementations:
   calimero-server:
@@ -80,3 +81,19 @@ implementations:
     upstream: "openhab/openhab-addons (org.openhab.binding.knx)"
     license: "EPL-2.0"
     note: "Embeds io.calimero:calimero-core 3.0-M2: not an independent implementation; needs a full openHAB runtime."
+
+# OT Fabric's own stacks (own/, ADR-0012): published for others to test
+# against, not references. Built by hand from the latest release (the "Own
+# stack" workflow); not pinned here, not in a release.
+own_implementations:
+  otfabric:
+    upstream: "go-knx"
+    repository: "https://github.com/otfabric/go-knx"
+    artifact: "go:github.com/otfabric/go-knx"
+    version: "latest release, resolved when the image is built by hand"
+    license: "MIT"
+    language: "Go"
+    independent_engine: false
+    roles: [server, client]
+    image: "ghcr.io/otfabric/knx-interop-otfabric"
+    build: "own/go-knx"
