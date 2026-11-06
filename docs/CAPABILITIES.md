@@ -18,8 +18,8 @@ Print them with `make capabilities` (and `docker run --rm <image> capabilities`)
 | `calimero-server` | calimero-server | 3.0-M1 | server | yes |
 | `calimero-tools` | calimero | 3.0-M1 | client | yes |
 | `knxd` | knxd | 0.14.73 | server, client | yes |
-| `xknx` | xknx | 4.0.0 | client | yes |
-| `knxultimate` | knxultimate | 6.3.1 | client | yes |
+| `xknx` | xknx | 4.1.1 | client | yes |
+| `knxultimate` | knxultimate | 6.3.2 | client | yes |
 | `probe` | probe | 1.0 | client | yes |
 | `otfabric` | go-knx | v0.7.0 | server, client | no |
 

@@ -1,8 +1,8 @@
 # knx-interop results
 
-Started 2026-10-30T05:54:18.591582+00:00, finished 2026-10-30T06:02:55.483948+00:00 on darwin/arm64.
+Started 2026-11-06T13:32:15.831577+00:00, finished 2026-11-06T13:41:04.266089+00:00 on darwin/arm64.
 
-Summary: known-difference 5, pass 220, unsupported 51
+Summary: known-difference 4, pass 221, unsupported 51
 
 ## Implementations
 
@@ -11,9 +11,9 @@ Summary: known-difference 5, pass 220, unsupported 51
 | calimero-server | calimero-server | 3.0-M1 | server |
 | calimero-tools | calimero | 3.0-M1 | client |
 | knxd | knxd | 0.14.73 | server, client |
-| knxultimate | knxultimate | 6.3.1 | client |
+| knxultimate | knxultimate | 6.3.2 | client |
 | probe | probe | 1.0 | client |
-| xknx | xknx | 4.0.0 | client |
+| xknx | xknx | 4.1.1 | client |
 
 ## tunnel
 
@@ -25,20 +25,20 @@ Summary: known-difference 5, pass 220, unsupported 51
 | group write (DPT 1.001) | xknx | knxd | PASS | observer/responder calimero-tools.  |
 | group read/response (DPT 9.001) | xknx | knxd | PASS | observer/responder knxultimate.  |
 | discover (multicast search) | knxultimate | knxd | PASS |  |
-| describe | knxultimate | knxd | KNOWN-DIFFERENCE | KNXUltimate 6.3.1 announces <local IP>:3671 in its DESCRIPTION_REQUEST HPAI while it listens on an ephemeral port (src/KNXClient.ts sendDescriptionRequestMessage: new HPAI(localIPAddress), default port 3671); servers that answer to the HPAI, as the standard requires, answer a port nobody listens on. |
+| describe | knxultimate | knxd | PASS |  |
 | connect and disconnect | knxultimate | knxd | PASS |  |
 | group write (DPT 1.001) | knxultimate | knxd | PASS | observer/responder xknx.  |
 | group read/response (DPT 9.001) | knxultimate | knxd | PASS | observer/responder xknx.  |
-| discover (multicast search) | calimero-tools | knxd | PASS |  |
-| describe | calimero-tools | knxd | PASS |  |
-| connect and disconnect | calimero-tools | knxd | PASS |  |
-| group write (DPT 1.001) | calimero-tools | knxd | PASS | observer/responder xknx.  |
-| group read/response (DPT 9.001) | calimero-tools | knxd | PASS | observer/responder xknx.  |
 | discover (multicast search) | knxd | knxd | UNSUPPORTED | The Debian package has no eibnetsearch/eibnetdescribe tools; knxd has no DPT codec, writes send the octets given with --data. |
 | describe | knxd | knxd | UNSUPPORTED | The Debian package has no eibnetsearch/eibnetdescribe tools; knxd has no DPT codec, writes send the octets given with --data. |
 | connect and disconnect | knxd | knxd | PASS |  |
 | group write (DPT 1.001) | knxd | knxd | PASS | observer/responder xknx.  |
 | group read/response (DPT 9.001) | knxd | knxd | PASS | observer/responder xknx.  |
+| discover (multicast search) | calimero-tools | knxd | PASS |  |
+| describe | calimero-tools | knxd | PASS |  |
+| connect and disconnect | calimero-tools | knxd | PASS |  |
+| group write (DPT 1.001) | calimero-tools | knxd | PASS | observer/responder xknx.  |
+| group read/response (DPT 9.001) | calimero-tools | knxd | PASS | observer/responder xknx.  |
 | discover (multicast search) | xknx | calimero-server | PASS |  |
 | describe | xknx | calimero-server | PASS |  |
 | connect and disconnect | xknx | calimero-server | PASS |  |
@@ -49,16 +49,16 @@ Summary: known-difference 5, pass 220, unsupported 51
 | connect and disconnect | knxultimate | calimero-server | PASS |  |
 | group write (DPT 1.001) | knxultimate | calimero-server | PASS | observer/responder xknx.  |
 | group read/response (DPT 9.001) | knxultimate | calimero-server | PASS | observer/responder xknx.  |
-| discover (multicast search) | calimero-tools | calimero-server | PASS |  |
-| describe | calimero-tools | calimero-server | PASS |  |
-| connect and disconnect | calimero-tools | calimero-server | PASS |  |
-| group write (DPT 1.001) | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| group read/response (DPT 9.001) | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
 | discover (multicast search) | knxd | calimero-server | UNSUPPORTED | The Debian package has no eibnetsearch/eibnetdescribe tools; knxd has no DPT codec, writes send the octets given with --data. |
 | describe | knxd | calimero-server | UNSUPPORTED | The Debian package has no eibnetsearch/eibnetdescribe tools; knxd has no DPT codec, writes send the octets given with --data. |
 | connect and disconnect | knxd | calimero-server | PASS |  |
 | group write (DPT 1.001) | knxd | calimero-server | PASS | observer/responder xknx.  |
 | group read/response (DPT 9.001) | knxd | calimero-server | PASS | observer/responder xknx.  |
+| discover (multicast search) | calimero-tools | calimero-server | PASS |  |
+| describe | calimero-tools | calimero-server | PASS |  |
+| connect and disconnect | calimero-tools | calimero-server | PASS |  |
+| group write (DPT 1.001) | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| group read/response (DPT 9.001) | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
 
 ## dpt
 
@@ -88,18 +88,6 @@ Summary: known-difference 5, pass 220, unsupported 51
 | DPT 13.001 -2 | knxultimate | knxd | PASS | observer/responder xknx.  |
 | DPT 14.056 1234.5 | knxultimate | knxd | PASS | observer/responder xknx.  |
 | DPT 16.000 KNX interop | knxultimate | knxd | PASS | observer/responder xknx.  |
-| DPT 1.001 on | calimero-tools | knxd | PASS | observer/responder xknx.  |
-| DPT 1.001 off | calimero-tools | knxd | PASS | observer/responder xknx.  |
-| DPT 5.001 100 | calimero-tools | knxd | PASS | observer/responder xknx.  |
-| DPT 5.010 200 | calimero-tools | knxd | PASS | observer/responder xknx.  |
-| DPT 7.001 4660 | calimero-tools | knxd | PASS | observer/responder xknx.  |
-| DPT 9.001 21.5 | calimero-tools | knxd | PASS | observer/responder xknx.  |
-| DPT 9.001 -30 | calimero-tools | knxd | PASS | observer/responder xknx.  |
-| DPT 9.004 1200 | calimero-tools | knxd | PASS | observer/responder xknx.  |
-| DPT 12.001 305419896 | calimero-tools | knxd | PASS | observer/responder xknx.  |
-| DPT 13.001 -2 | calimero-tools | knxd | PASS | observer/responder xknx.  |
-| DPT 14.056 1234.5 | calimero-tools | knxd | PASS | observer/responder xknx.  |
-| DPT 16.000 KNX interop | calimero-tools | knxd | PASS | observer/responder xknx.  |
 | DPT 1.001 on | knxd | knxd | PASS | observer/responder xknx.  |
 | DPT 1.001 off | knxd | knxd | PASS | observer/responder xknx.  |
 | DPT 5.001 100 | knxd | knxd | PASS | observer/responder xknx.  |
@@ -112,6 +100,18 @@ Summary: known-difference 5, pass 220, unsupported 51
 | DPT 13.001 -2 | knxd | knxd | PASS | observer/responder xknx.  |
 | DPT 14.056 1234.5 | knxd | knxd | PASS | observer/responder xknx.  |
 | DPT 16.000 KNX interop | knxd | knxd | PASS | observer/responder xknx.  |
+| DPT 1.001 on | calimero-tools | knxd | PASS | observer/responder xknx.  |
+| DPT 1.001 off | calimero-tools | knxd | PASS | observer/responder xknx.  |
+| DPT 5.001 100 | calimero-tools | knxd | PASS | observer/responder xknx.  |
+| DPT 5.010 200 | calimero-tools | knxd | PASS | observer/responder xknx.  |
+| DPT 7.001 4660 | calimero-tools | knxd | PASS | observer/responder xknx.  |
+| DPT 9.001 21.5 | calimero-tools | knxd | PASS | observer/responder xknx.  |
+| DPT 9.001 -30 | calimero-tools | knxd | PASS | observer/responder xknx.  |
+| DPT 9.004 1200 | calimero-tools | knxd | PASS | observer/responder xknx.  |
+| DPT 12.001 305419896 | calimero-tools | knxd | PASS | observer/responder xknx.  |
+| DPT 13.001 -2 | calimero-tools | knxd | PASS | observer/responder xknx.  |
+| DPT 14.056 1234.5 | calimero-tools | knxd | PASS | observer/responder xknx.  |
+| DPT 16.000 KNX interop | calimero-tools | knxd | PASS | observer/responder xknx.  |
 | DPT 1.001 on | xknx | calimero-server | PASS | observer/responder calimero-tools.  |
 | DPT 1.001 off | xknx | calimero-server | PASS | observer/responder calimero-tools.  |
 | DPT 5.001 100 | xknx | calimero-server | PASS | observer/responder calimero-tools.  |
@@ -136,18 +136,6 @@ Summary: known-difference 5, pass 220, unsupported 51
 | DPT 13.001 -2 | knxultimate | calimero-server | PASS | observer/responder xknx.  |
 | DPT 14.056 1234.5 | knxultimate | calimero-server | PASS | observer/responder xknx.  |
 | DPT 16.000 KNX interop | knxultimate | calimero-server | PASS | observer/responder xknx.  |
-| DPT 1.001 on | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| DPT 1.001 off | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| DPT 5.001 100 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| DPT 5.010 200 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| DPT 7.001 4660 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| DPT 9.001 21.5 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| DPT 9.001 -30 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| DPT 9.004 1200 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| DPT 12.001 305419896 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| DPT 13.001 -2 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| DPT 14.056 1234.5 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| DPT 16.000 KNX interop | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
 | DPT 1.001 on | knxd | calimero-server | PASS | observer/responder xknx.  |
 | DPT 1.001 off | knxd | calimero-server | PASS | observer/responder xknx.  |
 | DPT 5.001 100 | knxd | calimero-server | PASS | observer/responder xknx.  |
@@ -160,6 +148,18 @@ Summary: known-difference 5, pass 220, unsupported 51
 | DPT 13.001 -2 | knxd | calimero-server | PASS | observer/responder xknx.  |
 | DPT 14.056 1234.5 | knxd | calimero-server | PASS | observer/responder xknx.  |
 | DPT 16.000 KNX interop | knxd | calimero-server | PASS | observer/responder xknx.  |
+| DPT 1.001 on | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| DPT 1.001 off | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| DPT 5.001 100 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| DPT 5.010 200 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| DPT 7.001 4660 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| DPT 9.001 21.5 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| DPT 9.001 -30 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| DPT 9.004 1200 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| DPT 12.001 305419896 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| DPT 13.001 -2 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| DPT 14.056 1234.5 | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| DPT 16.000 KNX interop | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
 
 ## v2
 
@@ -173,14 +173,14 @@ Summary: known-difference 5, pass 220, unsupported 51
 | group read over TCP (DPT 9.001) | knxultimate | knxd | UNSUPPORTED | no TCP on the server |
 | device management: device serial number (M_PropRead) | knxultimate | knxd | UNSUPPORTED | no device management on the client |
 | busmonitor sees a write (L_Busmon.ind, TP1 frame) | knxultimate | knxd | UNSUPPORTED | no busmonitor on the client |
-| group write over TCP (DPT 1.001) | calimero-tools | knxd | UNSUPPORTED | no TCP on the server |
-| group read over TCP (DPT 9.001) | calimero-tools | knxd | UNSUPPORTED | no TCP on the server |
-| device management: device serial number (M_PropRead) | calimero-tools | knxd | UNSUPPORTED | no device management on the server |
-| busmonitor sees a write (L_Busmon.ind, TP1 frame) | calimero-tools | knxd | PASS | observer/responder xknx.  |
 | group write over TCP (DPT 1.001) | knxd | knxd | UNSUPPORTED | no TCP on the client |
 | group read over TCP (DPT 9.001) | knxd | knxd | UNSUPPORTED | no TCP on the client |
 | device management: device serial number (M_PropRead) | knxd | knxd | UNSUPPORTED | no device management on the client |
 | busmonitor sees a write (L_Busmon.ind, TP1 frame) | knxd | knxd | UNSUPPORTED | no busmonitor on the client |
+| group write over TCP (DPT 1.001) | calimero-tools | knxd | UNSUPPORTED | no TCP on the server |
+| group read over TCP (DPT 9.001) | calimero-tools | knxd | UNSUPPORTED | no TCP on the server |
+| device management: device serial number (M_PropRead) | calimero-tools | knxd | UNSUPPORTED | no device management on the server |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | calimero-tools | knxd | PASS | observer/responder xknx.  |
 | group write over TCP (DPT 1.001) | xknx | calimero-server | PASS | observer/responder calimero-tools.  |
 | group read over TCP (DPT 9.001) | xknx | calimero-server | PASS | observer/responder knxultimate.  |
 | device management: device serial number (M_PropRead) | xknx | calimero-server | UNSUPPORTED | no device management on the client |
@@ -189,14 +189,14 @@ Summary: known-difference 5, pass 220, unsupported 51
 | group read over TCP (DPT 9.001) | knxultimate | calimero-server | PASS | observer/responder xknx.  |
 | device management: device serial number (M_PropRead) | knxultimate | calimero-server | UNSUPPORTED | no device management on the client |
 | busmonitor sees a write (L_Busmon.ind, TP1 frame) | knxultimate | calimero-server | UNSUPPORTED | no busmonitor on the client |
-| group write over TCP (DPT 1.001) | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| group read over TCP (DPT 9.001) | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
-| device management: device serial number (M_PropRead) | calimero-tools | calimero-server | PASS |  |
-| busmonitor sees a write (L_Busmon.ind, TP1 frame) | calimero-tools | calimero-server | UNSUPPORTED | no busmonitor on the server |
 | group write over TCP (DPT 1.001) | knxd | calimero-server | UNSUPPORTED | no TCP on the client |
 | group read over TCP (DPT 9.001) | knxd | calimero-server | UNSUPPORTED | no TCP on the client |
 | device management: device serial number (M_PropRead) | knxd | calimero-server | UNSUPPORTED | no device management on the client |
 | busmonitor sees a write (L_Busmon.ind, TP1 frame) | knxd | calimero-server | UNSUPPORTED | no busmonitor on the client |
+| group write over TCP (DPT 1.001) | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| group read over TCP (DPT 9.001) | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
+| device management: device serial number (M_PropRead) | calimero-tools | calimero-server | PASS |  |
+| busmonitor sees a write (L_Busmon.ind, TP1 frame) | calimero-tools | calimero-server | UNSUPPORTED | no busmonitor on the server |
 
 ## negative
 
@@ -256,17 +256,17 @@ Summary: known-difference 5, pass 220, unsupported 51
 | Scenario | Client | Peer | Result | Detail |
 |---|---|---|---|---|
 | routing write (multicast) | xknx | knxultimate | PASS |  |
-| routing write (multicast) | xknx | calimero-tools | PASS |  |
 | routing write (multicast) | xknx | knxd | PASS |  |
+| routing write (multicast) | xknx | calimero-tools | PASS |  |
 | routing write (multicast) | knxultimate | xknx | PASS |  |
-| routing write (multicast) | knxultimate | calimero-tools | PASS |  |
 | routing write (multicast) | knxultimate | knxd | PASS |  |
-| routing write (multicast) | calimero-tools | xknx | PASS |  |
-| routing write (multicast) | calimero-tools | knxultimate | PASS |  |
-| routing write (multicast) | calimero-tools | knxd | PASS |  |
+| routing write (multicast) | knxultimate | calimero-tools | PASS |  |
 | routing write (multicast) | knxd | xknx | PASS |  |
 | routing write (multicast) | knxd | knxultimate | PASS |  |
 | routing write (multicast) | knxd | calimero-tools | PASS |  |
+| routing write (multicast) | calimero-tools | xknx | PASS |  |
+| routing write (multicast) | calimero-tools | knxultimate | PASS |  |
+| routing write (multicast) | calimero-tools | knxd | PASS |  |
 
 ## secure
 
@@ -297,7 +297,7 @@ Summary: known-difference 5, pass 220, unsupported 51
 | secure routing write (DPT 1.001) | xknx | calimero-tools | PASS |  |
 | Data Secure group write over secure routing (DPT 9.001) | xknx | calimero-tools | PASS |  |
 | secure routing write (DPT 1.001) | calimero-tools | xknx | PASS |  |
-| Data Secure group write over secure routing (DPT 9.001) | calimero-tools | xknx | KNOWN-DIFFERENCE | calimero-tools 3.0-M1 send Data Secure group telegrams only through a surrogate device; xknx does not act as one, and the pairing has no go-knx on the network. Towards go-knx, the surrogate, it passes. (observed: 06:01:50.730 [ERROR  ] io.calimero.tools.ProcComm: completed with error io.calimero.sec |
+| Data Secure group write over secure routing (DPT 9.001) | calimero-tools | xknx | KNOWN-DIFFERENCE | calimero-tools 3.0-M1 send Data Secure group telegrams only through a surrogate device; xknx does not act as one, and the pairing has no surrogate on the network. Towards a system under test with the surrogate capability, it passes. (observed: 13:39:58.570 [ERROR  ] io.calimero.tools.ProcComm: compl |
 | server secure routing | - | knxd | UNSUPPORTED | no secure routing in the server |
 | secure routing into the server, seen by a secure tunnel | xknx | calimero-server | PASS | observer/responder calimero-tools.  |
 | secure routing into the server, seen by a secure tunnel | calimero-tools | calimero-server | PASS | observer/responder xknx.  |
@@ -317,6 +317,7 @@ Summary: known-difference 5, pass 220, unsupported 51
 | tool access write (S-A_Data, tool key) | xknx | calimero-server | UNSUPPORTED | no tool key access on the server |
 | plain management refused by a secured device | xknx | calimero-server | UNSUPPORTED | no tool key access on the server |
 | remote property services | knxultimate | calimero-server | UNSUPPORTED | no remote device management on the client |
+| remote property services | knxd | calimero-server | UNSUPPORTED | no remote device management on the client |
 | remote property read: friendly name (A_PropertyValue_Read) | calimero-tools | calimero-server | PASS |  |
 | remote property read in a transport connection | calimero-tools | calimero-server | PASS |  |
 | remote property write, then read back (A_PropertyValue_Write) | calimero-tools | calimero-server | PASS |  |
@@ -324,4 +325,3 @@ Summary: known-difference 5, pass 220, unsupported 51
 | tool access read in a transport connection | calimero-tools | calimero-server | UNSUPPORTED | no tool key access on the server |
 | tool access write (S-A_Data, tool key) | calimero-tools | calimero-server | UNSUPPORTED | no tool key access on the server |
 | plain management refused by a secured device | calimero-tools | calimero-server | UNSUPPORTED | no tool key access on the server |
-| remote property services | knxd | calimero-server | UNSUPPORTED | no remote device management on the client |

@@ -35,9 +35,9 @@ def main():
     for d in ("70463ad74c4c976cbc8c062fc219b19059f417562051670deeaa65c5e13f7f9c",):
         want(d in read("adapters/calimero-server/Dockerfile") and d in v, "calimero-server digest")
     want("c83aa43c4a61f237104f08952d205cacab17d574040b46d5861b05cba4119966" in read("adapters/calimero-tools/Dockerfile"), "calimero-tools digest")
-    want(re.search(r"^xknx==4\.0\.0$", read("adapters/xknx/requirements.txt"), re.M) is not None, "xknx pin in requirements.txt")
+    want(re.search(r"^xknx==4\.1\.1$", read("adapters/xknx/requirements.txt"), re.M) is not None, "xknx pin in requirements.txt")
     lock = json.loads(read("adapters/knxultimate/package-lock.json"))
-    want(lock["packages"]["node_modules/knxultimate"]["version"] == "6.3.1", "knxultimate version in package-lock.json")
+    want(lock["packages"]["node_modules/knxultimate"]["version"] == "6.3.2", "knxultimate version in package-lock.json")
     want("ARG KNXD_VERSION=0.14.73-1" in read("adapters/knxd/Dockerfile"), "knxd package version")
     iv = re.search(r'^interop_version: "([^"]+)"', v, re.M).group(1)
     rel = read("RELEASE.md") if os.path.exists(os.path.join(ROOT, "RELEASE.md")) else ""
