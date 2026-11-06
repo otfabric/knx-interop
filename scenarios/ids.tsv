@@ -76,3 +76,23 @@ management	plain management refused by a secured device	management.plain-managem
 tunnel	server start	tunnel.server-start
 secure	secure server start	secure.secure-server-start
 negative	negative suite	negative.negative-suite
+sim	knx-sim: secure tunnel write (user 2)	sim.knx-sim-secure-tunnel-write-user-2
+sim	knx-sim: secure tunnel read answered (user 2)	sim.knx-sim-secure-tunnel-read-answered-user-2
+sim	knx-sim: Data Secure write opened by the gateway	sim.knx-sim-data-secure-write-opened-by-the-gateway
+sim	knx-sim: Data Secure response of the gateway opened	sim.knx-sim-data-secure-response-of-the-gateway-opened
+sim	knx-sim: replayed secure wrapper discarded	sim.knx-sim-replayed-secure-wrapper-discarded
+sim	knx-sim: tampered secure wrapper discarded	sim.knx-sim-tampered-secure-wrapper-discarded
+sim	knx-sim: SESSION_STATUS close ends the session	sim.knx-sim-session-status-close-ends-the-session
+sim	knx-sim: idle secure session kept alive past 60 s	sim.knx-sim-idle-secure-session-kept-alive-past-60-s
+sim	knx-sim router: ROUTING_BUSY holds back the answer (500 ms)	sim.knx-sim-router-routing-busy-holds-back-the-answer-500-ms
+sim	knx-sim router: answering goes on after ROUTING_LOST_MESSAGE	sim.knx-sim-router-answering-goes-on-after-routing-lost-message
+sim	knx-sim: tunnel write reaches the bus (UDP)	sim.knx-sim-tunnel-write-reaches-the-bus-udp
+sim	knx-sim: tunnel read answered (UDP, DPT 9.001)	sim.knx-sim-tunnel-read-answered-udp-dpt-9-001
+sim	knx-sim: tunnel write reaches the bus (TCP)	sim.knx-sim-tunnel-write-reaches-the-bus-tcp
+sim	knx-sim: tunnel read answered (TCP, DPT 9.001)	sim.knx-sim-tunnel-read-answered-tcp-dpt-9-001
+sim	knx-sim: repeated indication delivered once (UDP)	sim.knx-sim-repeated-indication-delivered-once-udp
+sim	knx-sim: unacknowledged request reported as failed (UDP)	sim.knx-sim-unacknowledged-request-reported-as-failed-udp
+sim	simulator start	sim.simulator-start
+files	keyring: the test profile (scripts/secure-fixture.py)	files.keyring-the-test-profile-scripts-secure-fixture-py
+files	keyring: the test profile written by knx-sim	files.keyring-the-test-profile-written-by-knx-sim
+files	keyring: wrong password refused	files.keyring-wrong-password-refused

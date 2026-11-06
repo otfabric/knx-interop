@@ -43,7 +43,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        adapter: [calimero-server, calimero-tools, knxd, xknx, knxultimate]
+        adapter: [calimero-server, calimero-tools, knxd, xknx, knxultimate, cbsigma, cbsigma-sim]
     steps:
       - uses: actions/checkout@v7
 
@@ -101,7 +101,9 @@ jobs:
             - **Package** (knxd): `ARG KNXD_VERSION` in `adapters/knxd/Dockerfile`, the Debian
               trixie version.
             - **Library:** xknx in `adapters/xknx/requirements.txt`, knxultimate in
-              `adapters/knxultimate/package.json` and `package-lock.json`.
+              `adapters/knxultimate/package.json` and `package-lock.json`, cbsigma and cbsigma-sim
+              (cB-Sigma knx and knx-sim) in `adapters/cbsigma/go.mod` and `go.sum`, with the tag's
+              commit in the Dockerfile's `UPSTREAM_SHA` or `SIM_SHA`.
             - Every pin is also in `versions.yaml` and `scripts/check-versions.py`
               (`make validate`). Reproduce a candidate with `scripts/candidate.sh <adapter>
               <version>`; a `failure` needs the matrix report of the run first (a new deviation

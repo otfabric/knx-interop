@@ -6,7 +6,8 @@ run-name: "Build knx-interop-otfabric from the latest go-knx, by @${{ github.act
 # harness release and, when run from main, publishes it as :<go-knx version>
 # and :latest.
 #
-# The references are the published ones (xknx, KNXUltimate, the probe): the
+# The references are the published ones (xknx, KNXUltimate, cB-Sigma knx with
+# its simulator knx-sim, the probe): the
 # images with GPL binaries (knxd, Calimero) are never published
 # (THIRD_PARTY_NOTICES.md), so this run has no third-party server; the
 # harness CI and go-knx's interop suite cover those.
@@ -133,7 +134,7 @@ jobs:
 
       - name: Pull the reference images of ${{ needs.version.outputs.harness }}
         run: |
-          for a in xknx knxultimate probe; do
+          for a in xknx knxultimate cbsigma probe; do
             scripts/retry.sh docker pull --quiet "ghcr.io/otfabric/knx-interop-${a}:${VERSION}"
             docker run --rm "ghcr.io/otfabric/knx-interop-${a}:${VERSION}" capabilities \
               | jq -r --arg image "${a}:${VERSION}" '"- \($image): \(.implementation) \(.version)"' | tee -a "$GITHUB_STEP_SUMMARY"
@@ -145,7 +146,7 @@ jobs:
           set -o pipefail
           mkdir -p reports
           REPORT_DIR=reports scripts/smoke.sh otfabric 2>&1 | tee reports/smoke.log
-          REPORT_DIR=reports scripts/interop.sh otfabric xknx knxultimate probe 2>&1 | tee reports/interop.log
+          REPORT_DIR=reports scripts/interop.sh otfabric xknx knxultimate cbsigma probe 2>&1 | tee reports/interop.log
           python3 scripts/interop_result.py reports/results.json
           grep -E '^\[smoke\]' reports/smoke.log | tee -a "$GITHUB_STEP_SUMMARY" || true
           cat reports/latest.md >> "$GITHUB_STEP_SUMMARY" || true

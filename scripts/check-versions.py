@@ -39,6 +39,17 @@ def main():
     lock = json.loads(read("adapters/knxultimate/package-lock.json"))
     want(lock["packages"]["node_modules/knxultimate"]["version"] == "6.3.2", "knxultimate version in package-lock.json")
     want("ARG KNXD_VERSION=0.14.73-1" in read("adapters/knxd/Dockerfile"), "knxd package version")
+    # cbsigma: go.mod is the pin; versions.yaml and the Dockerfile's commits mirror it.
+    gomod, cbdock, gosum = read("adapters/cbsigma/go.mod"), read("adapters/cbsigma/Dockerfile"), read("adapters/cbsigma/go.sum")
+    for module, key, arg in (("github.com/cB-Sigma/knx", "cbsigma", "UPSTREAM_SHA"), ("github.com/cB-Sigma/knx-sim", "cbsigma_sim", "SIM_SHA")):
+        pin = re.search(r"^\s*%s (v\S+)$" % re.escape(module), gomod, re.M)
+        block = re.search(r"^  %s:\n((?:    .*\n)+)" % key, v, re.M)
+        want(pin is not None and block is not None, "%s in adapters/cbsigma/go.mod and versions.yaml" % module)
+        if pin and block:
+            want('version: "%s"' % pin.group(1) in block.group(1), "%s %s: versions.yaml %s" % (module, pin.group(1), key))
+            sha = re.search(r'revision: "([0-9a-f]{40})"', block.group(1))
+            want(sha is not None and ("ARG %s=%s" % (arg, sha.group(1))) in cbdock, "%s commit in versions.yaml and the Dockerfile" % module)
+            want(("%s %s h1:" % (module, pin.group(1))) in gosum, "%s %s in go.sum" % (module, pin.group(1)))
     iv = re.search(r'^interop_version: "([^"]+)"', v, re.M).group(1)
     rel = read("RELEASE.md") if os.path.exists(os.path.join(ROOT, "RELEASE.md")) else ""
     want("## v" + iv in rel, "RELEASE.md has no section ## v%s" % iv)

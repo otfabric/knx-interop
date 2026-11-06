@@ -7,7 +7,7 @@ import json
 import sys
 
 COLS = [("calimero", ["calimero-tools", "calimero-server"]), ("knxd", ["knxd"]), ("xknx", ["xknx"]),
-        ("KNXUltimate", ["knxultimate"])]
+        ("KNXUltimate", ["knxultimate"]), ("cB-Sigma", ["cbsigma"])]
 MARK = {"pass": "PASS", "fail": "FAIL", "unsupported": "UNSUPPORTED", "not-tested": "NOT TESTED", "known-difference": "KNOWN DIFFERENCE"}
 
 
@@ -67,6 +67,11 @@ def main():
         ("Remote property services (device)", lambda r, a: r["suite"] == "management" and r["scenario"].startswith("remote property") and r["peer"] in a),
         ("Data Secure tool access (tool)", lambda r, a: r["suite"] == "management" and r["scenario"].startswith("tool access") and r["client"] in a),
         ("Data Secure tool access (device)", lambda r, a: r["suite"] == "management" and r["scenario"].startswith(("tool access", "plain management")) and r["peer"] in a),
+        ("knx-sim: tunnelling, repeats, missing acks (client)", lambda r, a: r["suite"] == "sim" and r["scenario"].startswith(("knx-sim: tunnel", "knx-sim: repeated", "knx-sim: unacknowledged")) and r["client"] in a),
+        ("knx-sim: IP Secure and Data Secure (client)", lambda r, a: r["suite"] == "sim" and r["scenario"].startswith(("knx-sim: secure tunnel", "knx-sim: Data Secure")) and r["client"] in a),
+        ("knx-sim: secure session faults (client)", lambda r, a: r["suite"] == "sim" and r["scenario"].startswith(("knx-sim: replayed", "knx-sim: tampered", "knx-sim: SESSION_STATUS", "knx-sim: idle")) and r["client"] in a),
+        ("knx-sim router: flow control (client)", lambda r, a: r["suite"] == "sim" and r["scenario"].startswith("knx-sim router") and r["client"] in a),
+        ("ETS keyring import (offline)", lambda r, a: r["suite"] == "files" and r["client"] in a),
     ]
     print("| Feature | " + " | ".join(c for c, _ in cols) + " |")
     print("|---|" + "---|" * len(cols))

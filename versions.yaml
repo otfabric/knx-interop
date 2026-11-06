@@ -4,8 +4,8 @@
 # adapters/knxultimate/package-lock.json are the source of truth for a
 # build: scripts/check-versions.py fails when this file disagrees with them.
 
-interop_version: "0.8.1"
-contract_version: "1.5"          # docs/CONTAINER_CONTRACT.md
+interop_version: "0.9.0"
+contract_version: "1.6"          # docs/CONTAINER_CONTRACT.md
 
 protocol:
   name: "KNXnet/IP (core, tunnelling, routing), cEMI, KNX datapoint types"
@@ -14,8 +14,8 @@ protocol:
 base_images:
   python: "python:3.12-slim-bookworm@sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df"
   node: "node:22-bookworm-slim@sha256:5ec23b7c622b00547753bc6ffd78085dd868a68aeb41c8e0a1418f033e13d96d"
-  debian: "debian:trixie-slim@sha256:a72b4433de1cf7d6bae0c4cee74d0547f58601a643b3375f070c51600d63b6b2"   # knxd, own/go-knx
-  golang: "golang:1.27.2-trixie@sha256:e58d6f83b3416618d8bcac2b3dde1b7f7e3c4a77d25e88637f8bbae81536c48d"   # own/go-knx
+  debian: "debian:trixie-slim@sha256:a72b4433de1cf7d6bae0c4cee74d0547f58601a643b3375f070c51600d63b6b2"   # knxd, cbsigma, own/go-knx
+  golang: "golang:1.27.2-trixie@sha256:e58d6f83b3416618d8bcac2b3dde1b7f7e3c4a77d25e88637f8bbae81536c48d"   # cbsigma, own/go-knx
 
 implementations:
   calimero-server:
@@ -68,6 +68,32 @@ implementations:
     language: "TypeScript (Node.js)"
     stack: "KNXUltimate"
     roles: [client]
+  cbsigma:
+    status: implemented
+    upstream: "cB-Sigma/knx"
+    repository: "https://github.com/cB-Sigma/knx"
+    module: "github.com/cB-Sigma/knx"
+    version: "v0.2.0"               # adapters/cbsigma/go.mod is the pin
+    revision: "8221e2fd1bdcefffd06344e0718d51f272fd13eb"
+    license: "Apache-2.0"
+    language: "Go"
+    stack: "cB-Sigma knx (KNXnet/IP client and router, KNX IP Secure, KNX Data Secure, ETS import)"
+    independent_engine: true
+    roles: [client]
+    note: "The image also carries cbsigma_sim (the sim suite's gateway and router); no contract server: knx-sim does not pass group writes between tunnels."
+  cbsigma_sim:
+    status: implemented
+    upstream: "cB-Sigma/knx-sim"
+    repository: "https://github.com/cB-Sigma/knx-sim"
+    module: "github.com/cB-Sigma/knx-sim"
+    version: "v0.2.0"               # adapters/cbsigma/go.mod is the pin
+    revision: "c30a0f175db896b36db0eb1fd76be2862b4379d1"
+    license: "Apache-2.0"
+    language: "Go"
+    stack: "cB-Sigma knx-sim (simulated gateway and router with fault switches), built on cB-Sigma knx"
+    independent_engine: true
+    roles: [simulator]
+    note: "In the knx-interop-cbsigma image (run sim, sim-ctl, sim-keyring); used by the sim and files suites, not a contract role."
   probe:
     status: implemented
     upstream: "otfabric/knx-interop"

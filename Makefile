@@ -15,10 +15,10 @@ BASE_REGISTRY ?= docker.io/library
 # The adapters: independent third-party stacks and the probe. A system
 # under test is not part of this repository: it brings its own adapter image
 # (ADAPTER=name=image, or ADAPTER_IMAGE_<name> with scripts/interop.sh).
-ADAPTERS ?= xknx knxultimate knxd calimero-server calimero-tools probe
+ADAPTERS ?= xknx knxultimate knxd calimero-server calimero-tools cbsigma probe
 # The adapters a release publishes (.github/workflows/release.yml PUBLISHED):
 # the others redistribute GPL binaries (THIRD_PARTY_NOTICES.md).
-PUBLISHED_ADAPTERS ?= xknx knxultimate probe
+PUBLISHED_ADAPTERS ?= xknx knxultimate cbsigma probe
 ADAPTER ?=
 export REGISTRY VERSION
 
@@ -70,6 +70,7 @@ lint: ## Shellcheck the shell adapters, byte-compile the Python ones, check the 
 	@if command -v shellcheck >/dev/null 2>&1; then shellcheck -s sh adapters/knxd/run.sh adapters/calimero-tools/run.sh adapters/calimero-server/run.sh && shellcheck -x -P scripts scripts/*.sh; else echo "(shellcheck not installed)"; fi
 	@for f in adapters/*/*.py adapters/common/*.py scripts/*.py; do python3 -m py_compile $$f || exit 1; done
 	@if command -v node >/dev/null 2>&1; then node --check adapters/knxultimate/adapter.js; fi
+	@if command -v go >/dev/null 2>&1; then cd adapters/cbsigma && test -z "$$(gofmt -l .)" && go vet ./...; fi
 
 # GATE: fail only on failures that involve this adapter (a system under
 # test); empty fails on any failure. ADAPTER adds an external adapter,

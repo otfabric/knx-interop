@@ -34,7 +34,7 @@ permissions:
 
 env:
   BASE_REGISTRY: mirror.gcr.io/library
-  PUBLISHED: "xknx knxultimate probe"
+  PUBLISHED: "xknx knxultimate cbsigma probe"
 
 jobs:
   # The tag to release. Fails before anything is built when the commit is not

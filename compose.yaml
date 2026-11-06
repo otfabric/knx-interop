@@ -38,6 +38,18 @@ services:
     <<: *image
     image: ghcr.io/otfabric/knx-interop-knxultimate:${VERSION:-dev}
     profiles: [client]
+  cbsigma:
+    <<: *image
+    image: ghcr.io/otfabric/knx-interop-cbsigma:${VERSION:-dev}
+    profiles: [client]
+  # cB-Sigma knx-sim, the sim suite's gateway (not a contract server):
+  #   docker compose --profile sim up -d knx-sim
+  #   docker compose exec knx-sim /adapter/run sim-ctl stats
+  knx-sim:
+    <<: *image
+    image: ghcr.io/otfabric/knx-interop-cbsigma:${VERSION:-dev}
+    command: ["sim", "--secure"]
+    profiles: [sim]
   calimero-tools:
     <<: *image
     image: ghcr.io/otfabric/knx-interop-calimero-tools:${VERSION:-dev}
