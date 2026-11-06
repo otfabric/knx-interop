@@ -22,7 +22,8 @@ same engine count once.
 
 Five candidates of the task were evaluated (Calimero, knxd, xknx,
 KNXUltimate, openHAB); four are independent engines and are used. openHAB
-was rejected because it is Calimero.
+was rejected because it is Calimero. cB-Sigma knx with knx-sim was added on
+2026-11-06 as a fifth independent engine (Go, Apache-2.0).
 
 ## Adapter notes
 

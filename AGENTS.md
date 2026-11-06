@@ -2,7 +2,7 @@
 
 ## What this is
 
-KNX over KNXnet/IP interoperability tests between independent implementations (Calimero, knxd, xknx, KNXUltimate, a raw probe) in containers on an isolated Docker network. A system under test brings its own adapter image; third-party images only here. The one exception is `own/go-knx/`: OT Fabric's own go-knx behind the contract, published by hand as `knx-interop-otfabric` (own-go-knx.yml), not a reference, not in a release (REQUIREMENTS.md R1). Profile: **interoperability**.
+KNX over KNXnet/IP interoperability tests between independent implementations (Calimero, knxd, xknx, KNXUltimate, cB-Sigma knx with its simulator knx-sim, a raw probe) in containers on an isolated Docker network. A system under test brings its own adapter image; third-party images only here. The one exception is `own/go-knx/`: OT Fabric's own go-knx behind the contract, published by hand as `knx-interop-otfabric` (own-go-knx.yml), not a reference, not in a release (REQUIREMENTS.md R1). Profile: **interoperability**.
 
 ## Organisation standards
 

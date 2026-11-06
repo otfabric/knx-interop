@@ -6,6 +6,21 @@ run the Release workflow on `main` and pick the bump (`patch` by default,
 takes this file's section of that version as the release notes. Add the
 section, headed exactly `## vX.Y.Z` and closed by a line `---`, first.
 
+## v0.9.1
+
+**Date:** 2026-11-06
+**Previous release:** v0.9.0
+
+### Changed
+
+- The cbsigma capabilities no longer report `adapterVersion`: the release build passes none, so v0.9.0 reported `dev`. No other reference image reports one.
+
+### Documentation
+
+- AGENTS.md, REQUIREMENTS.md (R2.1), docs/CANDIDATES.md and the Upstream workflow's header name cB-Sigma knx and knx-sim with the other references.
+
+---
+
 ## v0.9.0
 
 **Date:** 2026-11-06

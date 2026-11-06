@@ -61,7 +61,6 @@ const (
 var (
 	upstreamRevision = ""
 	simRevision      = ""
-	adapterVersion   = "dev"
 )
 
 // modVersion is the version of a module in the binary.
@@ -128,7 +127,6 @@ func capabilitiesDoc() map[string]any {
 		"simulator": map[string]any{
 			"name": "cB-Sigma knx-sim", "version": modVersion(simModule), "revision": simRevision,
 		},
-		"adapterVersion": adapterVersion,
 		"notes": "cB-Sigma knx (Apache-2.0): KNX IP Secure over TCP only; no cEMI device management (M_PropRead) and no " +
 			"connection-oriented management. describe is the DESCRIPTION_REQUEST of DialTunnel (the module has no " +
 			"stand-alone one). The image also carries knx-sim (sim, sim-ctl), not a contract server.",
