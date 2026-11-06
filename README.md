@@ -18,6 +18,14 @@ with it (`--adapter name=image`): [go-knx](https://github.com/otfabric/go-knx)
 does so in its interop suite. knx-interop depends on no system under test;
 they depend on it.
 
+## OT Fabric's own stack
+
+`ghcr.io/otfabric/knx-interop-otfabric` is go-knx behind the same contract,
+so you can test your stack against ours the way we test ours against yours.
+Despite the name it shares with the reference images, it is not an
+independent implementation and not part of a release of this repository, so
+its tags are go-knx versions: see [own/go-knx/README.md](own/go-knx/README.md).
+
 Results: [docs/INTEROPERABILITY.md](docs/INTEROPERABILITY.md) and
 `reports/latest.{json,md}`,
 and `reports/results.json`, the organisation's
@@ -68,8 +76,11 @@ Docker (Docker Desktop on macOS works) and Python 3.
 
 ```bash
 make images                         # build every adapter image
-make matrix                         # every suite, every pair: reports/latest.{json,md}
-make matrix ADAPTER=sut=my/image:tag GATE=sut   # with a system under test, gating on it
+make smoke                          # the contract of each image on its own (scripts/smoke.sh)
+make interop                        # every suite, every pair: reports/latest.{json,md}
+scripts/interop.sh xknx calimero-server probe            # some adapters, each in the roles it declares
+ADAPTER_IMAGE_sut=my/image:tag GATE=sut scripts/interop.sh sut xknx knxultimate knxd calimero-server calimero-tools probe
+make matrix ADAPTER=sut=my/image:tag GATE=sut   # the same with the default lists, gating on it
 python3 scripts/run-matrix.py --servers calimero-server --clients xknx,calimero-tools --suites tunnel
 ```
 
@@ -88,11 +99,13 @@ docker run --rm --network knx ghcr.io/otfabric/knx-interop-xknx:dev client read 
 ## CI
 
 `.github/workflows/ci.yml` lints the adapters, validates fixtures and
-versions, builds every image natively on amd64 and arm64 GitHub runners,
-and runs the whole matrix (multicast works on a user-defined bridge
+versions, checks that nothing outside `own/` names a library under test
+([REQUIREMENTS.md](REQUIREMENTS.md) R1), builds every image natively on
+amd64 and arm64 GitHub runners, smoke-tests each and runs the whole matrix (multicast works on a user-defined bridge
 network on hosted runners), uploading the reports. It runs on every push,
 weekly, and on demand. Releases are
-tag-driven ([RELEASE.md](RELEASE.md)).
+tag-driven ([RELEASE.md](RELEASE.md)). `.github/workflows/own-go-knx.yml`
+builds and publishes OT Fabric's own image, by hand only.
 
 `.github/workflows/upstream.yml` compares every pin with the latest
 upstream release every day (`scripts/latest-upstream.py`: the Calimero

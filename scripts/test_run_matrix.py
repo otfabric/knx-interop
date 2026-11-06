@@ -16,8 +16,8 @@ rm = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(rm)
 
 
-def matrix():
-    return rm.Matrix(types.SimpleNamespace(external={}, gate="", report="latest", registry="r", version="v"))
+def matrix(external=None, only=()):
+    return rm.Matrix(types.SimpleNamespace(external=external or {}, only=list(only), gate="", report="latest", registry="r", version="v"))
 
 
 class Results(unittest.TestCase):
@@ -54,6 +54,27 @@ class Results(unittest.TestCase):
         doc = self.document(m)
         self.assertEqual(doc["results"][0]["outcome"], "infra-error")
         self.assertEqual(doc["results"][0]["roles"], {"peer": "knxd"})
+
+    def test_independent_is_what_the_image_says(self):
+        m = matrix(external={"sut": "img"}, only=["own", "xknx", "sut", "old"])
+        m.caps = {"own": {"version": "v1", "upstream": {"independentEngine": False}},
+                  "xknx": {"version": "4.0.0", "upstream": {"independentEngine": True}},
+                  "sut": {"version": "x"}, "old": {"version": "y"}}
+        got = {i["name"]: i["independent"] for i in m.result_document("2026-11-06T00:00:00Z")["implementations"]}
+        self.assertEqual(got, {"own": False, "xknx": True, "sut": False, "old": True})
+        # A stack that is not independent is preferred as observer; with
+        # --adapters, nothing outside the list is used.
+        self.assertEqual(m.helpers("xknx", "calimero-tools"), ["sut", "own", "xknx"])
+
+    def test_an_image_override_wins(self):
+        m = matrix(external={"sut": "img"})
+        os.environ["ADAPTER_IMAGE_calimero_server"] = "local/cs:1"
+        try:
+            self.assertEqual(m.image("calimero-server"), "local/cs:1")
+        finally:
+            del os.environ["ADAPTER_IMAGE_calimero_server"]
+        self.assertEqual(m.image("sut"), "img")
+        self.assertEqual(m.image("xknx"), "r/knx-interop-xknx:v")
 
     def test_a_scenario_without_an_id_stops_the_run(self):
         with self.assertRaises(SystemExit):

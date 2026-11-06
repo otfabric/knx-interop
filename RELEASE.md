@@ -6,6 +6,26 @@ run the Release workflow on `main` and pick the bump (`patch` by default,
 takes this file's section of that version as the release notes. Add the
 section, headed exactly `## vX.Y.Z` and closed by a line `---`, first.
 
+## v0.8.0
+
+**Date:** 2026-11-06
+**Previous release:** v0.7.1
+
+### Added
+
+- OT Fabric's own stack: `own/go-knx/` puts go-knx behind the container contract, and the manual workflow "Own stack (go-knx)" builds it from the latest go-knx release, tests it against the published references (xknx, KNXUltimate, the probe) on amd64 and arm64, and publishes it from `main` as `ghcr.io/otfabric/knx-interop-otfabric:<go-knx version>` and `:latest`. Not an independent implementation, not a reference, and not part of this or any release (otfabric/engineering ADR-0012).
+- Container contract 1.5: the capabilities document has `upstream` (`name`, `version`, `independentEngine`); every adapter declares it, and `results.json` takes `independent` from it.
+- `scripts/smoke.sh <adapter>` (`make smoke`): the contract of one image on its own. `scripts/interop.sh <adapters…>` (`make interop`): the matrix between exactly those adapters, each in the roles its capabilities declare. `scripts/lib.sh`: `ADAPTER_IMAGE_<adapter>` names the image of an adapter, for the scripts and `scripts/run-matrix.py`.
+- `REQUIREMENTS.md` (R1: nothing outside `own/` names a library under test, checked in CI) and `docs/CAPABILITIES.md`.
+
+### Changed
+
+- CI smoke-tests every image and runs the matrix through `make interop`. `make matrix` with `ADAPTER=name=image` and `GATE` stays for a system under test with its own adapter image.
+- `compose.yaml` offers OT Fabric's own image in place of the removed `goknx` services.
+- docs/INTEROPERABILITY.md: Calimero 3.0-M1 fails about 1 S-A_Sync in 256 ("MAC mismatch") because it drops trailing zero octets of the response's random ([calimero-core#176](https://github.com/calimero-project/calimero-core/issues/176), fixed on master, not released).
+
+---
+
 ## v0.7.1
 
 **Date:** 2026-11-01

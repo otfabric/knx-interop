@@ -9,11 +9,15 @@ offer the operation) or not-tested (a prerequisite failed).
 
 The adapters are third-party stacks and the probe. A system under test
 brings its own adapter image implementing the container contract
-(--adapter NAME=IMAGE, for example go-knx's): it joins every role its
-capabilities declare and is preferred as observer and responder.
+(--adapter NAME=IMAGE): it joins every role its capabilities declare and is
+preferred as observer and responder, as is an adapter whose capabilities
+say upstream.independentEngine false. --adapters a,b,c runs exactly those
+adapters, each in the roles its capabilities declare (scripts/interop.sh).
+ADAPTER_IMAGE_<adapter> (a hyphen as "_") names the image of an adapter.
 
-Usage: run-matrix.py [--registry R] [--version V] [--adapter NAME=IMAGE ...] [--servers a,b] [--clients a,b]
-                     [--suites tunnel,dpt,negative,routing,v2,secure] [--report NAME]
+Usage: run-matrix.py [--registry R] [--version V] [--adapter NAME=IMAGE ...] [--adapters a,b]
+                     [--servers a,b] [--clients a,b] [--suites tunnel,dpt,negative,routing,v2,secure]
+                     [--report NAME] [--gate NAME]
 
 Writes reports/results.json (reports/<name>.results.json with --report), the
 organisation's interop-result-v1. The run fails on a failure or infrastructure
@@ -90,6 +94,9 @@ class Matrix:
         self.started = datetime.datetime.now(datetime.timezone.utc)
 
     def image(self, adapter):
+        override = os.environ.get("ADAPTER_IMAGE_" + adapter.replace("-", "_"))
+        if override:
+            return override
         if adapter in self.a.external:
             return self.a.external[adapter]
         return "%s/knx-interop-%s:%s" % (self.a.registry, adapter, self.a.version)
@@ -207,11 +214,29 @@ class Matrix:
     def feature(self, adapter, f):
         return self.capabilities(adapter).get("features", {}).get(f, False)
 
+    def independent(self, adapter):
+        """What the image says of itself (contract 1.5), else: an external
+        adapter is not independent."""
+        engine = self.capabilities(adapter).get("upstream", {}).get("independentEngine")
+        if isinstance(engine, bool):
+            return engine
+        return adapter not in self.a.external
+
+    def helpers(self, *fallback):
+        """Observer, responder and writer candidates in order: the systems
+        under test, then the fallback stacks; with --adapters, only those."""
+        first = list(self.a.external) + [x for x in self.a.only if not self.independent(x)]
+        out = []
+        for x in first + list(fallback):
+            if x not in out and (not self.a.only or x in self.a.only):
+                out.append(x)
+        return out
+
     # -- scenarios ---------------------------------------------------
     def observer_for(self, client):
         """A monitor of a client's telegrams: the system under test, else a
         secure-capable third-party stack (secure scenarios use it too)."""
-        for o in list(self.a.external) + ["xknx", "calimero-tools"]:
+        for o in self.helpers("xknx", "calimero-tools"):
             if o != client:
                 return o
         return "xknx"
@@ -220,7 +245,7 @@ class Matrix:
         """A group read responder: the system under test, else xknx, else
         KNXUltimate; with secure, one that runs secure sessions. None when
         there is none."""
-        for o in list(self.a.external) + ["xknx", "knxultimate"]:
+        for o in self.helpers("xknx", "knxultimate"):
             if o != client and self.feature(o, "answer") and (not secure or self.feature(o, "secure")):
                 return o
         return None
@@ -589,7 +614,7 @@ class Matrix:
                     self.with_routing_server(server, "secure routing into the server, seen by a secure tunnel", w,
                                              lambda ip, w=w: self.server_routing_in(server, ip, w))
             for m in routers:
-                writer = next(x for x in list(self.a.external) + ["xknx", "calimero-tools"] if x != m and self.feature(x, "secure"))
+                writer = next(x for x in self.helpers("xknx", "calimero-tools") if x != m and self.feature(x, "secure"))
                 self.with_routing_server(server, "secure routing out of the server, from a secure tunnel", writer,
                                          lambda ip, m=m, writer=writer: self.server_routing_out(server, ip, m, writer))
 
@@ -731,7 +756,7 @@ class Matrix:
             results.append(res)
         implementations = []
         for name, caps in sorted(self.caps.items()):
-            i = {"name": name, "version": str(caps.get("version") or "unknown"), "independent": name not in self.a.external}
+            i = {"name": name, "version": str(caps.get("version") or "unknown"), "independent": self.independent(name)}
             if caps.get("implementation"):
                 i["upstream"] = caps["implementation"]
             digest = interop_result.repo_digest(self.image(name))
@@ -802,7 +827,10 @@ def main():
     p.add_argument("--gate", default="", help="fail only on failures involving this adapter (empty: any failure)")
     p.add_argument("--adapter", action="append", default=[], metavar="NAME=IMAGE",
                    help="an external adapter image (a system under test); it joins every role of its capabilities")
+    p.add_argument("--adapters", default="",
+                   help="run exactly these adapters, in the roles of their capabilities (replaces --servers, --clients, --routers)")
     a = p.parse_args()
+    a.only = [s for s in a.adapters.split(",") if s]
     a.external = {}
     for spec in a.adapter:
         name, _, img = spec.partition("=")
@@ -814,6 +842,16 @@ def main():
     a.routers = [s for s in a.routers.split(",") if s]
     a.suites = a.suites.split(",")
     m = Matrix(a)
+    if a.only:
+        a.servers, a.clients, a.routers = [], [], []
+        for name in a.only:
+            roles = m.capabilities(name).get("roles", [])
+            if "server" in roles:
+                a.servers.append(name)
+            if "client" in roles and name != "probe":
+                a.clients.append(name)
+                if m.feature(name, "routing"):
+                    a.routers.append(name)
     for name in a.external:
         roles = m.capabilities(name).get("roles", [])
         if "server" in roles and name not in a.servers:

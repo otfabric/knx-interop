@@ -122,7 +122,7 @@ hexbytes() { printf '%s' "$1" | sed 's/../& /g; s/ $//'; }
 
 case "$ROLE" in
 capabilities)
-	printf '{"features":{"answer":true,"connect":true,"describe":false,"discover":false,"nat":true,"routing":true,"secure":false,"tunnel":true,"dptCodec":false,"tcp":false,"property":false,"busmonitor":false,"server":{"tcp":false,"property":false,"busmonitor":true}},"implementation":"%s","notes":"The Debian package has no eibnetsearch/eibnetdescribe tools; knxd has no DPT codec, writes send the octets given with --data.","roles":["server","client"],"schemaVersion":"1.0","version":"%s"}\n' "$IMPL" "$VERSION"
+	printf '{"features":{"answer":true,"connect":true,"describe":false,"discover":false,"nat":true,"routing":true,"secure":false,"tunnel":true,"dptCodec":false,"tcp":false,"property":false,"busmonitor":false,"server":{"tcp":false,"property":false,"busmonitor":true}},"implementation":"%s","notes":"The Debian package has no eibnetsearch/eibnetdescribe tools; knxd has no DPT codec, writes send the octets given with --data.","roles":["server","client"],"schemaVersion":"1.0","upstream":{"name":"%s","version":"%s","independentEngine":true},"version":"%s"}\n' "$IMPL" "$IMPL" "$VERSION" "$VERSION"
 	exit 0 ;;
 server)
 	r=""

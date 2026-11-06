@@ -10,7 +10,7 @@ http://knx.org/xml/keyring/1) as the KNX keyring support article describes
 it: values AES-128-CBC encrypted with PBKDF2-HMAC-SHA256("1.keyring.ets.knx.org")
 of the password and the IV SHA-256(Created)[:16], passwords prefixed with 8
 random octets and padded, and a signature over the document's canonical
-form. xknx, Calimero and go-knx read it.
+form. xknx, Calimero and the systems under test read it.
 
 Needs the Python package cryptography (the xknx image has it):
     make fixture
@@ -40,12 +40,12 @@ GROUPS = {"1/3/1": "64732d67726f75702d6b65792d303031", "1/3/2": "64732d67726f757
 SURROGATE_GROUP, SURROGATE_GROUP_KEY = "1/3/3", "64732d67726f75702d6b65792d303033"
 # Every address an adapter may send secured telegrams from: the tunnelling
 # addresses of the servers and the routing sources (15.15.240 Calimero
-# tools, 15.15.250 xknx, 15.15.255 a system under test such as go-knx).
+# tools, 15.15.250 xknx, 15.15.255 a system under test).
 SENDERS = ["1.1.10", "1.1.11", "1.1.12", "1.1.13", "1.1.14", "1.1.15", "1.1.16", "1.1.17", "15.15.240", "15.15.250", "15.15.255"]
 # Calimero tools' routing source: its interface lists the surrogate group.
 CALIMERO_ROUTING = "15.15.240"
 # A device with a tool key, the only sender of the surrogate group: the
-# surrogate a system under test (go-knx) plays for Calimero tools.
+# surrogate a system under test plays for Calimero tools.
 SURROGATE = "15.15.255"
 TOOL_KEYS = {HOST: "746f6f6c000000000000000000000000", SURROGATE: "73757272000000000000000000000000", CALIMERO_ROUTING: "63616c00000000000000000000000000"}
 
