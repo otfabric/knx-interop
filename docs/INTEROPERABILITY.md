@@ -92,7 +92,7 @@ with a system under test as the device (go-knx).
 | calimero-server 3.0-M1 | About 10 s without answers after a 3-octet datagram, and after a CONNECT_REQUEST whose CRI has length 0; its log shows the control endpoint starting again | probe negative suite; server log |
 | knxd 0.14.73 | Ignores ROUTING_BUSY: answered 31 to 114 ms after a ROUTING_BUSY with wait time 500 ms | sim suite; its router backend has no handling for it |
 | KNXUltimate 6.3.2 | Ignores ROUTING_BUSY (an error event only; answered after 5 ms); `write` is fire and forget, so an unacknowledged tunnelling request is not reported | sim suite; `KNXClient.ts` |
-| xknx 4.1.1 | Repeats an unacknowledged TUNNELLING_REQUEST once and closes the tunnel, as the standard asks, but only logs the failure: the application's write does not fail | sim suite; `cemi_handler.py` |
+| xknx 4.1.1 | Repeats an unacknowledged TUNNELLING_REQUEST once and closes the tunnel, as the standard asks, but its telegram queue only logs the failure: the application's write does not fail | sim suite; `telegram_queue.py` |
 | calimero-tools 3.0-M1 | Keeps its tunnel and connection after the gateway's SESSION_STATUS close (still open 18 s later) | sim suite |
 
 ## Failures investigated and fixed
@@ -114,6 +114,13 @@ fixed in the harness (2026-10-29 and 2026-10-30):
 | calimero-tools | [#24](https://github.com/calimero-project/calimero-tools/issues/24): `describe --json --nat` NullPointerException | open |
 | knxd | [#667](https://github.com/knxd/knxd/issues/667): the `ipt` client never sends its DISCONNECT_REQUEST | open |
 | calimero-server | not reported: the control endpoint crash is fixed on master (d276d8a8), not released yet | — |
+| knxd | [#669](https://github.com/knxd/knxd/issues/669): ROUTING_BUSY is not acted on | open, tracked in [#21](https://github.com/otfabric/knx-interop/issues/21) |
+| KNXUltimate | [#118](https://github.com/Supergiovane/KNXUltimate/issues/118): ROUTING_BUSY only emits an error | open, tracked in [#22](https://github.com/otfabric/knx-interop/issues/22) |
+| KNXUltimate | [#119](https://github.com/Supergiovane/KNXUltimate/issues/119): `write()` cannot report an unacknowledged request (feature request) | open, tracked in [#23](https://github.com/otfabric/knx-interop/issues/23) |
+| xknx | [#2024](https://github.com/XKNX/xknx/issues/2024): queued telegrams cannot report a send failure (feature request) | open, tracked in [#24](https://github.com/otfabric/knx-interop/issues/24) |
+| calimero-core | [#181](https://github.com/calimero-project/calimero-core/issues/181): SESSION_STATUS close ignored after authentication | open, tracked in [#25](https://github.com/otfabric/knx-interop/issues/25) |
+| cB-Sigma knx-sim | [#1](https://github.com/cB-Sigma/knx-sim/issues/1): tunnel addresses grow beyond the announced slots | open, tracked in [#26](https://github.com/otfabric/knx-interop/issues/26) |
+| cB-Sigma knx | [#1](https://github.com/cB-Sigma/knx/issues/1): the plain router pauses on its own ROUTING_BUSY | open, tracked in [#27](https://github.com/otfabric/knx-interop/issues/27) |
 | calimero-core | [#176](https://github.com/calimero-project/calimero-core/issues/176) (by another reporter): S-A_Sync_Res random loses trailing zero octets | fixed on master (368d0929), not released yet |
 
 ## Other observations
@@ -169,8 +176,9 @@ fixed in the harness (2026-10-29 and 2026-10-30):
 
 ## cB-Sigma knx and knx-sim
 
-Found while adding them (2026-11-06), each in a real run; not reported
-upstream:
+Found while adding them (2026-11-06), each in a real run; reported as
+[knx-sim#1](https://github.com/cB-Sigma/knx-sim/issues/1) and
+[knx#1](https://github.com/cB-Sigma/knx/issues/1) (tracked in [#26](https://github.com/otfabric/knx-interop/issues/26), #27):
 
 - knx-sim v0.2.0 gives a tunnel the address 1.1.(240 + channel) and never
   reuses a channel number, so from the fifth connection of a simulator's

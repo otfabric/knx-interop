@@ -21,7 +21,7 @@ cB-Sigma knx v0.2.0 and its simulator knx-sim v0.2.0 (Apache-2.0, Go) join as an
 - Suite `sim`: against a fresh knx-sim per scenario, each client's tunnel writes and reads over UDP and TCP, a repeated indication, an unacknowledged TUNNELLING_REQUEST, secure tunnel writes and reads, Data Secure both ways, a replayed and a tampered SECURE_WRAPPER, a SESSION_STATUS close from the gateway, an idle secure session past the 60 s timeout, ROUTING_BUSY (an answer must wait the 500 ms wait time) and ROUTING_LOST_MESSAGE.
 - Suite `files` (offline, apart from the wire scenarios): each adapter with the new `keyring` operation reads the test profile's keyring and the same profile written by knx-sim, and refuses a wrong password.
 - Container contract 1.6: the client operation `keyring` and its feature; OT Fabric's own image implements it.
-- Known differences, found by the sim suite: knxd 0.14.73 and KNXUltimate 6.3.2 do not pause after ROUTING_BUSY; xknx 4.1.1 and KNXUltimate 6.3.2 cannot report an unacknowledged write to the application; calimero-tools 3.0-M1 keeps its tunnel after a SESSION_STATUS close and reads Data Secure groups only through a surrogate.
+- Known differences, found by the sim suite and reported upstream (knxd#669, KNXUltimate#118 and #119, xknx#2024, calimero-core#181; tracked in #21 to #25): knxd 0.14.73 and KNXUltimate 6.3.2 do not pause after ROUTING_BUSY; xknx 4.1.1 and KNXUltimate 6.3.2 cannot report an unacknowledged write to the application; calimero-tools 3.0-M1 keeps its tunnel after a SESSION_STATUS close and reads Data Secure groups only through a surrogate.
 
 ### Changed
 
