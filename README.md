@@ -61,8 +61,8 @@ evidence). Each result records the implementations and versions.
 | `calimero-server` | Calimero KNXnet/IP server, emulated subnet | 3.0-M1 (official image, pinned by digest) | server |
 | `calimero-tools` | Calimero tools | 3.0-M1 (official image, pinned by digest) | client |
 | `knxd` | knxd and knxtool, dummy bus | 0.14.73-1 (Debian trixie) | server, client |
-| `xknx` | xknx | 4.0.0 | client |
-| `knxultimate` | KNXUltimate | 6.3.1 | client |
+| `xknx` | xknx | 4.1.1 | client |
+| `knxultimate` | KNXUltimate | 6.3.2 | client |
 | `probe` | hand-built datagrams (Python standard library) | 1.0 | negative tests |
 
 How each was chosen, and the rejected candidates (openHAB embeds Calimero):

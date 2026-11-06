@@ -8,8 +8,8 @@ among themselves. Each cell counts the results in which that
 implementation took the role named in the row.
 
 Versions: calimero-server and calimero-tools 3.0-M1 (official images,
-pinned by digest), knxd 0.14.73-1 (Debian trixie), xknx 4.0.0, KNXUltimate
-6.3.1, probe 1.0.
+pinned by digest), knxd 0.14.73-1 (Debian trixie), xknx 4.1.1, KNXUltimate
+6.3.2, probe 1.0.
 
 A system under test runs this matrix from its own repository with its own
 adapter (`--adapter`): go-knx's results are in
@@ -19,7 +19,7 @@ adapter (`--adapter`): go-knx's results are in
 | Feature | calimero | knxd | xknx | KNXUltimate |
 |---|---|---|---|---|
 | Discovery (as client) | PASS (2) | UNSUPPORTED 2 | PASS (2) | PASS (2) |
-| Description (as client) | PASS (2) | UNSUPPORTED 2 | PASS (2) | KNOWN DIFFERENCE 1, PASS 1 |
+| Description (as client) | PASS (2) | UNSUPPORTED 2 | PASS (2) | PASS (2) |
 | Tunnelling client | PASS (2) | PASS (2) | PASS (2) | PASS (2) |
 | Tunnelling server | PASS (8) | PASS (8) | NOT TESTED | NOT TESTED |
 | Group write | PASS 3, UNSUPPORTED 1 | PASS 2, UNSUPPORTED 2 | PASS 3, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 1 |
@@ -78,7 +78,6 @@ with a system under test as the device (go-knx).
 
 | Implementation | Difference | Evidence |
 |---|---|---|
-| KNXUltimate 6.3.1 | Its DESCRIPTION_REQUEST announces port 3671 while it listens on an ephemeral port, so servers that answer to the HPAI (all three here) are not heard | src/KNXClient.ts `sendDescriptionRequestMessage`: `new HPAI(localIPAddress)` with the default port |
 | calimero-server 3.0-M1 | About 10 s without answers after a 3-octet datagram, and after a CONNECT_REQUEST whose CRI has length 0; its log shows the control endpoint starting again | probe negative suite; server log |
 
 ## Failures investigated and fixed
@@ -96,7 +95,7 @@ fixed in the harness (2026-10-29 and 2026-10-30):
 
 | Project | Report | Status |
 |---|---|---|
-| KNXUltimate | [#117](https://github.com/Supergiovane/KNXUltimate/issues/117): the description request announces port 3671 | open |
+| KNXUltimate | [#117](https://github.com/Supergiovane/KNXUltimate/issues/117): the description request announces port 3671 | fixed in 6.3.2 |
 | calimero-tools | [#24](https://github.com/calimero-project/calimero-tools/issues/24): `describe --json --nat` NullPointerException | open |
 | knxd | [#667](https://github.com/knxd/knxd/issues/667): the `ipt` client never sends its DISCONNECT_REQUEST | open |
 | calimero-server | not reported: the control endpoint crash is fixed on master (d276d8a8), not released yet | — |

@@ -6,6 +6,21 @@ run the Release workflow on `main` and pick the bump (`patch` by default,
 takes this file's section of that version as the release notes. Add the
 section, headed exactly `## vX.Y.Z` and closed by a line `---`, first.
 
+## v0.8.1
+
+**Date:** 2026-11-06
+**Previous release:** v0.8.0
+
+### Changed
+
+- xknx 4.1.1 (was 4.0.0) and KNXUltimate 6.3.2 (was 6.3.1); base images python:3.12-slim-bookworm, node:22-bookworm-slim and debian:trixie-slim at their current digests.
+
+### Fixed
+
+- KNXUltimate 6.3.2 fixes [KNXUltimate#117](https://github.com/Supergiovane/KNXUltimate/issues/117) (the DESCRIPTION_REQUEST announced port 3671): the waiver `knxultimate-describe-hpai-port` is removed, and KNXUltimate's description passes against every server.
+
+---
+
 ## v0.8.0
 
 **Date:** 2026-11-06

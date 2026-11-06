@@ -28,17 +28,17 @@ class Results(unittest.TestCase):
 
     def test_a_reproduced_waiver_is_a_known_difference(self):
         m = matrix()
-        m.record("tunnel", "describe", "knxultimate", "knxd", "fail", time.monotonic(), "no answer")
+        m.record("negative", "survives truncated header", "probe", "calimero-server", "fail", time.monotonic(), "no answer")
         m.record("tunnel", "connect and disconnect", "xknx", "knxd", "pass", time.monotonic())
         doc = self.document(m)
         self.assertEqual(doc["results"][0]["outcome"], "known-difference")
-        self.assertEqual(doc["results"][0]["waiver"], "knxultimate-describe-hpai-port")
+        self.assertEqual(doc["results"][0]["waiver"], "calimero-server-truncated-header")
         self.assertEqual(interop_result.problems(doc), [])
         self.assertEqual(interop_result.schema_errors(doc), [])
 
     def test_a_waiver_that_passes_is_stale_and_fails_the_run(self):
         m = matrix()
-        m.record("tunnel", "describe", "knxultimate", "knxd", "pass", time.monotonic())
+        m.record("negative", "survives truncated header", "probe", "calimero-server", "pass", time.monotonic())
         doc = self.document(m)
         self.assertFalse(doc["waivers"][0]["reproduced"])
         self.assertTrue(interop_result.problems(doc))

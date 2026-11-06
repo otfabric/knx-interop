@@ -3,6 +3,6 @@
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "knxultimate": "6.3.1"
+    "knxultimate": "6.3.2"
   }
 }
