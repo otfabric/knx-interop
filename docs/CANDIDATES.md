@@ -39,7 +39,9 @@ was rejected because it is Calimero. cB-Sigma knx with knx-sim was added on
   client it would send its own client addresses (1.2.10…) as sources; the
   adapter uses knxd's `single` filter, which sends with the address the
   server assigned. knxd 0.14.73 does not send its DISCONNECT_REQUEST on
-  shutdown ([knxd#667](https://github.com/knxd/knxd/issues/667)): the
+  shutdown ([knxd#537](https://github.com/knxd/knxd/issues/537), our
+  [knxd#667](https://github.com/knxd/knxd/issues/667) closed as its
+  duplicate; tracked in [#30](https://github.com/otfabric/knx-interop/issues/30)): the
   adapter sends it after knxd exits, and requires the CONNECT_RESPONSE and
   each L_Data.con from knxd's protocol trace.
 - **xknx**: no server. Scripts drive `xknx.XKNX` directly (tunnelling,
