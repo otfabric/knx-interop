@@ -122,13 +122,21 @@ hexbytes() { printf '%s' "$1" | sed 's/../& /g; s/ $//'; }
 
 case "$ROLE" in
 capabilities)
-	printf '{"features":{"answer":true,"connect":true,"describe":false,"discover":false,"nat":true,"routing":true,"secure":false,"tunnel":true,"dptCodec":false,"tcp":false,"property":false,"busmonitor":false,"server":{"tcp":false,"property":false,"busmonitor":true}},"implementation":"%s","notes":"The Debian package has no eibnetsearch/eibnetdescribe tools; knxd has no DPT codec, writes send the octets given with --data.","roles":["server","client"],"schemaVersion":"1.0","upstream":{"name":"%s","version":"%s","independentEngine":true},"version":"%s"}\n' "$IMPL" "$IMPL" "$VERSION" "$VERSION"
+	printf '{"features":{"answer":true,"connect":true,"describe":false,"discover":false,"nat":true,"routing":true,"secure":false,"tunnel":true,"dptCodec":false,"tcp":false,"property":false,"busmonitor":false,"server":{"tcp":true,"property":false,"busmonitor":true}},"implementation":"%s","notes":"The Debian package has no eibnetsearch/eibnetdescribe tools; knxd has no DPT codec, writes send the octets given with --data.","roles":["server","client"],"schemaVersion":"1.0","upstream":{"name":"%s","version":"%s","independentEngine":true},"version":"%s"}\n' "$IMPL" "$IMPL" "$VERSION" "$VERSION"
 	exit 0 ;;
 server)
-	r=""
-	[ "$ROUTING" = 1 ] && r="-R"
+	# A config file, not -D -T -S: knxd's command line is deprecated and
+	# its TCP tunnelling server (tcptunsrv, knxd 0.14.68+) can only be
+	# configured in a file (knx-interop#33).
+	cfg=/tmp/knxd.ini
+	{
+		printf '[main]\nname=%s\naddr=1.1.0\nclient-addrs=1.1.10:8\nconnections=server,tcpserver,bus\n\n' "$NAME"
+		printf '[server]\nserver=ets_router\ntunnel=tunnel\ndiscover=true\n'
+		[ "$ROUTING" = 1 ] && printf 'router=router\n'
+		printf '\n[tcpserver]\nserver=tcptunsrv\ntunnel=tunnel\n\n[tunnel]\n\n[router]\n\n[bus]\ndriver=dummy\n'
+	} >"$cfg"
 	ready
-	exec knxd -n "$NAME" -e 1.1.0 -E 1.1.10:8 -D -T $r -S -b dummy: ;;
+	exec knxd "$cfg" ;;
 client) ;;
 *) echo "usage: run capabilities|server|client <op> ..." >&2; exit 2 ;;
 esac
