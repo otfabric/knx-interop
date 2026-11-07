@@ -6,6 +6,22 @@ run the Release workflow on `main` and pick the bump (`patch` by default,
 takes this file's section of that version as the release notes. Add the
 section, headed exactly `## vX.Y.Z` and closed by a line `---`, first.
 
+## v0.9.2
+
+**Date:** 2026-11-07
+**Previous release:** v0.9.1
+
+### Changed
+
+- The knxd server is now started from a configuration file instead of `-D -T -S` command-line options, with an `ets_router` server (UDP tunnelling, discovery, routing) and the `tcptunsrv` TCP tunnelling server that knxd 0.14.68 added (knxd#573). knxd deprecated its command line in favour of the config file, and the TCP server can only be configured there. The adapter now declares `server.tcp`. Thanks to dallmair (knxd) for pointing this out (#33).
+- Results: knxd's TCP tunnelling server passes write and read over TCP with xknx, KNXUltimate, Calimero tools and cB-Sigma knx (8 results that were unsupported). Matrix: 327 pass, 12 known differences, 77 unsupported, 0 fail.
+
+### Documentation
+
+- docs/CAPABILITIES.md: knxd `server.tcp` yes. docs/INTEROPERABILITY.md: the new results, and the note on knxd's lost source address now names its cause, knxd#537.
+
+---
+
 ## v0.9.1
 
 **Date:** 2026-11-06

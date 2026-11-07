@@ -1,9 +1,9 @@
 # Interoperability matrix
 
-Run of 2026-11-06 on Docker Desktop (macOS, arm64), report
+Run of 2026-11-07 on Docker Desktop (macOS, arm64), report
 [reports/latest.json](../reports/latest.json) /
-[reports/latest.md](../reports/latest.md): **319 pass, 12 known
-differences, 85 unsupported, 0 fail** (416 results), the third-party stacks
+[reports/latest.md](../reports/latest.md): **327 pass, 12 known
+differences, 77 unsupported, 0 fail** (416 results), the third-party stacks
 among themselves. Each cell counts the results in which that
 implementation took the role named in the row.
 
@@ -22,16 +22,16 @@ adapter (`--adapter`): go-knx's results are in
 | Description (as client) | PASS (2) | UNSUPPORTED 2 | PASS (2) | PASS (2) | PASS (2) |
 | Tunnelling client | PASS (2) | PASS (2) | PASS (2) | PASS (2) | PASS (2) |
 | Tunnelling server | PASS (10) | PASS (10) | NOT TESTED | NOT TESTED | NOT TESTED |
-| Group write | PASS 3, UNSUPPORTED 1 | PASS 2, UNSUPPORTED 2 | PASS 3, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 1 |
-| Group read (client) | PASS 3, UNSUPPORTED 1 | PASS 2, UNSUPPORTED 2 | PASS 3, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 1 | PASS 3, UNSUPPORTED 1 |
-| Group response (responder/observer) | NOT TESTED | NOT TESTED | PASS (11) | PASS (3) | NOT TESTED |
+| Group write | PASS (4) | PASS 2, UNSUPPORTED 2 | PASS (4) | PASS (4) | PASS (4) |
+| Group read (client) | PASS (4) | PASS 2, UNSUPPORTED 2 | PASS (4) | PASS (4) | PASS (4) |
+| Group response (responder/observer) | NOT TESTED | NOT TESTED | PASS (14) | PASS (4) | NOT TESTED |
 | Routing (sender) | PASS (4) | PASS (4) | PASS (4) | PASS (4) | PASS (4) |
 | Routing (receiver) | PASS (4) | PASS (4) | PASS (4) | PASS (4) | PASS (4) |
 | DPT encoding (sender) | PASS (24) | PASS (24) | PASS (24) | PASS (24) | PASS (24) |
 | DPT decoding (observer) | PASS (24) | NOT TESTED | PASS (96) | NOT TESTED | NOT TESTED |
 | Negative tests (server) | KNOWN DIFFERENCE 2, PASS 22 | PASS (24) | NOT TESTED | NOT TESTED | NOT TESTED |
-| Tunnelling over TCP (client) | PASS 2, UNSUPPORTED 2 | UNSUPPORTED 4 | PASS 2, UNSUPPORTED 2 | PASS 2, UNSUPPORTED 2 | PASS 2, UNSUPPORTED 2 |
-| Tunnelling over TCP (server) | PASS 8, UNSUPPORTED 2 | UNSUPPORTED 10 | NOT TESTED | NOT TESTED | NOT TESTED |
+| Tunnelling over TCP (client) | PASS (4) | UNSUPPORTED 4 | PASS (4) | PASS (4) | PASS (4) |
+| Tunnelling over TCP (server) | PASS 8, UNSUPPORTED 2 | PASS 8, UNSUPPORTED 2 | NOT TESTED | NOT TESTED | NOT TESTED |
 | Device management (client) | PASS 1, UNSUPPORTED 1 | UNSUPPORTED 2 | UNSUPPORTED 2 | UNSUPPORTED 2 | UNSUPPORTED 2 |
 | Device management (server) | PASS 1, UNSUPPORTED 4 | UNSUPPORTED 5 | NOT TESTED | NOT TESTED | NOT TESTED |
 | Busmonitor (client) | PASS 1, UNSUPPORTED 1 | UNSUPPORTED 2 | UNSUPPORTED 2 | UNSUPPORTED 2 | PASS 1, UNSUPPORTED 1 |
@@ -165,9 +165,10 @@ fixed in the harness (2026-10-29 and 2026-10-30):
   with security mode off; it has no tool key access, also with a keyring.
 - Calimero tools open a device management connection after a tunnel; the
   go-knx server refuses it (E_CONNECTION_TYPE), harmlessly.
-- The knxd server drops a source address it learned on an earlier
-  tunnelling connection (loop protection); the knxd adapter therefore uses
-  knxd's `single` filter as a client.
+- The knxd server kept the source address of an earlier knxd tunnel
+  client, because that client never sent its DISCONNECT_REQUEST
+  ([knxd#537](https://github.com/knxd/knxd/issues/537)); the knxd adapter
+  sends it and, as a client, uses knxd's `single` filter.
 - go-knx's routing sent telegrams with source 0.0.0 when none was set;
   knxd dropped them. Fixed in go-knx (default 15.15.255), found by this
   matrix.

@@ -51,7 +51,7 @@ Print them with `make capabilities` (and `docker run --rm <image> capabilities`)
 
 | Feature | `calimero-server` | `knxd` | `otfabric` |
 |---|---|---|---|
-| `tcp` | yes | no | yes |
+| `tcp` | yes | yes | yes |
 | `property` | yes | no | yes |
 | `busmonitor` | no | yes | yes |
 | `secure` | yes | – | yes |
