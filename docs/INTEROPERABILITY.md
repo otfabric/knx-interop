@@ -61,7 +61,7 @@ Legend: PASS, FAIL, UNSUPPORTED (the stack or its adapter does not offer
 it), NOT TESTED (no scenario uses the implementation in that role yet),
 KNOWN DIFFERENCE (a verified deviation, below). HARDWARE REQUIRED and
 BLOCKED do not occur in this run: nothing needs hardware. The secure rows
-use the public test profile of contract 1.2; KNXUltimate and knxd take no
+use the public test profile (introduced in contract 1.2; the contract is now 1.6); KNXUltimate and knxd take no
 part in them.
 
 ## Coverage
