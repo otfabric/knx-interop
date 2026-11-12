@@ -33,7 +33,7 @@ The server prints `READY` on stderr once it listens; a client waits until
 its DESCRIPTION_REQUEST is answered (the contract). Multicast discovery and
 routing need every participant on one Docker network.
 
-`<tag>` is a go-knx version such as `v0.7.0`, or `latest`, the newest one
+`<tag>` is a go-knx version such as `v0.9.0`, or `latest`, the newest one
 published. A rebuild of a version replaces its tag, so pin the digest if you
 need an exact build. The digest is in the summary of the
 [workflow run](https://github.com/otfabric/knx-interop/actions/workflows/own-go-knx.yml),
