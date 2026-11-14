@@ -2,7 +2,7 @@
 
 What each adapter declares in its `capabilities` document (contract 1.6,
 [CONTAINER_CONTRACT.md](CONTAINER_CONTRACT.md)), as built from this
-repository (`otfabric`: go-knx v0.8.1, the release it was last built
+repository (`otfabric`: go-knx v0.10.0, the release it was last built
 from). A scenario that needs a feature declared `no` is `unsupported`, never
 a pass; – means the adapter does not declare the feature (the runner reads
 those it needs, as the contract lists them). `otfabric` is OT Fabric's own go-knx
