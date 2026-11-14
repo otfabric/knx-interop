@@ -105,7 +105,7 @@ docker run --rm --network knx ghcr.io/otfabric/knx-interop-xknx:dev client read 
 versions, checks that nothing outside `own/` names a library under test
 ([REQUIREMENTS.md](REQUIREMENTS.md) R1), builds every image natively on
 amd64 and arm64 GitHub runners, smoke-tests each and runs the whole matrix (multicast works on a user-defined bridge
-network on hosted runners), uploading the reports. It runs on every push,
+network on hosted runners), uploading the reports. It runs on every pull request,
 weekly, and on demand. Releases are
 tag-driven ([RELEASE.md](RELEASE.md)). `.github/workflows/own-go-knx.yml`
 builds and publishes OT Fabric's own image, by hand only.
