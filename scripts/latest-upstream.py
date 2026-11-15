@@ -12,7 +12,7 @@ Prints key=value lines (the format of $GITHUB_OUTPUT):
     update=yes|no
     source=<where the latest release was looked up>
 
-The pins are read from the build inputs (Dockerfiles, requirements.txt,
+The pins are read from the build inputs (Dockerfiles, requirements.in,
 package-lock.json): calimero-server and calimero-tools against the tags of
 their official images on Docker Hub, knxd against the Debian suite of its
 base image, xknx against PyPI, knxultimate against npm, and cbsigma (cB-Sigma
@@ -99,7 +99,7 @@ def knxd():
 
 
 def xknx():
-    pin = search(r"^xknx==(\S+)$", "adapters/xknx/requirements.txt")
+    pin = search(r"^xknx==(\S+)$", "adapters/xknx/requirements.in")
     releases = json.loads(fetch("https://pypi.org/pypi/xknx/json"))["releases"]
     live = [v for v, files in releases.items() if files and not all(f.get("yanked") for f in files)]
     return "library", pin, newest(live), "PyPI"

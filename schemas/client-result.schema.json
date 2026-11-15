@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/otfabric/knx-interop/schemas/client-result.schema.json",
+  "title": "knx-interop client result document",
+  "description": "The last line of stdout of `run client <op>` (docs/CONTAINER_CONTRACT.md): one document per operation. The exit status follows status: 0 pass, 1 fail, 3 unsupported. Members the contract does not name are allowed.",
+  "type": "object",
+  "required": ["schemaVersion", "implementation", "version", "op", "status", "durationMs", "data"],
+  "properties": {
+    "schemaVersion": {"const": "1.0"},
+    "implementation": {"type": "string", "minLength": 1},
+    "version": {"type": "string"},
+    "op": {"type": "string", "description": "The operation, as given on the command line."},
+    "status": {"enum": ["pass", "fail", "unsupported"]},
+    "durationMs": {"type": "integer", "minimum": 0, "description": "Measured; 0 when the adapter answers at once."},
+    "data": {"type": "object", "description": "What the operation reports (the contract's table of operations); empty when there is nothing."},
+    "error": {"type": "string", "description": "Why the operation failed or is unsupported."}
+  }
+}

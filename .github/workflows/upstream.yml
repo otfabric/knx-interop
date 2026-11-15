@@ -101,12 +101,13 @@ jobs:
               adapter's `FROM`, its `VERSION` and comments, and `versions.yaml`.
             - **Package** (knxd): `ARG KNXD_VERSION` in `adapters/knxd/Dockerfile`, the Debian
               trixie version.
-            - **Library:** xknx in `adapters/xknx/requirements.txt`, knxultimate in
+            - **Library:** xknx in `adapters/xknx/requirements.in`, then `make lock-xknx`
+              (its hashed lock `requirements.txt`), knxultimate in
               `adapters/knxultimate/package.json` and `package-lock.json`, cbsigma and cbsigma-sim
               (cB-Sigma knx and knx-sim) in `adapters/cbsigma/go.mod` and `go.sum`, with the tag's
               commit in the Dockerfile's `UPSTREAM_SHA` or `SIM_SHA`.
-            - Every pin is also in `versions.yaml` and `scripts/check-versions.py`
-              (`make validate`). Reproduce a candidate with `scripts/candidate.sh <adapter>
+            - Every pin is also in `versions.yaml`, which `scripts/check-versions.py` compares
+              with the build files (`make validate`). Reproduce a candidate with `scripts/candidate.sh <adapter>
               <version>`; a `failure` needs the matrix report of the run first (a new deviation
               goes to `tests/known-differences.tsv` with its evidence).
             - **Base image:** replace the digest in `versions.yaml` and in every Dockerfile that pins it.

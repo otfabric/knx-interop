@@ -26,7 +26,7 @@ image = $(REGISTRY)/knx-interop-$(1):$(VERSION)
 
 # image-% and smoke-% are pattern rules, which make ignores for .PHONY
 # targets: they depend on FORCE instead.
-.PHONY: help all ci images validate lint smoke interop matrix matrix-quick capabilities print-adapters print-published-adapters release-notes fixture clean FORCE
+.PHONY: help all ci images validate lint smoke interop matrix matrix-quick capabilities print-adapters print-published-adapters release-notes fixture lock-xknx clean FORCE
 FORCE:
 
 help: ## Show this help
@@ -66,10 +66,10 @@ validate: ## Check versions.yaml against the Dockerfiles and the fixtures agains
 	@python3 scripts/validate.py
 	@python3 -m unittest discover -q -s scripts -p 'test_*.py'
 
-lint: ## Shellcheck the shell adapters, byte-compile the Python ones, check the Node one
+lint: ## Shellcheck the shell adapters, byte-compile the Python ones, check the Node ones
 	@if command -v shellcheck >/dev/null 2>&1; then shellcheck -s sh adapters/knxd/run.sh adapters/calimero-tools/run.sh adapters/calimero-server/run.sh && shellcheck -x -P scripts scripts/*.sh; else echo "(shellcheck not installed)"; fi
 	@for f in adapters/*/*.py adapters/common/*.py scripts/*.py; do python3 -m py_compile $$f || exit 1; done
-	@if command -v node >/dev/null 2>&1; then node --check adapters/knxultimate/adapter.js; fi
+	@if command -v node >/dev/null 2>&1; then for f in adapters/knxultimate/*.js; do node --check $$f || exit 1; done; fi
 	@if command -v go >/dev/null 2>&1; then cd adapters/cbsigma && test -z "$$(gofmt -l .)" && go vet ./...; fi
 
 # GATE: fail only on failures that involve this adapter (a system under
@@ -85,6 +85,17 @@ matrix-quick: ## Run the tunnel suite only
 
 fixture: ## Regenerate the KNX Secure test profile (adapters/common/secure) in the xknx image
 	@docker run --rm -v $(CURDIR):/w -w /w --entrypoint python3 $(call image,xknx) scripts/secure-fixture.py adapters/common/secure
+
+# uv locks xknx with its dependencies, in the python base image of
+# versions.yaml (the one the xknx image is built from).
+UV_VERSION ?= 0.13.8
+PYTHON_IMAGE := $(shell sed -nE 's/^  python: "([^"]+)".*/\1/p' versions.yaml)
+lock-xknx: ## Regenerate adapters/xknx/requirements.txt (xknx and its dependencies, with hashes) from requirements.in (Docker)
+	@docker run --rm -v "$(CURDIR)/adapters/xknx:/w" -w /w $(BASE_REGISTRY)/$(PYTHON_IMAGE) \
+		sh -c 'pip install -q --root-user-action=ignore --disable-pip-version-check uv==$(UV_VERSION) && \
+		       uv pip compile -q --universal --python-version 3.12 --generate-hashes --no-header \
+		       --output-file requirements.txt requirements.in'
+	@echo "adapters/xknx/requirements.txt updated"
 
 release-notes: ## Print the release notes of VERSION from RELEASE.md
 	@scripts/release-notes.sh $(VERSION)

@@ -36,7 +36,8 @@ run client <op> [--target HOST] [--port 3671] [--nat] [--routing] [--tcp]
 
 ## capabilities
 
-One JSON document on stdout:
+One JSON document on stdout; its JSON Schema is
+[schemas/capabilities.schema.json](../schemas/capabilities.schema.json):
 
 ```json
 {"schemaVersion": "1.0", "implementation": "xknx", "version": "4.0.0",
@@ -138,7 +139,8 @@ failures that involve it. The image needs the test profile at
 ## client operations
 
 Each operation prints exactly one result document as the last line of
-stdout and exits 0 (pass), 1 (fail) or 3 (unsupported):
+stdout and exits 0 (pass), 1 (fail) or 3 (unsupported); its JSON Schema is
+[schemas/client-result.schema.json](../schemas/client-result.schema.json):
 
 ```json
 {"schemaVersion": "1.0", "implementation": "...", "version": "...", "op": "read",

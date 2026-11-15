@@ -13,7 +13,7 @@ This repository follows **otfabric/engineering policy 1.6**, profile **interoper
 | Question | Source |
 |---|---|
 | Container commands, documents, exit codes | docs/CONTAINER_CONTRACT.md (`contract_version` in versions.yaml) |
-| Pins (upstream revision, source hash, base image digests) | versions.yaml, checked by `make validate` |
+| Pins (upstream versions and revisions, image and base image digests, `published`; no source archive hash: see its header) | versions.yaml, checked by `make validate` |
 | Expected deviations of the stacks | tests/known-differences.tsv |
 | Results | docs/INTEROPERABILITY.md |
 
@@ -34,6 +34,7 @@ This repository follows **otfabric/engineering policy 1.6**, profile **interoper
 | an adapter | `make image-<adapter> smoke-<adapter> matrix-quick` |
 | own/go-knx | `make -f own/go-knx/Makefile image smoke interop` |
 | scenarios | `make matrix` |
+| `adapters/xknx/requirements.in` | `make lock-xknx` (regenerates the hashed `requirements.txt`) |
 | a release | `make release-notes VERSION=vX.Y.Z` |
 
 ## Git and releases
