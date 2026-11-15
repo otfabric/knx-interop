@@ -1,9 +1,16 @@
 # SPDX-License-Identifier: MIT
 # xknx 4.1.1 (MIT) — https://github.com/XKNX/xknx
+# requirements.txt locks xknx and its dependencies with their hashes (make
+# lock-xknx, from requirements.in); pip installs exactly that, wheels only.
+# The licence files of every installed distribution and of this repository
+# are under /licenses.
 ARG BASE_REGISTRY=docker.io/library
 FROM ${BASE_REGISTRY}/python:3.12-slim-bookworm@sha256:935c3c5b12357a7e10caa9c1e6ca5692344d97cf229832ef584be2cec9fc03df
-COPY xknx/requirements.txt /adapter/requirements.txt
-RUN pip install --no-cache-dir --root-user-action=ignore -r /adapter/requirements.txt
+COPY xknx/requirements.txt xknx/copy-licences.py /adapter/
+RUN pip install --no-cache-dir --root-user-action=ignore --require-hashes --only-binary=:all: -r /adapter/requirements.txt \
+    && python3 /adapter/copy-licences.py /adapter/requirements.txt /licenses \
+    && rm /adapter/copy-licences.py
+COPY LICENSE /licenses/knx-interop/LICENSE
 COPY common/ /adapter/common/
 COPY xknx/adapter.py /adapter/run
 RUN chmod +x /adapter/run && /adapter/run capabilities

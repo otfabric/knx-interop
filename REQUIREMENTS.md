@@ -67,10 +67,12 @@ framework.
 ## R5 - Reproducibility
 
 - R5.1 Upstreams are pinned by exact version, images and base images by
-  digest; [versions.yaml](versions.yaml) mirrors every pin and
-  `make validate` fails when it disagrees with the build files.
-- R5.2 Images are built natively for linux/amd64 and linux/arm64 and tested
-  on both before they are published.
+  digest, Python dependencies by hash; [versions.yaml](versions.yaml) mirrors
+  every pin and `make validate` fails when it disagrees with the build files.
+- R5.2 Images are built natively for linux/amd64 and linux/arm64. CI runs the
+  smoke test and the matrix on both for every pull request; the release
+  smoke-tests the images it publishes on both before it pushes them, and
+  records their digests in `manifest.json`.
 
 ## R6 - Licensing
 

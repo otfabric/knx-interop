@@ -2,9 +2,42 @@
 
 A release is a tag `vX.Y.Z` equal to `interop_version` in versions.yaml:
 run the Release workflow on `main` and pick the bump (`patch` by default,
-`minor` or `major`), or push the tag. The workflow builds the images and
-takes this file's section of that version as the release notes. Add the
+`minor` or `major`), or push the tag. The workflow builds the published
+images, smoke-tests them on both architectures, publishes them by digest
+with `manifest.json`, and takes this file's section of that version as the
+release notes. Add the
 section, headed exactly `## vX.Y.Z` and closed by a line `---`, first.
+
+## v0.10.0
+
+**Date:** 2026-11-16
+**Previous release:** v0.9.2
+
+### Added
+
+- `schemas/capabilities.schema.json` and `schemas/client-result.schema.json`: the JSON Schemas of the capabilities and client result documents of the container contract, as the adapters write them (the contract is unchanged, 1.6). `scripts/smoke.py` checks each image's capabilities document and the result documents of its client checks against them, with the standard library (`scripts/document_schema.py`).
+- The GitHub release has a `manifest.json` asset: the digest of every published multi-arch image, the commit, the contract version and the upstream versions from versions.yaml (`scripts/release-manifest.py`).
+- versions.yaml: `published: true` or `false` for every implementation; `make validate` checks it against the release's `PUBLISHED`.
+- `make lock-xknx` regenerates `adapters/xknx/requirements.txt` from the new `requirements.in`.
+
+### Changed
+
+- Release workflow: on each architecture it smoke-tests the images it publishes before it pushes any of them, and records the digest of each push. Each multi-arch tag is made from those two digests instead of the `<version>-<arch>` tags, and a missing digest stops the release before the GitHub release and its tag are created. Job names, inputs and permissions are unchanged.
+- xknx image: `requirements.txt` locks xknx 4.1.1 and its dependencies (cryptography 50.0.2, cffi 2.1.1, pycparser 3.12, ifaddr 0.2.0, typing-extensions 4.16.0) with their hashes, and the build installs exactly that, wheels only (`pip --require-hashes --only-binary=:all:`). Before, pip resolved the dependencies when the image was built. The pin is in `requirements.in`, where the Upstream workflow and `scripts/candidate.sh` now read and move it.
+- The xknx, knxultimate, cbsigma and probe images carry this repository's licence under `/licenses/knx-interop/`, and the xknx and knxultimate images the licence files of the packages they install under `/licenses/<component>/` (THIRD_PARTY_NOTICES.md). The smoke test checks them.
+- `scripts/check-versions.py` compares the calimero-server, calimero-tools, knxd, xknx and knxultimate pins with versions.yaml instead of with constants in the script. It also fails when a requirement of the xknx lock has no hash, when `published` differs from the release's `PUBLISHED`, or when `adapters/LICENSE` (the copy the images take) differs from `LICENSE`.
+- The cbsigma and own go-knx image builds run the adapter's tests with the race detector.
+- The own-stack workflow installs `jsonschema==4.26.0`; before, the latest jsonschema.
+
+### Documentation
+
+- AGENTS.md and versions.yaml's header say how the pins work (no source archive hash). CONTRIBUTING.md's "When CI runs" table and REQUIREMENTS.md R5.1 and R5.2 say what the release runs. THIRD_PARTY_NOTICES.md lists the xknx dependencies and the licence texts in each image; the README and the contract link the schemas.
+
+### Testing
+
+- `scripts/test_check_versions.py`, `scripts/test_smoke.py` and `scripts/test_release_manifest.py` (run by `make validate`), and `adapters/cbsigma/main_test.go`: flag parsing, the group value encoding of the fixture vectors, and the secure session options of the test profile.
+
+---
 
 ## v0.9.2
 

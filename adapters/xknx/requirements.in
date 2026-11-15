@@ -1,0 +1,5 @@
+# The stack of this adapter, pinned. requirements.txt locks it and its
+# dependencies with their hashes, and the image installs only that
+# (pip --require-hashes --only-binary=:all:). After a change here run
+# make lock-xknx, which regenerates requirements.txt.
+xknx==4.1.1

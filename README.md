@@ -71,7 +71,9 @@ evidence). Each result records the implementations and versions.
 How each was chosen, and the rejected candidates (openHAB embeds Calimero):
 [docs/CANDIDATES.md](docs/CANDIDATES.md). Versions and digests:
 [versions.yaml](versions.yaml). The container contract:
-[docs/CONTAINER_CONTRACT.md](docs/CONTAINER_CONTRACT.md).
+[docs/CONTAINER_CONTRACT.md](docs/CONTAINER_CONTRACT.md), with the JSON Schemas
+of its documents, [capabilities](schemas/capabilities.schema.json) and
+[client result](schemas/client-result.schema.json).
 
 ## Running
 
@@ -107,7 +109,9 @@ versions, checks that nothing outside `own/` names a library under test
 amd64 and arm64 GitHub runners, smoke-tests each and runs the whole matrix (multicast works on a user-defined bridge
 network on hosted runners), uploading the reports. It runs on every pull request,
 weekly, and on demand. Releases are
-tag-driven ([RELEASE.md](RELEASE.md)). `.github/workflows/own-go-knx.yml`
+tag-driven ([RELEASE.md](RELEASE.md)): the release smoke-tests the published
+images on both architectures before it pushes them, and attaches
+`manifest.json` with each image's digest and the upstream versions. `.github/workflows/own-go-knx.yml`
 builds and publishes OT Fabric's own image, by hand only.
 
 `.github/workflows/upstream.yml` compares every pin with the latest

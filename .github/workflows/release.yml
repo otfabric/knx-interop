@@ -1,11 +1,14 @@
 name: Release
 run-name: "Release ${{ inputs.bump && format('({0}) from {1}', inputs.bump, github.ref_name) || github.ref_name }}"
 
-# For a tag vX.Y.Z equal to interop_version: build the MIT-licensed adapter
-# images natively on amd64 and arm64, push them to GHCR as one multi-arch
-# tag, and create the GitHub release with the RELEASE.md section. The
-# images that redistribute GPL binaries (calimero-server, calimero-tools,
-# knxd) are not published (THIRD_PARTY_NOTICES.md).
+# For a tag vX.Y.Z equal to interop_version: build the published adapter
+# images natively on amd64 and arm64, smoke-test them there, push them to
+# GHCR and record each push's digest, join the two digests of each image into
+# one multi-arch tag, and create the GitHub release with the RELEASE.md
+# section and manifest.json (every image by digest, the upstream versions).
+# A missing digest stops the release before anything is tagged. The images
+# that redistribute GPL binaries (calimero-server, calimero-tools, knxd) are
+# not published (THIRD_PARTY_NOTICES.md; versions.yaml `published`).
 
 # Tag push: publish that tag. Manual run: bump the latest vX.Y.Z tag (patch by
 # default) and publish that from main; the git tag is created with the GitHub
@@ -99,16 +102,43 @@ jobs:
         run: |
           v=$(sed -nE 's/^interop_version: "([^"]+)".*/\1/p' versions.yaml)
           [ "v$v" = "${TAG}" ] || { echo "tag ${TAG} but interop_version $v"; exit 1; }
-      - name: Build and push
+      - name: Build
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: |
+          set -euo pipefail
+          for a in $PUBLISHED; do
+            t=ghcr.io/otfabric/knx-interop-$a:${TAG#v}-${ARCH}
+            docker build --build-arg BASE_REGISTRY=$BASE_REGISTRY -f adapters/$a/Dockerfile -t $t adapters
+          done
+      # The images this release publishes pass the container-contract smoke
+      # test on this architecture before any of them is pushed.
+      - name: Smoke test
+        env:
+          ARCH: ${{ matrix.arch }}
+        run: make smoke ADAPTERS="${PUBLISHED}" REGISTRY=ghcr.io/otfabric VERSION="${TAG#v}-${ARCH}"
+      - name: Push and record the digests
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ARCH: ${{ matrix.arch }}
         run: |
+          set -euo pipefail
           echo "$GH_TOKEN" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
+          mkdir -p digests
+          : > "digests/${ARCH}.txt"
           for a in $PUBLISHED; do
-            t=ghcr.io/otfabric/knx-interop-$a:${TAG#v}-${{ matrix.arch }}
-            docker build --build-arg BASE_REGISTRY=$BASE_REGISTRY -f adapters/$a/Dockerfile -t $t adapters
+            t=ghcr.io/otfabric/knx-interop-$a:${TAG#v}-${ARCH}
             docker push $t
+            d=$(docker buildx imagetools inspect "$t" --format '{{.Manifest.Digest}}')
+            [[ "$d" =~ ^sha256:[0-9a-f]{64}$ ]] || { echo "::error::no digest for $t"; exit 1; }
+            echo "$a $d" | tee -a "digests/${ARCH}.txt"
           done
+      - name: Upload the digests
+        uses: actions/upload-artifact@v7
+        with:
+          name: digests-${{ matrix.arch }}
+          path: digests/${{ matrix.arch }}.txt
+          if-no-files-found: error
 
   release:
     needs: [version, images]
@@ -117,20 +147,44 @@ jobs:
       TAG: ${{ needs.version.outputs.tag }}
     steps:
       - uses: actions/checkout@v7
+      - name: Download the digests
+        uses: actions/download-artifact@v8
+        with:
+          pattern: digests-*
+          path: digests
+          merge-multiple: true
+      # Each multi-arch tag is made from the digests the images job pushed,
+      # never from the mutable <version>-<arch> tags; an image without both
+      # digests stops the release.
       - name: Multi-arch tags
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          set -euo pipefail
           echo "$GH_TOKEN" | docker login ghcr.io -u "${{ github.actor }}" --password-stdin
           v=${TAG#v}
+          : > digests.txt
           for a in $PUBLISHED; do
             i=ghcr.io/otfabric/knx-interop-$a
-            docker buildx imagetools create -t $i:$v $i:$v-amd64 $i:$v-arm64
-            docker buildx imagetools inspect $i:$v | head -3
+            refs=()
+            for arch in amd64 arm64; do
+              d=$(awk -v a="$a" '$1 == a { print $2 }' "digests/${arch}.txt" 2>/dev/null || true)
+              [[ "$d" =~ ^sha256:[0-9a-f]{64}$ ]] || { echo "::error::no ${arch} digest for $a"; exit 1; }
+              refs+=("$i@$d")
+            done
+            docker buildx imagetools create -t "$i:$v" "${refs[@]}"
+            d=$(docker buildx imagetools inspect "$i:$v" --format '{{.Manifest.Digest}}')
+            [[ "$d" =~ ^sha256:[0-9a-f]{64}$ ]] || { echo "::error::no digest for $i:$v"; exit 1; }
+            echo "$a $d" | tee -a digests.txt
           done
+      - name: Write manifest.json
+        run: |
+          set -euo pipefail
+          scripts/release-manifest.py "${TAG}" "${GITHUB_SHA}" digests.txt manifest.json
+          cat manifest.json
       - name: GitHub release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           scripts/release-notes.sh "${TAG}" > notes.md && test -s notes.md
-          gh release create "${TAG}" --title "knx-interop ${TAG}" --target "${GITHUB_SHA}" --notes-file notes.md
+          gh release create "${TAG}" --title "knx-interop ${TAG}" --target "${GITHUB_SHA}" --notes-file notes.md manifest.json

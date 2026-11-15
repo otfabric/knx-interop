@@ -5,12 +5,13 @@
 #
 #   scripts/candidate.sh <adapter> <version>
 #
-# The pin is moved in the working tree only (Dockerfile, requirements.txt,
-# package.json/package-lock.json), every image is built and
+# The pin is moved in the working tree only (Dockerfile, requirements.in and
+# its lock requirements.txt, package.json/package-lock.json), every image is built and
 # `make matrix GATE=<adapter>` runs. Used by the Upstream workflow on a
 # throwaway checkout; locally, `git checkout adapters/` undoes the edits.
-# knxultimate needs npm on the host to update the lock file, cbsigma and
-# cbsigma-sim (the two cB-Sigma modules of adapters/cbsigma) need Go.
+# xknx needs Docker to update its lock (make lock-xknx), knxultimate npm on
+# the host to update the lock file, cbsigma and cbsigma-sim (the two cB-Sigma
+# modules of adapters/cbsigma) need Go.
 #
 # Ends with "[candidate] <n> passed, <n> failed, ..." from reports/latest.json.
 set -eu
@@ -42,7 +43,8 @@ case "$adapter" in
 		edit adapters/knxd/Dockerfile "^ARG KNXD_VERSION=" "ARG KNXD_VERSION=$version"
 		;;
 	xknx)
-		edit adapters/xknx/requirements.txt "^xknx==" "xknx==$version"
+		edit adapters/xknx/requirements.in "^xknx==" "xknx==$version"
+		make lock-xknx
 		;;
 	knxultimate)
 		(cd adapters/knxultimate && npm install --package-lock-only --save-exact --no-audit --no-fund "knxultimate@$version")

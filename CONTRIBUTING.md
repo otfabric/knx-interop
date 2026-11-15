@@ -8,8 +8,10 @@
    version pinned) and an entry point `/adapter/run` implementing
    [docs/CONTAINER_CONTRACT.md](docs/CONTAINER_CONTRACT.md), with an honest
    `capabilities` document: unsupported operations answer `unsupported`.
-3. Add it to `versions.yaml`, `THIRD_PARTY_NOTICES.md`, the Makefile's
-   `ADAPTERS` and the runner's lists, and evaluate it in docs/CANDIDATES.md.
+3. Add it to `versions.yaml` (with `published`), `THIRD_PARTY_NOTICES.md`, the
+   Makefile's `ADAPTERS` and the runner's lists, and evaluate it in
+   docs/CANDIDATES.md. A published image carries the licence texts of its
+   components under `/licenses/<component>/`, which `scripts/smoke.py` checks.
 4. Run `make images matrix` and add the results to docs/INTEROPERABILITY.md.
 
 ## OT Fabric's own stack
@@ -39,6 +41,6 @@ reference and not in a release; nothing outside `own/` may name it or go-knx
 | Push to a branch | none | nothing; dispatch `ci.yml` to test a branch without a pull request |
 | Push to `main` | `policy.yml` | the light checks; the merged commit was tested as the pull request's merge commit |
 | Schedule | `ci.yml`, `upstream.yml` | the scheduled runs, on `main` |
-| Release | `release.yml` | the release workflow tests the release commit again |
+| Release | `release.yml` | checks that `versions.yaml` and RELEASE.md name the version; on amd64 and arm64 builds the published images and runs `make smoke` on them before it pushes them; joins each image's two pushed digests into the multi-arch tag; creates the GitHub release with `manifest.json`. It runs no matrix and no `make validate` (both ran on the pull request) |
 
 Documentation means an added or modified `*.md` file outside `.github/`, `testdata/` and `vendor/`, other than `AGENTS.md` and `CLAUDE.md`. A deleted or renamed document, or any other file, runs everything. `OT Fabric Required Checks` fails unless every job that applies succeeded; its summary lists them.

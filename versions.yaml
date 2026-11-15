@@ -1,10 +1,22 @@
 # Machine-readable version manifest for knx-interop.
 # Upstream pins and base image digests are release inputs; nothing floats.
-# The Dockerfiles, adapters/xknx/requirements.txt and
-# adapters/knxultimate/package-lock.json are the source of truth for a
-# build: scripts/check-versions.py fails when this file disagrees with them.
+# The Dockerfiles, adapters/xknx/requirements.in and requirements.txt,
+# adapters/knxultimate/package.json and package-lock.json and
+# adapters/cbsigma/go.mod are the source of truth for a build:
+# scripts/check-versions.py compares every pin here with them and fails when
+# one disagrees.
+#
+# How the pins work. No source archive is downloaded, so there is no archive
+# hash: the Calimero images are pinned by tag and digest, knxd by its Debian
+# package version, xknx by version and locked with its dependencies by hash
+# (requirements.txt, installed with pip --require-hashes), KNXUltimate by
+# version and locked by package-lock.json (npm ci checks its integrity
+# hashes), cB-Sigma knx and knx-sim by module version, checked against
+# go.sum, with the tag's commit as revision. published: true for what a
+# release publishes (release.yml PUBLISHED); the other images contain GPL
+# binaries and are never published (THIRD_PARTY_NOTICES.md).
 
-interop_version: "0.9.2"
+interop_version: "0.10.0"
 contract_version: "1.6"          # docs/CONTAINER_CONTRACT.md
 
 protocol:
@@ -25,6 +37,7 @@ implementations:
     version: "3.0-M1"
     image: "calimeroproject/knxserver:3.0-M1@sha256:70463ad74c4c976cbc8c062fc219b19059f417562051670deeaa65c5e13f7f9c"
     license: "GPL-2.0-only WITH Classpath-exception-2.0"
+    published: false
     language: "Java"
     stack: "Calimero (calimero-core)"
     roles: [server]
@@ -36,6 +49,7 @@ implementations:
     version: "3.0-M1"
     image: "calimeroproject/knxtools:3.0-M1@sha256:c83aa43c4a61f237104f08952d205cacab17d574040b46d5861b05cba4119966"
     license: "GPL-2.0-only WITH Classpath-exception-2.0"
+    published: false
     language: "Java"
     stack: "Calimero (calimero-core) — the same protocol engine as calimero-server"
     roles: [client]
@@ -45,6 +59,7 @@ implementations:
     repository: "https://github.com/knxd/knxd"
     version: "0.14.73-1"           # Debian trixie package (upstream 0.14.75 is the latest tag)
     license: "GPL-2.0-only"
+    published: false
     language: "C++"
     stack: "knxd (eibnetserver, ipt/iptn/ip drivers) and knxtool"
     roles: [server, client]
@@ -55,6 +70,7 @@ implementations:
     package: "xknx"
     version: "4.1.1"               # commit e3d8212777160af85ea2ecb4e5b9c01d7e600b03
     license: "MIT"
+    published: true
     language: "Python"
     stack: "xknx"
     roles: [client]
@@ -65,6 +81,7 @@ implementations:
     package: "knxultimate"
     version: "6.3.2"               # commit cf104ba8122e2f42d3db032106808f98a1b6f215
     license: "MIT"
+    published: true
     language: "TypeScript (Node.js)"
     stack: "KNXUltimate"
     roles: [client]
@@ -76,6 +93,7 @@ implementations:
     version: "v0.2.0"               # adapters/cbsigma/go.mod is the pin
     revision: "8221e2fd1bdcefffd06344e0718d51f272fd13eb"
     license: "Apache-2.0"
+    published: true
     language: "Go"
     stack: "cB-Sigma knx (KNXnet/IP client and router, KNX IP Secure, KNX Data Secure, ETS import)"
     independent_engine: true
@@ -89,6 +107,7 @@ implementations:
     version: "v0.2.0"               # adapters/cbsigma/go.mod is the pin
     revision: "c30a0f175db896b36db0eb1fd76be2862b4379d1"
     license: "Apache-2.0"
+    published: true                 # in the knx-interop-cbsigma image
     language: "Go"
     stack: "cB-Sigma knx-sim (simulated gateway and router with fault switches), built on cB-Sigma knx"
     independent_engine: true
@@ -99,6 +118,7 @@ implementations:
     upstream: "otfabric/knx-interop"
     version: "1.0"
     license: "MIT"
+    published: true
     language: "Python (standard library)"
     stack: "hand-built datagrams for negative tests; shares no code with any stack"
     roles: [client]

@@ -10,7 +10,7 @@
 # versions.yaml (scripts/check-versions.py). "scripts/candidate.sh cbsigma
 # <version>" moves both modules to another release in the working tree.
 # The adapter is MIT and links them statically; the image carries their
-# LICENSE and NOTICE files under /licenses.
+# LICENSE and NOTICE files, Go's licence and this repository's under /licenses.
 
 ARG BASE_REGISTRY=docker.io/library
 ARG GOLANG_DIGEST=sha256:e58d6f83b3416618d8bcac2b3dde1b7f7e3c4a77d25e88637f8bbae81536c48d
@@ -27,8 +27,12 @@ WORKDIR /src
 COPY cbsigma/go.mod cbsigma/go.sum ./
 RUN go mod download && go mod verify
 COPY cbsigma/*.go ./
+# The tests read the KNX Secure test profile from ../common/secure, as in the
+# repository.
+COPY common/secure/ /common/secure/
 RUN test -z "$(gofmt -l .)" \
     && go vet ./... \
+    && CGO_ENABLED=1 go test -race ./... \
     && go build -trimpath -ldflags "-s -w \
          -X main.upstreamRevision=${UPSTREAM_SHA} \
          -X main.simRevision=${SIM_SHA}" \
@@ -44,6 +48,7 @@ FROM ${BASE_REGISTRY}/debian:trixie-slim@${DEBIAN_DIGEST}
 RUN useradd --uid 10001 --no-create-home --shell /usr/sbin/nologin interop
 COPY --from=build /out/run /adapter/run
 COPY --from=build /out/licenses /licenses
+COPY LICENSE /licenses/knx-interop/LICENSE
 # The KNX Secure test profile of the contract (public test values).
 COPY common/ /adapter/common/
 RUN /adapter/run capabilities

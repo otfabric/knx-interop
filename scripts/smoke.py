@@ -5,13 +5,15 @@
     scripts/smoke.py <adapter> <image> <probe image>
 
 Checks what needs no second stack: the capabilities document (contract 1.5,
-with upstream.independentEngine), the KNX Secure test profile in an image
-that declares a secure feature, a server that answers the probe's
+with upstream.independentEngine; against schemas/capabilities.schema.json),
+the licence texts of a published image under /licenses, the KNX Secure test
+profile in an image that declares a secure feature, a server that answers the probe's
 DESCRIPTION_REQUEST on a private Docker network, a client operation that
 cannot reach its target (one result document, fail, exit 1, or unsupported,
 exit 3, when the adapter does not offer it) and a contract operation whose
 feature the adapter declares false (unsupported, exit 3, never a fake
-success). REPORT_DIR keeps the capabilities document.
+success). Every result document must match schemas/client-result.schema.json.
+REPORT_DIR keeps the capabilities document.
 """
 
 import json
@@ -21,11 +23,23 @@ import sys
 import time
 import uuid
 
+import document_schema
+
 PROFILE = "/adapter/common/secure/profile.json"
 # TEST-NET-1: nothing answers there.
 UNREACHABLE = "192.0.2.1"
 # Features that need the test profile.
 SECURE = ("secure", "dataSecure", "secureUdp", "surrogate", "toolAccess")
+# The licence texts each published image carries, /licenses/<component>/
+# (THIRD_PARTY_NOTICES.md): every one must be a non-empty directory.
+LICENCES = {
+    "xknx": ("xknx", "knx-interop"),
+    "knxultimate": ("knxultimate", "knx-interop"),
+    "cbsigma": ("knx", "knx-sim", "go", "knx-interop"),
+    "probe": ("knx-interop",),
+}
+CAPABILITIES = document_schema.load("capabilities")
+CLIENT_RESULT = document_schema.load("client-result")
 # Client operations by the feature that declares them, in the order tried.
 UNDECLARED = (("busmonitor", "busmonitor"), ("property", "property"), ("answer", "answer"),
               ("remoteProperty", "remote-property"), ("discover", "discover"))
@@ -87,7 +101,20 @@ class Smoke:
         if not isinstance(up, dict) or not isinstance(up.get("name"), str) or not isinstance(up.get("version"), str) \
                 or not isinstance(up.get("independentEngine"), bool):
             problems.append("upstream {name, version, independentEngine} missing (contract 1.5): %r" % up)
+        problems += ["schema: " + e for e in document_schema.errors(doc, CAPABILITIES)]
         return "; ".join(problems) or None
+
+    def licences(self):
+        components = LICENCES[self.adapter]
+        p = docker("run", "--rm", "--entrypoint", "sh", self.image, "-c",
+                   'for d in "$@"; do [ -n "$(ls -A "/licenses/$d" 2>/dev/null)" ] || echo "$d"; done',
+                   "sh", *components)
+        if p.returncode != 0:
+            return "exit %d: %s" % (p.returncode, p.stderr.strip()[-300:])
+        missing = p.stdout.split()
+        if missing:
+            return "no licence texts in %s" % ", ".join("/licenses/%s/" % d for d in missing)
+        return None
 
     def profile(self):
         p = docker("run", "--rm", "--entrypoint", "cat", self.image, PROFILE)
@@ -130,6 +157,9 @@ class Smoke:
             return "status %s exits %d, want %d" % (doc["status"], p.returncode, exits[doc["status"]])
         if doc.get("op") != op or doc.get("schemaVersion") != "1.0":
             return "result document %r" % doc
+        bad = document_schema.errors(doc, CLIENT_RESULT)
+        if bad:
+            return "result document, schema: %s" % "; ".join(bad)
         return None
 
     def run(self):
@@ -138,6 +168,8 @@ class Smoke:
         roles = caps.get("roles") or []
         features = caps.get("features") or {}
         server = features.get("server") or {}
+        if self.adapter in LICENCES:
+            self.check("licence texts", self.licences)
         if any(features.get(f) for f in SECURE) or any(server.get(f) for f in SECURE + ("secureRouting",)):
             self.check("test profile", self.profile)
         docker("network", "create", "--driver", "bridge", self.network)
